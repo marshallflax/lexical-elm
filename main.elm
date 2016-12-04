@@ -3,10 +3,7 @@ module Main exposing (..)
 import Html exposing (Html, button, div, span, text, input)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput)
-
-
--- import Maybe exposing (withDefault)
--- import Array exposing (Array, fromList, get, length)
+import Regex exposing (..)
 
 
 rainbowList : List String
@@ -32,12 +29,13 @@ type alias Model =
     { counter : Int
     , text : String
     , workingColor : String
+    , words : List String
     }
 
 
 model : Model
 model =
-    { counter = 0, text = "Hello", workingColor = "" }
+    { counter = 0, text = "Hello", workingColor = "", words = [] }
 
 
 type Msg
@@ -57,7 +55,7 @@ myUpdate msg model =
             { model | counter = model.counter - 1 }
 
         SetText newtext ->
-            { model | text = newtext }
+            { model | text = newtext, words = Regex.split Regex.All (Regex.regex ",") newtext }
 
         SetCurrentColor newDefaultColor ->
             { model | workingColor = newDefaultColor }
@@ -79,7 +77,7 @@ myView model =
             ]
             []
         , div
-            []
+            [ colorStyle model.workingColor ]
             (List.map
                 (\l ->
                     button
@@ -88,4 +86,5 @@ myView model =
                 )
                 rainbowList
             )
+        , div [] (List.map (\w -> span [] [ text w ]) model.words)
         ]
