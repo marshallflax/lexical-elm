@@ -15,9 +15,9 @@ main =
         { model = model, view = myView, update = myUpdate }
 
 
-rainbowList : List String
+rainbowList : List (List String)
 rainbowList =
-    [ "Blue", "Green", "DarkTurquoise", "Indigo", "Purple", "Crimson", "Violet", "Coral", "Pink", "Gold" ]
+    [ [ "Blue", "Green", "DarkTurquoise" ], [ "Indigo", "Purple", "Crimson", "Violet", "Coral", "Pink", "Gold" ] ]
 
 
 type alias ColoredWord =
@@ -173,27 +173,25 @@ myView model =
             []
         , div
             []
-            [ table []
-                (let
-                    doCell : String -> Html Msg
-                    doCell l =
-                        td []
-                            [ input
-                                [ type_ "checkbox"
-                                , onClick (ToggleColorEnabled l)
-                                , checked (Set.member l model.hideColors)
-                                ]
-                                []
-                            , button [ colorStyle l, onClick (SetCurrentColor l) ] [ text l ]
+            (let
+                doCell : String -> Html Msg
+                doCell l =
+                    td []
+                        [ input
+                            [ type_ "checkbox"
+                            , onClick (ToggleColorEnabled l)
+                            , checked (Set.member l model.hideColors)
                             ]
+                            []
+                        , button [ colorStyle l, onClick (SetCurrentColor l) ] [ text l ]
+                        ]
 
-                    doRow : List String -> Html Msg
-                    doRow ls =
-                        tr [] (List.map doCell rainbowList)
-                 in
-                    [ doRow rainbowList ]
-                )
-            ]
+                doRow : List String -> Html Msg
+                doRow ls =
+                    table [] [ tr [] (List.map doCell ls) ]
+             in
+                List.map doRow rainbowList
+            )
         , Html.p [] [ button [ onClick EnableAllColors ] [ text "ResetHiding" ] ]
         , input
             [ value (String.join ", " (matchingWordsForColor model.workingColor model.words))
