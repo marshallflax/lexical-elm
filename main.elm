@@ -132,7 +132,7 @@ myView model =
         , Html.p []
             (List.map
                 (\( index, w ) ->
-                    button
+                    span
                         [ colorStyles w.colors
                         , onClick (ToggleColor index model.workingColor)
                         ]
