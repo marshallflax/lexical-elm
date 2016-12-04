@@ -1,10 +1,10 @@
 module Main exposing (..)
 
+import Array exposing (Array)
 import Html exposing (Html, button, div, span, text, input)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput)
 import Regex exposing (..)
-import Array exposing (Array)
 import Set exposing (Set)
 
 
@@ -68,24 +68,27 @@ myUpdate msg model =
             { model | workingColor = newDefaultColor }
 
         ToggleColor which newColor ->
-            let
-                currentColoredWord =
-                    Maybe.withDefault { text = "", colors = Set.empty }
-                        (Array.get which model.words)
+            if (String.length newColor == 0) then
+                model
+            else
+                let
+                    currentColoredWord =
+                        Maybe.withDefault { text = "", colors = Set.empty }
+                            (Array.get which model.words)
 
-                currentColors =
-                    currentColoredWord.colors
+                    currentColors =
+                        currentColoredWord.colors
 
-                modifiedColors =
-                    if (Set.member newColor currentColors) then
-                        (Set.remove newColor currentColors)
-                    else
-                        (Set.insert newColor currentColors)
+                    modifiedColors =
+                        if (Set.member newColor currentColors) then
+                            (Set.remove newColor currentColors)
+                        else
+                            (Set.insert newColor currentColors)
 
-                modifiedColoredWord =
-                    { currentColoredWord | colors = modifiedColors }
-            in
-                { model | words = Array.set which modifiedColoredWord model.words }
+                    modifiedColoredWord =
+                        { currentColoredWord | colors = modifiedColors }
+                in
+                    { model | words = Array.set which modifiedColoredWord model.words }
 
 
 colorStyle : String -> Html.Attribute msg
