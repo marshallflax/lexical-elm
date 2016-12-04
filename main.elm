@@ -111,7 +111,7 @@ colorStyles colorNameSet =
         if (size <= 1) then
             style [ ( "backgroundColor", list ) ]
         else
-            style [ ( "background", "linear-gradient(" ++ list ++ ")" ) ]
+            style [ ( "background", "linear-gradient(45deg," ++ list ++ ")" ) ]
 
 
 myView : Model -> Html Msg
