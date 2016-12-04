@@ -53,6 +53,7 @@ type Msg
     | ToggleColor Int String
     | SetCurrentWord Int
     | ToggleColorEnabled String
+    | EnableAllColors
 
 
 splitIntoColorwords : String -> Array ColoredWord
@@ -100,6 +101,9 @@ myUpdate msg model =
                 in
                     { model | words = Array.set which modifiedColoredWord model.words }
 
+        EnableAllColors ->
+            { model | hideColors = Set.empty }
+
 
 toggleSet : comparable1 -> Set comparable1 -> Set comparable1
 toggleSet a s =
@@ -144,15 +148,10 @@ colorStyles excludeSet coloredWord currentWord =
     in
         if (size == 0) then
             style matchingStyle
+        else if (size <= 1) then
+            style (( "backgroundColor", String.join "," (Set.toList colorSet) ) :: matchingStyle)
         else
-            let
-                list =
-                    String.join "," (Set.toList colorSet)
-            in
-                if (size <= 1) then
-                    style (( "backgroundColor", list ) :: matchingStyle)
-                else
-                    style (( "background", "repeating-radial-gradient(" ++ list ++ ")" ) :: matchingStyle)
+            style (( "background", "repeating-radial-gradient(" ++ String.join "," (Set.toList colorSet) ++ ")" ) :: matchingStyle)
 
 
 currentWordFromIndex : Model -> ColoredWord
@@ -173,13 +172,18 @@ myView model =
             ]
             []
         , div
-            [ colorStyle model.workingColor ]
+            []
             [ table []
                 [ tr []
                     (List.map
                         (\l ->
                             td []
-                                [ input [ type_ "checkbox", onClick (ToggleColorEnabled l) ] []
+                                [ input
+                                    [ type_ "checkbox"
+                                    , onClick (ToggleColorEnabled l)
+                                    , checked (Set.member l model.hideColors)
+                                    ]
+                                    []
                                 , button [ colorStyle l, onClick (SetCurrentColor l) ] [ text l ]
                                 ]
                         )
@@ -187,10 +191,12 @@ myView model =
                     )
                 ]
             ]
+        , Html.p [] [ button [ onClick EnableAllColors ] [ text "ResetHiding" ] ]
         , input
             [ value (String.join ", " (matchingWordsForColor model.workingColor model.words))
             , style [ ( "width", "800px" ) ]
             , readonly True
+            , colorStyle model.workingColor
             ]
             []
         , Html.p []
