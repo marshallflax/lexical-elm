@@ -25,11 +25,15 @@ main =
         { model = model, view = myView, update = myUpdate }
 
 
+type alias ColoredWord =
+    { text : String, color : String }
+
+
 type alias Model =
     { counter : Int
     , text : String
     , workingColor : String
-    , words : List String
+    , words : List ColoredWord
     }
 
 
@@ -45,6 +49,12 @@ type Msg
     | SetCurrentColor String
 
 
+splitIntoColorwords : String -> List ColoredWord
+splitIntoColorwords input =
+    List.map (\w -> { text = w, color = "" })
+        (Regex.split Regex.All (Regex.regex "\\s+") input)
+
+
 myUpdate : Msg -> Model -> Model
 myUpdate msg model =
     case msg of
@@ -55,7 +65,7 @@ myUpdate msg model =
             { model | counter = model.counter - 1 }
 
         SetText newtext ->
-            { model | text = newtext, words = Regex.split Regex.All (Regex.regex ",") newtext }
+            { model | text = newtext, words = splitIntoColorwords newtext }
 
         SetCurrentColor newDefaultColor ->
             { model | workingColor = newDefaultColor }
@@ -86,5 +96,8 @@ myView model =
                 )
                 rainbowList
             )
-        , div [] (List.map (\w -> span [] [ text w ]) model.words)
+        , Html.p []
+            (List.map (\w -> span [ colorStyle w.text ] [ text ("{" ++ w.text ++ "}") ])
+                model.words
+            )
         ]
