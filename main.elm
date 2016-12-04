@@ -101,21 +101,14 @@ colorStyles colorNameSet =
     let
         size =
             Set.size colorNameSet
+
+        list =
+            String.join "," (Set.toList colorNameSet)
     in
-        if (size == 0) then
-            (style [])
+        if (size <= 1) then
+            style [ ( "backgroundColor", list ) ]
         else
-            (if (size == 1) then
-                style [ ( "backgroundColor", String.join "," (Set.toList colorNameSet) ) ]
-             else
-                style
-                    [ ( "background"
-                      , "linear-gradient("
-                            ++ (String.join "," (Set.toList colorNameSet))
-                            ++ ")"
-                      )
-                    ]
-            )
+            style [ ( "background", "linear-gradient(" ++ list ++ ")" ) ]
 
 
 myView : Model -> Html Msg
