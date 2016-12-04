@@ -93,10 +93,7 @@ myUpdate msg model =
 
 colorStyle : String -> Html.Attribute msg
 colorStyle colorName =
-    style
-        [ ( "backgroundColor", colorName )
-        , ( "fontFamily", "Calibri,serif" )
-        ]
+    style [ ( "backgroundColor", colorName ) ]
 
 
 colorStyles : Set String -> Html.Attribute msg
@@ -104,14 +101,18 @@ colorStyles colorNameSet =
     let
         size =
             Set.size colorNameSet
-
-        list =
-            String.join "," (Set.toList colorNameSet)
     in
-        if (size <= 1) then
-            style [ ( "backgroundColor", list ) ]
+        if (size == 0) then
+            style []
         else
-            style [ ( "background", "repeating-radial-gradient(" ++ list ++ ")" ) ]
+            let
+                list =
+                    String.join "," (Set.toList colorNameSet)
+            in
+                if (size <= 1) then
+                    style [ ( "backgroundColor", list ) ]
+                else
+                    style [ ( "background", "repeating-radial-gradient(" ++ list ++ ")" ) ]
 
 
 myView : Model -> Html Msg
@@ -119,11 +120,9 @@ myView model =
     div []
         [ span
             [ colorStyle model.workingColor ]
-            [ text (toString model.workingWord) ]
+            [ text (toString (Array.get model.workingWord model.words)) ]
         , input
-            [ placeholder "Text to reverse"
-            , onInput SetText
-            ]
+            [ placeholder "Text to reverse", onInput SetText ]
             []
         , div
             [ colorStyle model.workingColor ]
