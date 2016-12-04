@@ -5,6 +5,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput)
 import Regex exposing (..)
 import Array exposing (Array)
+import Set exposing (Set)
 
 
 main : Program Never Model Msg
@@ -19,7 +20,7 @@ rainbowList =
 
 
 type alias ColoredWord =
-    { text : String, color : String }
+    { text : String, colors : Set String }
 
 
 type alias Model =
@@ -45,7 +46,7 @@ type Msg
 
 splitIntoColorwords : String -> Array ColoredWord
 splitIntoColorwords input =
-    Array.map (\w -> { text = w, color = "" })
+    Array.map (\w -> { text = w, colors = Set.empty })
         (Array.fromList
             (Regex.split Regex.All (Regex.regex "\\s+") input)
         )
@@ -69,11 +70,20 @@ myUpdate msg model =
         ToggleColor which newColor ->
             let
                 currentColoredWord =
-                    Maybe.withDefault { text = "", color = "" }
+                    Maybe.withDefault { text = "", colors = Set.empty }
                         (Array.get which model.words)
 
+                currentColors =
+                    currentColoredWord.colors
+
+                modifiedColors =
+                    if (Set.member newColor currentColors) then
+                        (Set.remove newColor currentColors)
+                    else
+                        (Set.insert newColor currentColors)
+
                 modifiedColoredWord =
-                    { currentColoredWord | text = newColor }
+                    { currentColoredWord | colors = modifiedColors }
             in
                 { model | words = Array.set which modifiedColoredWord model.words }
 
@@ -84,6 +94,14 @@ colorStyle colorName =
         [ ( "backgroundColor", colorName )
         , ( "fontFamily", "Calibri,serif" )
         ]
+
+
+colorStyles : Set String -> Html.Attribute msg
+colorStyles colorNameSet =
+    style
+        (List.map (\c -> ( "backgroundColor", c ))
+            (Set.toList colorNameSet)
+        )
 
 
 myView : Model -> Html Msg
@@ -115,8 +133,10 @@ myView model =
             (List.map
                 (\( index, w ) ->
                     button
-                        [ colorStyle w.text, onClick (ToggleColor index model.workingColor) ]
-                        [ text ("{" ++ w.text ++ "}") ]
+                        [ colorStyles w.colors
+                        , onClick (ToggleColor index model.workingColor)
+                        ]
+                        [ text w.text ]
                 )
                 (Array.toIndexedList model.words)
             )
