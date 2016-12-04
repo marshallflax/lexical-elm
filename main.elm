@@ -4,9 +4,9 @@ import Array exposing (Array)
 import Html exposing (Html, button, div, span, text, input, p, table, tr, td)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import HtmlParser as HtmlParser exposing (..)
 import Regex exposing (..)
 import Set exposing (Set)
-import HtmlParser as HtmlParser exposing (..)
 
 
 main : Program Never Model Msg
@@ -32,6 +32,7 @@ type alias Model =
     , words : Array ColoredWord
     , workingWord : Int
     , parsed : List Node
+    , hideColors : Set String
     }
 
 
@@ -42,6 +43,7 @@ model =
     , words = Array.fromList []
     , workingWord = -1
     , parsed = []
+    , hideColors = Set.empty
     }
 
 
@@ -83,7 +85,7 @@ myUpdate msg model =
             { model | workingWord = index }
 
         ToggleColorEnabled color ->
-            model
+            { model | hideColors = toggleSet color model.hideColors }
 
         ToggleColor which newColor ->
             if (String.length newColor == 0) then
@@ -125,11 +127,14 @@ matchingWordsForColor color coloredWordList =
         List.filterMap fw (Array.toList coloredWordList)
 
 
-colorStyles : ColoredWord -> ColoredWord -> Html.Attribute msg
-colorStyles coloredWord currentWord =
+colorStyles : Set String -> ColoredWord -> ColoredWord -> Html.Attribute msg
+colorStyles excludeSet coloredWord currentWord =
     let
+        colorSet =
+            Set.filter (\c -> not (Set.member c excludeSet)) coloredWord.colors
+
         size =
-            Set.size coloredWord.colors
+            Set.size colorSet
 
         matchingStyle =
             if (coloredWord.text == currentWord.text) then
@@ -142,7 +147,7 @@ colorStyles coloredWord currentWord =
         else
             let
                 list =
-                    String.join "," (Set.toList coloredWord.colors)
+                    String.join "," (Set.toList colorSet)
             in
                 if (size <= 1) then
                     style (( "backgroundColor", list ) :: matchingStyle)
@@ -192,7 +197,7 @@ myView model =
             (List.map
                 (\( index, w ) ->
                     span
-                        [ colorStyles w (currentWordFromIndex model)
+                        [ colorStyles model.hideColors w (currentWordFromIndex model)
                         , onClick (ToggleColor index model.workingColor)
                         , onMouseEnter (SetCurrentWord index)
                         ]
