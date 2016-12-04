@@ -159,7 +159,7 @@ myView model =
     div []
         [ span
             []
-            [ text (toString (currentWordFromIndex model)) ]
+            [ text (toString ((currentWordFromIndex model).colors)) ]
         , p [] []
         , input
             [ placeholder "Original Text Here"
@@ -170,7 +170,10 @@ myView model =
             [ colorStyle model.workingColor ]
             (List.map (\l -> button [ colorStyle l, onClick (SetCurrentColor l) ] [ text l ]) rainbowList)
         , input
-            [ value (String.join ", " (matchingWordsForColor model.workingColor model.words)), style [ ( "width", "800px" ) ] ]
+            [ value (String.join ", " (matchingWordsForColor model.workingColor model.words))
+            , style [ ( "width", "800px" ) ]
+            , readonly True
+            ]
             []
         , Html.p []
             (List.map
