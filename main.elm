@@ -1,7 +1,7 @@
 module Main exposing (..)
 
 import Array exposing (Array)
-import Html exposing (Html, button, div, span, text, input, p)
+import Html exposing (Html, button, div, span, text, input, p, table, tr, td)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Regex exposing (..)
@@ -50,6 +50,7 @@ type Msg
     | SetCurrentColor String
     | ToggleColor Int String
     | SetCurrentWord Int
+    | ToggleColorEnabled String
 
 
 splitIntoColorwords : String -> Array ColoredWord
@@ -80,6 +81,9 @@ myUpdate msg model =
 
         SetCurrentWord index ->
             { model | workingWord = index }
+
+        ToggleColorEnabled color ->
+            model
 
         ToggleColor which newColor ->
             if (String.length newColor == 0) then
@@ -165,7 +169,19 @@ myView model =
             []
         , div
             [ colorStyle model.workingColor ]
-            (List.map (\l -> button [ colorStyle l, onClick (SetCurrentColor l) ] [ text l ]) rainbowList)
+            [ table []
+                [ tr []
+                    (List.map
+                        (\l ->
+                            td []
+                                [ input [ type_ "checkbox", onClick (ToggleColorEnabled l) ] []
+                                , button [ colorStyle l, onClick (SetCurrentColor l) ] [ text l ]
+                                ]
+                        )
+                        rainbowList
+                    )
+                ]
+            ]
         , input
             [ value (String.join ", " (matchingWordsForColor model.workingColor model.words))
             , style [ ( "width", "800px" ) ]
