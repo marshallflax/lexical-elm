@@ -186,9 +186,12 @@ myView model =
                                 []
                             , button [ colorStyle l, onClick (SetCurrentColor l) ] [ text l ]
                             ]
+
+                    doRow : List String -> Html Msg
+                    doRow ls =
+                        tr [] (List.map doCell rainbowList)
                  in
-                    [ tr [] (List.map doCell rainbowList)
-                    ]
+                    [ doRow rainbowList ]
                 )
             ]
         , Html.p [] [ button [ onClick EnableAllColors ] [ text "ResetHiding" ] ]
