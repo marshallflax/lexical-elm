@@ -1,11 +1,12 @@
 module Main exposing (..)
 
 import Array exposing (Array)
-import Html exposing (Html, button, div, span, text, input)
+import Html exposing (Html, button, div, span, text, input, p)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Regex exposing (..)
 import Set exposing (Set)
+import HtmlParser as HtmlParser exposing (..)
 
 
 main : Program Never Model Msg
@@ -28,6 +29,7 @@ type alias Model =
     , workingColor : String
     , words : Array ColoredWord
     , workingWord : Int
+    , parsed : List Node
     }
 
 
@@ -37,6 +39,7 @@ model =
     , workingColor = ""
     , words = Array.fromList []
     , workingWord = -1
+    , parsed = []
     }
 
 
@@ -59,7 +62,11 @@ myUpdate : Msg -> Model -> Model
 myUpdate msg model =
     case msg of
         SetText newtext ->
-            { model | text = newtext, words = splitIntoColorwords newtext }
+            { model
+                | text = newtext
+                , words = splitIntoColorwords newtext
+                , parsed = HtmlParser.parse newtext
+            }
 
         SetCurrentColor newDefaultColor ->
             { model | workingColor = newDefaultColor }
@@ -121,6 +128,7 @@ myView model =
         [ span
             [ colorStyle model.workingColor ]
             [ text (toString (Array.get model.workingWord model.words)) ]
+        , p [] [ text (toString model.parsed) ]
         , input
             [ placeholder "Text to reverse", onInput SetText ]
             []
@@ -129,7 +137,9 @@ myView model =
             (List.map
                 (\l ->
                     button
-                        [ colorStyle l, onClick (SetCurrentColor l) ]
+                        [ colorStyle l
+                        , onClick (SetCurrentColor l)
+                        ]
                         [ text l ]
                 )
                 rainbowList
