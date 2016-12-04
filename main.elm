@@ -156,7 +156,7 @@ myView model =
     div []
         [ span
             []
-            [ text (toString ((currentWordFromIndex model).colors)) ]
+            [ text (toString (Set.toList ((currentWordFromIndex model).colors))) ]
         , p [] []
         , input
             [ placeholder "Original Text Here"
