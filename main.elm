@@ -3,7 +3,7 @@ module Main exposing (..)
 import Array exposing (Array)
 import Html exposing (Html, button, div, span, text, input)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onClick, onInput)
+import Html.Events exposing (..)
 import Regex exposing (..)
 import Set exposing (Set)
 
@@ -27,6 +27,7 @@ type alias Model =
     { text : String
     , workingColor : String
     , words : Array ColoredWord
+    , workingWord : Int
     }
 
 
@@ -35,6 +36,7 @@ model =
     { text = "Hello"
     , workingColor = ""
     , words = Array.fromList []
+    , workingWord = -1
     }
 
 
@@ -42,6 +44,7 @@ type Msg
     = SetText String
     | SetCurrentColor String
     | ToggleColor Int String
+    | SetCurrentWord Int
 
 
 splitIntoColorwords : String -> Array ColoredWord
@@ -60,6 +63,9 @@ myUpdate msg model =
 
         SetCurrentColor newDefaultColor ->
             { model | workingColor = newDefaultColor }
+
+        SetCurrentWord index ->
+            { model | workingWord = index }
 
         ToggleColor which newColor ->
             if (String.length newColor == 0) then
@@ -113,7 +119,7 @@ myView model =
     div []
         [ span
             [ colorStyle model.workingColor ]
-            [ text model.text ]
+            [ text (toString model.workingWord) ]
         , input
             [ placeholder "Text to reverse"
             , onInput SetText
@@ -135,6 +141,7 @@ myView model =
                     span
                         [ colorStyles w.colors
                         , onClick (ToggleColor index model.workingColor)
+                        , onMouseEnter (SetCurrentWord index)
                         ]
                         [ text w.text ]
                 )
