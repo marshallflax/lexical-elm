@@ -100,7 +100,7 @@ myView model =
                 rainbowList
             )
         , Html.p []
-            (List.map (\w -> span [ colorStyle w.text ] [ text ("{" ++ w.text ++ "}") ])
-                (Array.toList model.words)
+            (List.map (\(index, w) -> span [ colorStyle w.text ] [ text ("{" ++ w.text ++ "}") ])
+                (Array.toIndexedList model.words)
             )
         ]
