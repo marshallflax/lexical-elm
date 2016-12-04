@@ -124,11 +124,8 @@ matchingWordsForColor color coloredWordList =
 colorStyles : ColoredWord -> ColoredWord -> Html.Attribute msg
 colorStyles coloredWord currentWord =
     let
-        colorNameSet =
-            coloredWord.colors
-
         size =
-            Set.size colorNameSet
+            Set.size coloredWord.colors
 
         matchingStyle =
             if (coloredWord.text == currentWord.text) then
@@ -141,7 +138,7 @@ colorStyles coloredWord currentWord =
         else
             let
                 list =
-                    String.join "," (Set.toList colorNameSet)
+                    String.join "," (Set.toList coloredWord.colors)
             in
                 if (size <= 1) then
                     style (( "backgroundColor", list ) :: matchingStyle)
