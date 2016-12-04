@@ -4,7 +4,6 @@ import Array exposing (Array)
 import Html exposing (Html, button, div, span, text, input, p, table, tr, td)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import HtmlParser as HtmlParser exposing (..)
 import Regex exposing (..)
 import Set exposing (Set)
 
@@ -31,7 +30,6 @@ type alias Model =
     , workingColor : String
     , words : Array ColoredWord
     , workingWord : Int
-    , parsed : List Node
     , hideColors : Set String
     }
 
@@ -42,7 +40,6 @@ model =
     , workingColor = ""
     , words = Array.fromList []
     , workingWord = -1
-    , parsed = []
     , hideColors = Set.empty
     }
 
@@ -78,7 +75,6 @@ myUpdate msg model =
             { model
                 | text = newtext
                 , words = splitIntoColorwords newtext
-                , parsed = HtmlParser.parse newtext
             }
 
         SetCurrentColor newDefaultColor ->
