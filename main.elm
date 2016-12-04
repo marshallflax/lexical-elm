@@ -98,10 +98,24 @@ colorStyle colorName =
 
 colorStyles : Set String -> Html.Attribute msg
 colorStyles colorNameSet =
-    style
-        (List.map (\c -> ( "backgroundColor", c ))
-            (Set.toList colorNameSet)
-        )
+    let
+        size =
+            Set.size colorNameSet
+    in
+        if (size == 0) then
+            (style [])
+        else
+            (if (size == 1) then
+                style [ ( "backgroundColor", String.join "," (Set.toList colorNameSet) ) ]
+             else
+                style
+                    [ ( "background"
+                      , "linear-gradient("
+                            ++ (String.join "," (Set.toList colorNameSet))
+                            ++ ")"
+                      )
+                    ]
+            )
 
 
 myView : Model -> Html Msg
