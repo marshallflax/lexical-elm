@@ -4,25 +4,18 @@ import Html exposing (Html, button, div, span, text, input)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput)
 import Regex exposing (..)
-
-
-rainbowList : List String
-rainbowList =
-    [ "Blue", "Green", "DarkTurquoise", "Indigo", "Purple", "Crimson", "Violet", "Coral", "Pink", "Gold" ]
-
-
-colorStyle : String -> Html.Attribute msg
-colorStyle colorName =
-    style
-        [ ( "backgroundColor", colorName )
-        , ( "fontFamily", "Calibri,serif" )
-        ]
+import Array exposing (Array)
 
 
 main : Program Never Model Msg
 main =
     Html.beginnerProgram
         { model = model, view = myView, update = myUpdate }
+
+
+rainbowList : List String
+rainbowList =
+    [ "Blue", "Green", "DarkTurquoise", "Indigo", "Purple", "Crimson", "Violet", "Coral", "Pink", "Gold" ]
 
 
 type alias ColoredWord =
@@ -33,13 +26,13 @@ type alias Model =
     { counter : Int
     , text : String
     , workingColor : String
-    , words : List ColoredWord
+    , words : Array ColoredWord
     }
 
 
 model : Model
 model =
-    { counter = 0, text = "Hello", workingColor = "", words = [] }
+    { counter = 0, text = "Hello", workingColor = "", words = Array.fromList [] }
 
 
 type Msg
@@ -49,10 +42,12 @@ type Msg
     | SetCurrentColor String
 
 
-splitIntoColorwords : String -> List ColoredWord
+splitIntoColorwords : String -> Array ColoredWord
 splitIntoColorwords input =
-    List.map (\w -> { text = w, color = "" })
-        (Regex.split Regex.All (Regex.regex "\\s+") input)
+    Array.map (\w -> { text = w, color = "" })
+        (Array.fromList
+            (Regex.split Regex.All (Regex.regex "\\s+") input)
+        )
 
 
 myUpdate : Msg -> Model -> Model
@@ -69,6 +64,14 @@ myUpdate msg model =
 
         SetCurrentColor newDefaultColor ->
             { model | workingColor = newDefaultColor }
+
+
+colorStyle : String -> Html.Attribute msg
+colorStyle colorName =
+    style
+        [ ( "backgroundColor", colorName )
+        , ( "fontFamily", "Calibri,serif" )
+        ]
 
 
 myView : Model -> Html Msg
@@ -98,6 +101,6 @@ myView model =
             )
         , Html.p []
             (List.map (\w -> span [ colorStyle w.text ] [ text ("{" ++ w.text ++ "}") ])
-                model.words
+                (Array.toList model.words)
             )
         ]
