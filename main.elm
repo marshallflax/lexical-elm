@@ -24,8 +24,7 @@ type alias ColoredWord =
 
 
 type alias Model =
-    { counter : Int
-    , text : String
+    { text : String
     , workingColor : String
     , words : Array ColoredWord
     }
@@ -33,13 +32,14 @@ type alias Model =
 
 model : Model
 model =
-    { counter = 0, text = "Hello", workingColor = "", words = Array.fromList [] }
+    { text = "Hello"
+    , workingColor = ""
+    , words = Array.fromList []
+    }
 
 
 type Msg
-    = More
-    | Less
-    | SetText String
+    = SetText String
     | SetCurrentColor String
     | ToggleColor Int String
 
@@ -55,12 +55,6 @@ splitIntoColorwords input =
 myUpdate : Msg -> Model -> Model
 myUpdate msg model =
     case msg of
-        More ->
-            { model | counter = model.counter + 1 }
-
-        Less ->
-            { model | counter = model.counter - 1 }
-
         SetText newtext ->
             { model | text = newtext, words = splitIntoColorwords newtext }
 
@@ -111,18 +105,14 @@ colorStyles colorNameSet =
         if (size <= 1) then
             style [ ( "backgroundColor", list ) ]
         else
-            style [ ( "background", "linear-gradient(45deg," ++ list ++ ")" ) ]
+            style [ ( "background", "repeating-radial-gradient(" ++ list ++ ")" ) ]
 
 
 myView : Model -> Html Msg
 myView model =
     div []
-        [ div []
-            [ button [ onClick Less ] [ text "-" ]
-            , div [] [ text (toString model.counter) ]
-            , button [ onClick More ] [ text "+" ]
-            ]
-        , span [ colorStyle model.workingColor ]
+        [ span
+            [ colorStyle model.workingColor ]
             [ text model.text ]
         , input
             [ placeholder "Text to reverse"
