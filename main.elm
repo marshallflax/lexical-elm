@@ -54,7 +54,7 @@ type Msg
     | SetCurrentWord Int
     | ToggleColorEnabled String
     | EnableAllColors
-    | EnableSomeColors (List String)
+    | HideSomeColors (List String)
     | ResetSomeColors (List String)
 
 
@@ -106,11 +106,11 @@ myUpdate msg model =
         EnableAllColors ->
             { model | hideColors = Set.empty }
 
-        EnableSomeColors colorList ->
-            model
+        HideSomeColors colorList ->
+            { model | hideColors = Set.union model.hideColors (Set.fromList colorList) }
 
         ResetSomeColors colorList ->
-            model
+            { model | hideColors = Set.diff model.hideColors (Set.fromList colorList) }
 
 
 toggleSet : comparable1 -> Set comparable1 -> Set comparable1
@@ -196,11 +196,11 @@ myView model =
 
                 enableButton : List String -> Html Msg
                 enableButton cs =
-                    button [ onClick (EnableSomeColors cs) ] [ text "show" ]
+                    button [ onClick (HideSomeColors cs) ] [ text "hide" ]
 
                 disableButton : List String -> Html Msg
                 disableButton cs =
-                    button [ onClick (ResetSomeColors cs) ] [ text "hide" ]
+                    button [ onClick (ResetSomeColors cs) ] [ text "reset" ]
 
                 doRow : List String -> Html Msg
                 doRow ls =
