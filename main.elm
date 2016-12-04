@@ -54,6 +54,8 @@ type Msg
     | SetCurrentWord Int
     | ToggleColorEnabled String
     | EnableAllColors
+    | EnableSomeColors (List String)
+    | ResetSomeColors (List String)
 
 
 splitIntoColorwords : String -> Array ColoredWord
@@ -103,6 +105,12 @@ myUpdate msg model =
 
         EnableAllColors ->
             { model | hideColors = Set.empty }
+
+        EnableSomeColors colorList ->
+            model
+
+        ResetSomeColors colorList ->
+            model
 
 
 toggleSet : comparable1 -> Set comparable1 -> Set comparable1
