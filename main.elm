@@ -146,24 +146,15 @@ myView : Model -> Html Msg
 myView model =
     div []
         [ span
-            [ colorStyle model.workingColor ]
+            [ ]
             [ text (toString (currentWordFromIndex model)) ]
-        , p [] [ text (toString model.parsed) ]
+        , p [] []
         , input
             [ placeholder "Text to reverse", onInput SetText ]
             []
         , div
             [ colorStyle model.workingColor ]
-            (List.map
-                (\l ->
-                    button
-                        [ colorStyle l
-                        , onClick (SetCurrentColor l)
-                        ]
-                        [ text l ]
-                )
-                rainbowList
-            )
+            (List.map (\l -> button [ colorStyle l, onClick (SetCurrentColor l) ] [ text l ]) rainbowList)
         , Html.p []
             (List.map
                 (\( index, w ) ->
