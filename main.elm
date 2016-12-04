@@ -40,6 +40,7 @@ type Msg
     | Less
     | SetText String
     | SetCurrentColor String
+    | ToggleColor Int String
 
 
 splitIntoColorwords : String -> Array ColoredWord
@@ -64,6 +65,17 @@ myUpdate msg model =
 
         SetCurrentColor newDefaultColor ->
             { model | workingColor = newDefaultColor }
+
+        ToggleColor which newColor ->
+            let
+                currentColoredWord =
+                    Maybe.withDefault { text = "", color = "" }
+                        (Array.get which model.words)
+
+                modifiedColoredWord =
+                    { currentColoredWord | text = newColor }
+            in
+                { model | words = Array.set which modifiedColoredWord model.words }
 
 
 colorStyle : String -> Html.Attribute msg
@@ -100,7 +112,12 @@ myView model =
                 rainbowList
             )
         , Html.p []
-            (List.map (\(index, w) -> span [ colorStyle w.text ] [ text ("{" ++ w.text ++ "}") ])
+            (List.map
+                (\( index, w ) ->
+                    button
+                        [ colorStyle w.text, onClick (ToggleColor index model.workingColor) ]
+                        [ text ("{" ++ w.text ++ "}") ]
+                )
                 (Array.toIndexedList model.words)
             )
         ]
