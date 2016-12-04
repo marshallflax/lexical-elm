@@ -120,9 +120,9 @@ colorStyles coloredWord currentWord =
 
         matchingStyle =
             if (coloredWord.text == currentWord.text) then
-                [ ( "borderStyle", "solid" ) ]
+                [ ( "borderStyle", "solid" ), ( "borderColor", "black" ) ]
             else
-                []
+                [ ( "borderStyle", "solid" ), ( "borderColor", "transparent" ) ]
     in
         if (size == 0) then
             style matchingStyle
@@ -172,7 +172,7 @@ myView model =
                         , onClick (ToggleColor index model.workingColor)
                         , onMouseEnter (SetCurrentWord index)
                         ]
-                        [ text (" " ++ w.text ++ " ")]
+                        [ text (" " ++ w.text ++ " ") ]
                 )
                 (Array.toIndexedList model.words)
             )
