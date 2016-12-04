@@ -198,9 +198,13 @@ myView model =
                 enableButton cs =
                     button [ onClick (EnableSomeColors cs) ] [ text "show" ]
 
+                disableButton : List String -> Html Msg
+                disableButton cs =
+                    button [ onClick (ResetSomeColors cs) ] [ text "hide" ]
+
                 doRow : List String -> Html Msg
                 doRow ls =
-                    table [] [ tr [] (enableButton ls :: (List.map doCell ls)) ]
+                    table [] [ tr [] (enableButton ls :: disableButton ls :: (List.map doCell ls)) ]
              in
                 List.map doRow rainbowList
             )
