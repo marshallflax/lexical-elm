@@ -174,22 +174,22 @@ myView model =
         , div
             []
             [ table []
-                [ tr []
-                    (List.map
-                        (\l ->
-                            td []
-                                [ input
-                                    [ type_ "checkbox"
-                                    , onClick (ToggleColorEnabled l)
-                                    , checked (Set.member l model.hideColors)
-                                    ]
-                                    []
-                                , button [ colorStyle l, onClick (SetCurrentColor l) ] [ text l ]
+                (let
+                    doCell : String -> Html Msg
+                    doCell l =
+                        td []
+                            [ input
+                                [ type_ "checkbox"
+                                , onClick (ToggleColorEnabled l)
+                                , checked (Set.member l model.hideColors)
                                 ]
-                        )
-                        rainbowList
-                    )
-                ]
+                                []
+                            , button [ colorStyle l, onClick (SetCurrentColor l) ] [ text l ]
+                            ]
+                 in
+                    [ tr [] (List.map doCell rainbowList)
+                    ]
+                )
             ]
         , Html.p [] [ button [ onClick EnableAllColors ] [ text "ResetHiding" ] ]
         , input
