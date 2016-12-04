@@ -89,24 +89,36 @@ myUpdate msg model =
                     currentColoredWord =
                         nonMaybeColoredWord (Array.get which model.words)
 
-                    currentColors =
-                        currentColoredWord.colors
-
-                    modifiedColors =
-                        if (Set.member newColor currentColors) then
-                            (Set.remove newColor currentColors)
-                        else
-                            (Set.insert newColor currentColors)
-
                     modifiedColoredWord =
-                        { currentColoredWord | colors = modifiedColors }
+                        { currentColoredWord | colors = toggleSet newColor currentColoredWord.colors }
                 in
                     { model | words = Array.set which modifiedColoredWord model.words }
+
+
+toggleSet : comparable1 -> Set comparable1 -> Set comparable1
+toggleSet a s =
+    if (Set.member a s) then
+        (Set.remove a s)
+    else
+        (Set.insert a s)
 
 
 colorStyle : String -> Html.Attribute msg
 colorStyle colorName =
     style [ ( "backgroundColor", colorName ) ]
+
+
+matchingWordsForColor : String -> Array ColoredWord -> List String
+matchingWordsForColor color coloredWordList =
+    let
+        fw : ColoredWord -> Maybe String
+        fw cw =
+            if (Set.member color cw.colors) then
+                Just cw.text
+            else
+                Nothing
+    in
+        List.filterMap fw (Array.toList coloredWordList)
 
 
 colorStyles : ColoredWord -> ColoredWord -> Html.Attribute msg
@@ -146,15 +158,20 @@ myView : Model -> Html Msg
 myView model =
     div []
         [ span
-            [ ]
+            []
             [ text (toString (currentWordFromIndex model)) ]
         , p [] []
         , input
-            [ placeholder "Text to reverse", onInput SetText ]
+            [ placeholder "Original Text Here"
+            , onInput SetText
+            ]
             []
         , div
             [ colorStyle model.workingColor ]
             (List.map (\l -> button [ colorStyle l, onClick (SetCurrentColor l) ] [ text l ]) rainbowList)
+        , input
+            [ value (String.join ", " (matchingWordsForColor model.workingColor model.words)), style [ ( "width", "800px" ) ] ]
+            []
         , Html.p []
             (List.map
                 (\( index, w ) ->
