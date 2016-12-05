@@ -139,7 +139,7 @@ colorStyles : Set String -> ColoredWord -> ColoredWord -> Html.Attribute msg
 colorStyles excludeSet coloredWord currentWord =
     let
         colorSet =
-            Set.filter (\c -> not (Set.member c excludeSet)) coloredWord.colors
+            Set.diff coloredWord.colors excludeSet
 
         size =
             Set.size colorSet
@@ -155,7 +155,7 @@ colorStyles excludeSet coloredWord currentWord =
         else if (size <= 1) then
             style (( "backgroundColor", String.join "," (Set.toList colorSet) ) :: matchingStyle)
         else
-            style (( "background", "repeating-radial-gradient(" ++ String.join "," (Set.toList colorSet) ++ ")" ) :: matchingStyle)
+            style (( "background", "repeating-linear-gradient(90deg," ++ String.join "," (Set.toList colorSet) ++ ")" ) :: matchingStyle)
 
 
 currentWordFromIndex : Model -> ColoredWord
@@ -180,11 +180,7 @@ myView model =
             []
             [ text (toString (Set.toList ((currentWordFromIndex model).colors))) ]
         , p [] []
-        , input
-            [ placeholder "Original Text Here"
-            , onInput SetText
-            ]
-            []
+        , input [ placeholder "Original Text Here", onInput SetText ] []
         , div
             []
             (let
