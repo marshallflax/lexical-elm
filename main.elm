@@ -65,6 +65,29 @@ splitIntoColorwords input =
         chunkToColoredword : String -> ColoredWord
         chunkToColoredword str =
             let
+                textAndColors : List Match
+                textAndColors =
+                    Regex.find Regex.All (Regex.regex "^([^<>]+)<([^>]+)>\\s*$") str
+
+                theText : String
+                theText =
+                    case (List.head textAndColors) of
+                        Nothing ->
+                            str
+
+                        Just match ->
+                            case (List.head match.submatches) of
+                                Nothing ->
+                                    str
+
+                                Just maybeText ->
+                                    case maybeText of
+                                        Nothing ->
+                                            str
+
+                                        Just text ->
+                                            text
+
                 places : List Match
                 places =
                     Regex.find Regex.All (Regex.regex "^([^<>]+)<,*([^<>,]+)(,[^<>,]+)*>$") str
@@ -99,7 +122,7 @@ splitIntoColorwords input =
 
                         Just colors ->
                             Set.fromList
-                                (List.map (\w -> Regex.replace Regex.All (Regex.regex ",") (\x -> "")  w)
+                                (List.map (\w -> Regex.replace Regex.All (Regex.regex ",") (\x -> "") w)
                                     (List.map (\t -> Maybe.withDefault "ZZZ" t)
                                         (List.filter notNothing colors)
                                     )
@@ -119,7 +142,7 @@ splitIntoColorwords input =
                                 Just text ->
                                     text
             in
-                { text = extractText
+                { text = theText
                 , colors = colorSet
                 }
     in
