@@ -2,9 +2,9 @@ module Main exposing (..)
 
 import Array exposing (Array)
 import Html exposing (Html, button, div, span, text, input, p, table, tr, td)
-import Html.Attributes exposing (..)
-import Html.Events exposing (..)
-import Regex exposing (..)
+import Html.Attributes exposing (style, value, checked, type_, readonly, placeholder)
+import Html.Events exposing (onClick, onInput, onMouseEnter)
+import Regex exposing (Regex)
 import Set exposing (Set)
 
 
@@ -222,4 +222,6 @@ myView model =
                 )
                 (Array.toIndexedList model.words)
             )
+        , Html.p [] []
+        , Html.input [ value (toString model), readonly True ] []
         ]
