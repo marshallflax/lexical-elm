@@ -173,6 +173,19 @@ disableButton cs =
     button [ onClick (ResetSomeColors cs) ] [ text "reset" ]
 
 
+dumpState : Model -> String
+dumpState model =
+    let
+        f cw =
+            if (Set.isEmpty cw.colors) then
+                cw.text
+            else
+                cw.text ++ "<" ++ (String.join "," (Set.toList cw.colors)) ++ ">"
+    in
+        String.join " "
+            (List.map f (Array.toList model.words))
+
+
 myView : Model -> Html Msg
 myView model =
     div []
@@ -180,7 +193,12 @@ myView model =
             []
             [ text (toString (Set.toList ((currentWordFromIndex model).colors))) ]
         , p [] []
-        , input [ placeholder "Original Text Here", onInput SetText ] []
+        , input
+            [ value (dumpState model)
+            , onInput SetText
+            , style [ ( "width", "800px" ) ]
+            ]
+            []
         , div
             []
             (let
@@ -222,6 +240,4 @@ myView model =
                 )
                 (Array.toIndexedList model.words)
             )
-        , Html.p [] []
-        , Html.input [ value (toString model), readonly True ] []
         ]
