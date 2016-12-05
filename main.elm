@@ -57,10 +57,11 @@ type Msg
 
 splitIntoColorwords : String -> Array ColoredWord
 splitIntoColorwords input =
-    Array.map (\w -> { text = w, colors = Set.empty })
-        (Array.fromList
-            (Regex.split Regex.All (Regex.regex "\\s+") input)
-        )
+    let
+        chunkArray =
+            Array.fromList (Regex.split Regex.All (Regex.regex "\\s+") input)
+    in
+        Array.map (\w -> { text = w, colors = Set.empty }) chunkArray
 
 
 nonMaybeColoredWord : Maybe ColoredWord -> ColoredWord
