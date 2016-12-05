@@ -107,45 +107,6 @@ splitIntoColorwords input =
                                         Just s ->
                                             Set.fromList (Regex.split Regex.All (Regex.regex ",") s)
 
-                places : List Match
-                places =
-                    Regex.find Regex.All (Regex.regex "^([^<>]+)<,*([^<>,]+)(,[^<>,]+)*>$") str
-
-                match : Maybe Match
-                match =
-                    List.head places
-
-                submatches : List (Maybe String)
-                submatches =
-                    case match of
-                        Nothing ->
-                            []
-
-                        Just actualMatch ->
-                            actualMatch.submatches
-
-                notNothing : Maybe a -> Bool
-                notNothing a =
-                    case a of
-                        Nothing ->
-                            False
-
-                        Just j ->
-                            True
-
-                colorSet : Set String
-                colorSet =
-                    case (List.tail submatches) of
-                        Nothing ->
-                            Set.empty
-
-                        Just colors ->
-                            Set.fromList
-                                (List.map (\w -> Regex.replace Regex.All (Regex.regex ",") (\x -> "") w)
-                                    (List.map (\t -> Maybe.withDefault "ZZZ" t)
-                                        (List.filter notNothing colors)
-                                    )
-                                )
             in
                 { text = theText
                 , colors = theColors
