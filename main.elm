@@ -163,6 +163,16 @@ currentWordFromIndex model =
     nonMaybeColoredWord (Array.get model.workingWord model.words)
 
 
+enableButton : List String -> Html Msg
+enableButton cs =
+    button [ onClick (HideSomeColors cs) ] [ text "hide" ]
+
+
+disableButton : List String -> Html Msg
+disableButton cs =
+    button [ onClick (ResetSomeColors cs) ] [ text "reset" ]
+
+
 myView : Model -> Html Msg
 myView model =
     div []
@@ -189,14 +199,6 @@ myView model =
                             []
                         , button [ colorStyle l, onClick (SetCurrentColor l) ] [ text l ]
                         ]
-
-                enableButton : List String -> Html Msg
-                enableButton cs =
-                    button [ onClick (HideSomeColors cs) ] [ text "hide" ]
-
-                disableButton : List String -> Html Msg
-                disableButton cs =
-                    button [ onClick (ResetSomeColors cs) ] [ text "reset" ]
 
                 doRow : List String -> Html Msg
                 doRow ls =
