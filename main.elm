@@ -187,7 +187,7 @@ colorStyles excludeSet coloredWord currentWord =
         else if (size <= 1) then
             style (( "backgroundColor", String.join "," (Set.toList colorSet) ) :: matchingStyle)
         else
-            style (( "background", "repeating-linear-gradient(90deg," ++ String.join "," (Set.toList colorSet) ++ ")" ) :: matchingStyle)
+            style (( "background", "linear-gradient(90deg," ++ String.join "," (Set.toList colorSet) ++ ")" ) :: matchingStyle)
 
 
 currentWordFromIndex : Model -> ColoredWord
