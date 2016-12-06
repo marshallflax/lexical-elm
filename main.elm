@@ -69,10 +69,14 @@ splitIntoColorwords input =
                 textAndColors =
                     Regex.find Regex.All (Regex.regex "^([^<>]+)<([^>]+)>\\s*$") str
 
-
-                theTextMap : Maybe (List (Maybe String))
+                theTextMap : String
                 theTextMap =
-                    Maybe.map .submatches (List.head textAndColors)
+                    Maybe.withDefault str
+                        (Maybe.withDefault Nothing
+                            (Maybe.andThen List.head
+                                (Maybe.map .submatches (List.head textAndColors))
+                            )
+                        )
 
                 theText : String
                 theText =
@@ -112,7 +116,7 @@ splitIntoColorwords input =
                                         Just s ->
                                             Set.fromList (Regex.split Regex.All (Regex.regex ",") s)
             in
-                { text = theText
+                { text = theTextMap
                 , colors = theColors
                 }
     in
