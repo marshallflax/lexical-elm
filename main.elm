@@ -78,25 +78,6 @@ splitIntoColorwords input =
                             )
                         )
 
-                theText : String
-                theText =
-                    case (List.head textAndColors) of
-                        Nothing ->
-                            str
-
-                        Just match ->
-                            case (List.head match.submatches) of
-                                Nothing ->
-                                    str
-
-                                Just maybeText ->
-                                    case maybeText of
-                                        Nothing ->
-                                            str
-
-                                        Just text ->
-                                            text
-
                 theColors : Set String
                 theColors =
                     case (List.head textAndColors) of
