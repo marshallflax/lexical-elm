@@ -206,15 +206,15 @@ disableButton cs =
 
 dumpState : Model -> String
 dumpState model =
-    let
-        f cw =
+    List.map
+        (\cw ->
             if (Set.isEmpty cw.colors) then
                 cw.text
             else
                 cw.text ++ "<" ++ (String.join "," (Set.toList cw.colors)) ++ ">"
-    in
-        String.join " "
-            (List.map f (Array.toList model.words))
+        )
+        (Array.toList model.words)
+        |> (String.join " ")
 
 
 myView : Model -> Html Msg
