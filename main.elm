@@ -71,12 +71,11 @@ splitIntoColorwords input =
 
                 theTextMap : String
                 theTextMap =
-                    Maybe.withDefault str
-                        (Maybe.withDefault Nothing
-                            (Maybe.andThen List.head
-                                (Maybe.map .submatches (List.head textAndColors))
-                            )
-                        )
+                    List.head textAndColors
+                        |> Maybe.map .submatches
+                        |> Maybe.andThen List.head
+                        |> Maybe.withDefault Nothing
+                        |> Maybe.withDefault str
 
                 theColors : Set String
                 theColors =
