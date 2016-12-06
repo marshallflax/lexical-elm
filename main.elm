@@ -96,8 +96,8 @@ splitIntoColorwords input =
 
 
 nonMaybeColoredWord : Maybe ColoredWord -> ColoredWord
-nonMaybeColoredWord x =
-    Maybe.withDefault { text = "", colors = Set.empty } x
+nonMaybeColoredWord =
+    Maybe.withDefault { text = "", colors = Set.empty }
 
 
 myUpdate : Msg -> Model -> Model
