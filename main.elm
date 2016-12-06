@@ -65,22 +65,22 @@ splitIntoColorwords input =
         chunkToColoredword : String -> ColoredWord
         chunkToColoredword str =
             let
-                textAndColors : List Match
+                textAndColors : Maybe (List (Maybe String))
                 textAndColors =
                     Regex.find Regex.All (Regex.regex "^([^<>]+)<([^>]+)>\\s*$") str
+                        |> List.head
+                        |> Maybe.map .submatches
 
                 theTextMap : String
                 theTextMap =
-                    List.head textAndColors
-                        |> Maybe.map .submatches
+                    textAndColors
                         |> Maybe.andThen List.head
                         |> Maybe.withDefault Nothing
                         |> Maybe.withDefault str
 
                 theColors : Set String
                 theColors =
-                    List.head textAndColors
-                        |> Maybe.map .submatches
+                    textAndColors
                         |> Maybe.map (List.drop 1)
                         |> Maybe.andThen List.head
                         |> Maybe.withDefault Nothing
@@ -142,11 +142,11 @@ myUpdate msg model =
 
 
 toggleSet : comparable1 -> Set comparable1 -> Set comparable1
-toggleSet a s =
-    if (Set.member a s) then
-        (Set.remove a s)
+toggleSet element set =
+    if (Set.member element set) then
+        (Set.remove element set)
     else
-        (Set.insert a s)
+        (Set.insert element set)
 
 
 colorStyle : String -> Html.Attribute msg
@@ -156,15 +156,14 @@ colorStyle colorName =
 
 matchingWordsForColor : String -> Array ColoredWord -> List String
 matchingWordsForColor color coloredWordList =
-    let
-        fw : ColoredWord -> Maybe String
-        fw cw =
+    List.filterMap
+        (\cw ->
             if (Set.member color cw.colors) then
                 Just cw.text
             else
                 Nothing
-    in
-        List.filterMap fw (Array.toList coloredWordList)
+        )
+        (Array.toList coloredWordList)
 
 
 colorStyles : Set String -> ColoredWord -> ColoredWord -> Html.Attribute msg
