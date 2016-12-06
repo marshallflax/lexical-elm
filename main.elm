@@ -79,22 +79,14 @@ splitIntoColorwords input =
 
                 theColors : Set String
                 theColors =
-                    case (List.head textAndColors) of
-                        Nothing ->
-                            Set.empty
-
-                        Just match ->
-                            case (List.head (List.drop 1 match.submatches)) of
-                                Nothing ->
-                                    Set.empty
-
-                                Just maybeString ->
-                                    case maybeString of
-                                        Nothing ->
-                                            Set.empty
-
-                                        Just s ->
-                                            Set.fromList (Regex.split Regex.All (Regex.regex ",") s)
+                    List.head textAndColors
+                        |> Maybe.map .submatches
+                        |> Maybe.map (List.drop 1)
+                        |> Maybe.andThen List.head
+                        |> Maybe.withDefault Nothing
+                        |> Maybe.map (Regex.split Regex.All (Regex.regex ","))
+                        |> Maybe.map Set.fromList
+                        |> Maybe.withDefault Set.empty
             in
                 { text = theTextMap
                 , colors = theColors
