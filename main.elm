@@ -6,6 +6,8 @@ import Html.Attributes exposing (style, value, checked, type_, readonly, placeho
 import Html.Events exposing (onClick, onInput, onMouseEnter)
 import Regex exposing (Regex, Match)
 import Set exposing (Set)
+import Css
+import List.Split
 
 
 main : Program Never Model Msg
@@ -16,7 +18,7 @@ main =
 
 rainbowList : List (List String)
 rainbowList =
-    [ [ "Blue", "Green", "DarkTurquoise" ], [ "Indigo", "Purple", "Crimson", "Violet", "Coral", "Pink", "Gold" ] ]
+    [ [ "Aqua", "Blue", "Green", "DarkTurquoise", "Fuschia", "Lime", "Plum" ], [ "Beige", "Indigo", "Purple", "Crimson", "Violet", "Coral", "Pink", "Gold" ] ]
 
 
 type alias ColoredWord =
@@ -217,10 +219,41 @@ dumpState model =
         |> (String.join " ")
 
 
+type Id
+    = MyId
+
+
+type Class
+    = MyClass
+
+
+imports : List String
+imports =
+    [--  "https://fonts.googleapis.com/css?family=Droid+Sans:400,700"
+    ]
+
+
+rules : List { descriptor : Css.Descriptor, selectors : List (Css.Sel Id Class) }
+rules =
+    [ { selectors = [ Css.Class MyClass ]
+      , descriptor = [ ( "counter-increment", "line" ) ]
+      }
+    , { selectors = [ Css.Pseudo [ Css.Before ] (Css.Class MyClass) ]
+      , descriptor = [ ( "content", "counter(line)" ), ( "color", "red" ) ]
+      }
+    ]
+
+
+stylesheet : Css.Stylesheet Id Class msg
+stylesheet =
+    Css.stylesheet imports rules
+
+
 myView : Model -> Html Msg
 myView model =
     div []
-        [ span
+        [ Css.style [ Html.Attributes.scoped True ] stylesheet
+        , span
             []
             [ text (toString (Set.toList ((currentWordFromIndex model).colors))) ]
         , p [] []
@@ -251,7 +284,9 @@ myView model =
              in
                 List.map doRow rainbowList
             )
-        , Html.p [] [ button [ onClick EnableAllColors ] [ text "ResetHiding" ] ]
+        , Html.p
+            []
+            [ button [ onClick EnableAllColors ] [ text "ResetHiding" ] ]
         , input
             [ value (String.join ", " (matchingWordsForColor model.workingColor model.words))
             , style [ ( "width", "800px" ) ]
@@ -259,16 +294,27 @@ myView model =
             , colorStyle model.workingColor
             ]
             []
-        , Html.p []
-            (List.map
-                (\( index, w ) ->
+        , Html.p
+            []
+            (let
+                indexedList : List ( Int, ColoredWord )
+                indexedList =
+                    (Array.toIndexedList model.words)
+
+                partitionedList : List (List ( Int, ColoredWord ))
+                partitionedList =
+                    List.Split.chunksOfLeft 5 indexedList
+
+                renderWord : ( Int, ColoredWord ) -> Html Msg
+                renderWord ( index, w ) =
                     span
-                        [ colorStyles model.hideColors w (currentWordFromIndex model)
+                        [ stylesheet.class MyClass
+                        , colorStyles model.hideColors w (currentWordFromIndex model)
                         , onClick (ToggleColor index model.workingColor)
                         , onMouseEnter (SetCurrentWord index)
                         ]
                         [ text (" " ++ w.text ++ " ") ]
-                )
-                (Array.toIndexedList model.words)
+             in
+                List.map renderWord indexedList
             )
         ]
