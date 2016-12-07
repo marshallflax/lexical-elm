@@ -4,9 +4,9 @@
     "repository": "https://github.com/user/project.git",
     "license": "BSD3",
     "source-directories": [
-        "."
+        ".","src"
     ],
-    "exposed-modules": [],
+    "exposed-modules": ["App"],
     "dependencies": {
         "elm-community/list-split": "1.0.2 <= v < 2.0.0",
         "elm-lang/core": "5.0.0 <= v < 6.0.0",

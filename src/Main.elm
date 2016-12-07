@@ -10,10 +10,18 @@ import Regex exposing (Regex, Match)
 import Set exposing (Set)
 
 
-main : Program Never Model Msg
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Sub.none
+
+
+
+-- main : Program Never
+
+main: Program Never Model Msg
 main =
-    Html.beginnerProgram
-        { model = model, view = myView, update = myUpdate }
+    Html.program
+        { init = (model, Cmd.none), view = myView, update = myUpdate, subscriptions = subscriptions }
 
 
 rainbowList : List (List String)
@@ -116,28 +124,30 @@ normalize text =
         (String.toLower text)
 
 
-myUpdate : Msg -> Model -> Model
+myUpdate : Msg -> Model -> ( Model, Cmd Msg )
 myUpdate msg model =
     case msg of
         SetText newtext ->
-            { model
+            ( { model
                 | text = newtext
                 , words = splitIntoColorwords newtext
-            }
+              }
+            , Cmd.none
+            )
 
         SetCurrentColor newDefaultColor ->
-            { model | workingColor = newDefaultColor }
+            ( { model | workingColor = newDefaultColor }, Cmd.none )
 
         SetCurrentWord index ->
-            { model | workingWord = index }
+            ( { model | workingWord = index }, Cmd.none )
 
         ToggleColorEnabled color ->
-            { model | hideColors = toggleSet color model.hideColors }
+            ( { model | hideColors = toggleSet color model.hideColors }, Cmd.none )
 
         ToggleColor which newColor ->
-            if (String.length newColor == 0) then
+            ( (if (String.length newColor == 0) then
                 model
-            else
+               else
                 let
                     currentColoredWord =
                         nonMaybeColoredWord (Array.get which model.words)
@@ -146,25 +156,31 @@ myUpdate msg model =
                         { currentColoredWord | colors = toggleSet newColor currentColoredWord.colors }
                 in
                     { model | words = Array.set which modifiedColoredWord model.words }
+              )
+            , Cmd.none
+            )
 
         EnableAllColors ->
-            { model | hideColors = Set.empty }
+            ( ({ model | hideColors = Set.empty }), Cmd.none )
 
         HideSomeColors colorList ->
-            { model | hideColors = Set.union model.hideColors (Set.fromList colorList) }
+            ( ({ model | hideColors = Set.union model.hideColors (Set.fromList colorList) }), Cmd.none )
 
         ResetSomeColors colorList ->
-            { model | hideColors = Set.diff model.hideColors (Set.fromList colorList) }
+            ( ({ model | hideColors = Set.diff model.hideColors (Set.fromList colorList) }), Cmd.none )
 
         SetWordsPerLine wordString ->
-            case
+            ( (case
                 String.toInt wordString
-            of
+               of
                 Err msg ->
                     model
 
                 Ok val ->
                     { model | wordsPerLine = val }
+              )
+            , Cmd.none
+            )
 
 
 toggleSet : comparable1 -> Set comparable1 -> Set comparable1
