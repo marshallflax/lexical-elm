@@ -1,13 +1,13 @@
 module Main exposing (..)
 
 import Array exposing (Array)
+import Css
 import Html exposing (Html, button, div, span, text, input, p, table, tr, td)
 import Html.Attributes exposing (style, value, checked, type_, readonly, placeholder)
 import Html.Events exposing (onClick, onInput, onMouseEnter)
+import List.Split
 import Regex exposing (Regex, Match)
 import Set exposing (Set)
-import Css
-import List.Split
 
 
 main : Program Never Model Msg
@@ -243,16 +243,17 @@ disableButton cs =
     button [ onClick (ResetSomeColors cs) ] [ text "reset" ]
 
 
+dumpColoredWord : ColoredWord -> String
+dumpColoredWord cw =
+    if (Set.isEmpty cw.colors) then
+        cw.text
+    else
+        cw.text ++ "<" ++ (String.join "," (Set.toList cw.colors)) ++ ">"
+
+
 dumpState : Model -> String
 dumpState model =
-    List.map
-        (\cw ->
-            if (Set.isEmpty cw.colors) then
-                cw.text
-            else
-                cw.text ++ "<" ++ (String.join "," (Set.toList cw.colors)) ++ ">"
-        )
-        (Array.toList model.words)
+    List.map dumpColoredWord (Array.toList model.words)
         |> (String.join " ")
 
 
