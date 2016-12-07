@@ -3,7 +3,7 @@ module Main exposing (..)
 import Array exposing (Array)
 import Css
 import Html exposing (Html, button, div, span, text, input, p, table, tr, td)
-import Html.Attributes exposing (style, value, checked, type_, readonly, placeholder)
+import Html.Attributes exposing (style, value, checked, type_, readonly, placeholder, href)
 import Html.Events exposing (onClick, onInput, onMouseEnter)
 import List.Split
 import Regex exposing (Regex, Match)
@@ -66,43 +66,44 @@ type Msg
     | SetWordsPerLine String
 
 
+chunkToColoredword : String -> ColoredWord
+chunkToColoredword str =
+    let
+        textAndColors : Maybe (List (Maybe String))
+        textAndColors =
+            Regex.find Regex.All (Regex.regex "^([^<>]+)<([^>]+)>\\s*$") str
+                |> List.head
+                |> Maybe.map .submatches
+
+        theTextMap : String
+        theTextMap =
+            textAndColors
+                |> Maybe.andThen List.head
+                |> Maybe.withDefault Nothing
+                |> Maybe.withDefault str
+
+        theColors : Set String
+        theColors =
+            textAndColors
+                |> Maybe.map (List.drop 1)
+                |> Maybe.andThen List.head
+                |> Maybe.withDefault Nothing
+                |> Maybe.map (Regex.split Regex.All (Regex.regex ","))
+                |> Maybe.map Set.fromList
+                |> Maybe.withDefault Set.empty
+    in
+        { text = theTextMap
+        , colors = theColors
+        , normalized = normalize theTextMap
+        }
+
+
 splitIntoColorwords : String -> Array ColoredWord
 splitIntoColorwords input =
     let
         chunkArray : Array String
         chunkArray =
             Array.fromList (Regex.split Regex.All (Regex.regex "\\s+") input)
-
-        chunkToColoredword : String -> ColoredWord
-        chunkToColoredword str =
-            let
-                textAndColors : Maybe (List (Maybe String))
-                textAndColors =
-                    Regex.find Regex.All (Regex.regex "^([^<>]+)<([^>]+)>\\s*$") str
-                        |> List.head
-                        |> Maybe.map .submatches
-
-                theTextMap : String
-                theTextMap =
-                    textAndColors
-                        |> Maybe.andThen List.head
-                        |> Maybe.withDefault Nothing
-                        |> Maybe.withDefault str
-
-                theColors : Set String
-                theColors =
-                    textAndColors
-                        |> Maybe.map (List.drop 1)
-                        |> Maybe.andThen List.head
-                        |> Maybe.withDefault Nothing
-                        |> Maybe.map (Regex.split Regex.All (Regex.regex ","))
-                        |> Maybe.map Set.fromList
-                        |> Maybe.withDefault Set.empty
-            in
-                { text = theTextMap
-                , colors = theColors
-                , normalized = normalize theTextMap
-                }
     in
         Array.map chunkToColoredword chunkArray
 
@@ -379,4 +380,8 @@ myView model =
                 -- renderWords indexedList
                 renderPartitioned partitionedList
             )
+        , p [ style [ ( "fontSize", "10%" ) ] ]
+            [ text "(c) marshall.flax@gmail.com; licensed "
+            , Html.a [ href "https://www.gnu.org/licenses/gpl-3.0.en.html" ] [ text "GPL3.0 +" ]
+            ]
         ]
