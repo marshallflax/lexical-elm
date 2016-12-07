@@ -326,10 +326,7 @@ myView model =
             , input [ value (toString model.wordsPerLine), onInput SetWordsPerLine ] [ text "WordsPerLine" ]
             , span []
                 [ text
-                    (toString
-                        (countWordsMatching
-                            model
-                        )
+                    (toString (countWordsMatching model)
                         ++ "/"
                         ++ (toString (countWords model))
                     )
