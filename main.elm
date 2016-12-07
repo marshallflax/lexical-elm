@@ -24,6 +24,7 @@ rainbowList =
 type alias ColoredWord =
     { colors : Set String
     , text : String
+    , normalized : String
     }
 
 
@@ -95,6 +96,7 @@ splitIntoColorwords input =
             in
                 { text = theTextMap
                 , colors = theColors
+                , normalized = normalize theTextMap
                 }
     in
         Array.map chunkToColoredword chunkArray
@@ -102,7 +104,15 @@ splitIntoColorwords input =
 
 nonMaybeColoredWord : Maybe ColoredWord -> ColoredWord
 nonMaybeColoredWord =
-    Maybe.withDefault { text = "", colors = Set.empty }
+    Maybe.withDefault { text = "", colors = Set.empty, normalized = "" }
+
+
+normalize : String -> String
+normalize text =
+    Regex.replace Regex.All
+        (Regex.regex "[^a-z0-9]")
+        (\_ -> "")
+        (String.toLower text)
 
 
 myUpdate : Msg -> Model -> Model
@@ -191,7 +201,7 @@ colorStyles excludeSet coloredWord currentWord =
             Set.size colorSet
 
         matchingStyle =
-            if (coloredWord.text == currentWord.text) then
+            if (coloredWord.normalized == currentWord.normalized) then
                 [ ( "borderStyle", "solid" ), ( "borderColor", "black" ) ]
             else
                 [ ( "borderStyle", "solid" ), ( "borderColor", "transparent" ) ]
