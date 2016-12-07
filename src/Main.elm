@@ -8,6 +8,7 @@ import Html.Events exposing (onClick, onInput, onMouseEnter)
 import List.Split
 import Regex exposing (Regex, Match)
 import Set exposing (Set)
+import Types exposing (..)
 
 
 subscriptions : Model -> Sub Msg
@@ -29,27 +30,9 @@ rainbowList =
     [ [ "Aqua", "Blue", "Green", "DarkTurquoise", "Fuschia", "Lime", "Plum" ], [ "Beige", "Indigo", "Purple", "Crimson", "Violet", "Coral", "Pink", "Gold" ] ]
 
 
-type alias ColoredWord =
-    { colors : Set String
-    , text : String
-    , normalized : String
-    }
-
-
 nonMaybeColoredWord : Maybe ColoredWord -> ColoredWord
 nonMaybeColoredWord =
     Maybe.withDefault { text = "", colors = Set.empty, normalized = "" }
-
-
-type alias Model =
-    { text : String
-    , workingColor : String
-    , words : Array ColoredWord
-    , workingWord : Int
-    , hideColors : Set String
-    , wordsPerLine : Int
-    }
-
 
 model : Model
 model =
@@ -60,19 +43,6 @@ model =
     , hideColors = Set.empty
     , wordsPerLine = 10
     }
-
-
-type Msg
-    = SetText String
-    | SetCurrentColor String
-    | ToggleColor Int String
-    | SetCurrentWord Int
-    | ToggleColorEnabled String
-    | EnableAllColors
-    | HideSomeColors (List String)
-    | ResetSomeColors (List String)
-    | SetWordsPerLine String
-
 
 chunkToColoredword : String -> ColoredWord
 chunkToColoredword str =
