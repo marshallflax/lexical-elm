@@ -28,6 +28,11 @@ type alias ColoredWord =
     }
 
 
+nonMaybeColoredWord : Maybe ColoredWord -> ColoredWord
+nonMaybeColoredWord =
+    Maybe.withDefault { text = "", colors = Set.empty, normalized = "" }
+
+
 type alias Model =
     { text : String
     , workingColor : String
@@ -100,11 +105,6 @@ splitIntoColorwords input =
                 }
     in
         Array.map chunkToColoredword chunkArray
-
-
-nonMaybeColoredWord : Maybe ColoredWord -> ColoredWord
-nonMaybeColoredWord =
-    Maybe.withDefault { text = "", colors = Set.empty, normalized = "" }
 
 
 normalize : String -> String
@@ -191,6 +191,16 @@ matchingWordsForColor color coloredWordList =
         (Array.toList coloredWordList)
 
 
+countWordsMatching : ColoredWord -> Model -> Int
+countWordsMatching desired model =
+    Array.length (Array.filter (\cw -> (cw.normalized == desired.normalized)) model.words)
+
+
+countWords : Model -> Int
+countWords model =
+    Array.length model.words
+
+
 colorStyles : Set String -> ColoredWord -> ColoredWord -> Html.Attribute msg
 colorStyles excludeSet coloredWord currentWord =
     let
@@ -252,8 +262,7 @@ type Class
 
 imports : List String
 imports =
-    [--  "https://fonts.googleapis.com/css?family=Droid+Sans:400,700"
-    ]
+    []
 
 
 rules : List { descriptor : Css.Descriptor, selectors : List (Css.Sel Id Class) }
@@ -311,6 +320,13 @@ myView model =
             []
             [ button [ onClick EnableAllColors ] [ text "ResetHiding" ]
             , input [ value (toString model.wordsPerLine), onInput SetWordsPerLine ] [ text "WordsPerLine" ]
+            , span []
+                [ text
+                    (toString (countWordsMatching (currentWordFromIndex model) model)
+                        ++ "/"
+                        ++ (toString (countWords model))
+                    )
+                ]
             ]
         , input
             [ value (String.join ", " (matchingWordsForColor model.workingColor model.words))
@@ -330,10 +346,14 @@ myView model =
                 partitionedList =
                     List.Split.chunksOfLeft model.wordsPerLine indexedList
 
+                wordToMatch : ColoredWord
+                wordToMatch =
+                    currentWordFromIndex model
+
                 renderWord : ( Int, ColoredWord ) -> Html Msg
                 renderWord ( index, w ) =
                     span
-                        [ colorStyles model.hideColors w (currentWordFromIndex model)
+                        [ colorStyles model.hideColors w wordToMatch
                         , onClick (ToggleColor index model.workingColor)
                         , onMouseEnter (SetCurrentWord index)
                         ]
