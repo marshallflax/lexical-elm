@@ -33,6 +33,7 @@ type alias Model =
     , words : Array ColoredWord
     , workingWord : Int
     , hideColors : Set String
+    , wordsPerLine : Int
     }
 
 
@@ -43,6 +44,7 @@ model =
     , words = Array.fromList []
     , workingWord = -1
     , hideColors = Set.empty
+    , wordsPerLine = 10
     }
 
 
@@ -303,7 +305,7 @@ myView model =
 
                 partitionedList : List (List ( Int, ColoredWord ))
                 partitionedList =
-                    List.Split.chunksOfLeft 10 indexedList
+                    List.Split.chunksOfLeft model.wordsPerLine indexedList
 
                 renderWord : ( Int, ColoredWord ) -> Html Msg
                 renderWord ( index, w ) =
