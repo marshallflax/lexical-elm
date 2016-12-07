@@ -57,6 +57,7 @@ type Msg
     | EnableAllColors
     | HideSomeColors (List String)
     | ResetSomeColors (List String)
+    | SetWordsPerLine String
 
 
 splitIntoColorwords : String -> Array ColoredWord
@@ -143,6 +144,16 @@ myUpdate msg model =
 
         ResetSomeColors colorList ->
             { model | hideColors = Set.diff model.hideColors (Set.fromList colorList) }
+
+        SetWordsPerLine wordString ->
+            case
+                String.toInt wordString
+            of
+                Err msg ->
+                    model
+
+                Ok val ->
+                    { model | wordsPerLine = val }
 
 
 toggleSet : comparable1 -> Set comparable1 -> Set comparable1
@@ -288,7 +299,9 @@ myView model =
             )
         , Html.p
             []
-            [ button [ onClick EnableAllColors ] [ text "ResetHiding" ] ]
+            [ button [ onClick EnableAllColors ] [ text "ResetHiding" ]
+            , input [ value (toString model.wordsPerLine), onInput SetWordsPerLine ] [ text "WordsPerLine" ]
+            ]
         , input
             [ value (String.join ", " (matchingWordsForColor model.workingColor model.words))
             , style [ ( "width", "800px" ) ]
