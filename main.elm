@@ -303,18 +303,30 @@ myView model =
 
                 partitionedList : List (List ( Int, ColoredWord ))
                 partitionedList =
-                    List.Split.chunksOfLeft 5 indexedList
+                    List.Split.chunksOfLeft 10 indexedList
 
                 renderWord : ( Int, ColoredWord ) -> Html Msg
                 renderWord ( index, w ) =
                     span
-                        [ stylesheet.class MyClass
-                        , colorStyles model.hideColors w (currentWordFromIndex model)
+                        [ colorStyles model.hideColors w (currentWordFromIndex model)
                         , onClick (ToggleColor index model.workingColor)
                         , onMouseEnter (SetCurrentWord index)
                         ]
                         [ text (" " ++ w.text ++ " ") ]
+
+                renderWords : List ( Int, ColoredWord ) -> List (Html Msg)
+                renderWords indexedList =
+                    List.map renderWord indexedList
+
+                renderLine : List ( Int, ColoredWord ) -> Html Msg
+                renderLine listPart =
+                    Html.div [ stylesheet.class MyClass ] (renderWords listPart)
+
+                renderPartitioned : List (List ( Int, ColoredWord )) -> List (Html Msg)
+                renderPartitioned partitionedList =
+                    List.map renderLine partitionedList
              in
-                List.map renderWord indexedList
+                -- renderWords indexedList
+                renderPartitioned partitionedList
             )
         ]
