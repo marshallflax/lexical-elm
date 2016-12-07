@@ -191,9 +191,13 @@ matchingWordsForColor color coloredWordList =
         (Array.toList coloredWordList)
 
 
-countWordsMatching : ColoredWord -> Model -> Int
-countWordsMatching desired model =
-    Array.length (Array.filter (\cw -> (cw.normalized == desired.normalized)) model.words)
+countWordsMatching : Model -> Int
+countWordsMatching model =
+    let
+        desired =
+            (currentWordFromIndex model).normalized
+    in
+        Array.length (Array.filter (\cw -> (cw.normalized == desired)) model.words)
 
 
 countWords : Model -> Int
@@ -322,7 +326,10 @@ myView model =
             , input [ value (toString model.wordsPerLine), onInput SetWordsPerLine ] [ text "WordsPerLine" ]
             , span []
                 [ text
-                    (toString (countWordsMatching (currentWordFromIndex model) model)
+                    (toString
+                        (countWordsMatching
+                            model
+                        )
                         ++ "/"
                         ++ (toString (countWords model))
                     )
