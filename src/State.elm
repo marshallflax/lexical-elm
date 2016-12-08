@@ -37,12 +37,7 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         SetText newtext ->
-            ( { model
-                | text = newtext
-                , words = splitIntoColorwords newtext
-              }
-            , Cmd.none
-            )
+            ( { model | text = newtext, words = splitIntoColorwords newtext }, Cmd.none )
 
         SetCurrentColor newDefaultColor ->
             ( { model | workingColor = newDefaultColor }, Cmd.none )
@@ -70,13 +65,13 @@ update msg model =
             )
 
         EnableAllColors ->
-            ( ({ model | hideColors = Set.empty }), Cmd.none )
+            ( { model | hideColors = Set.empty }, Cmd.none )
 
         HideSomeColors colorList ->
-            ( ({ model | hideColors = Set.union model.hideColors (Set.fromList colorList) }), Cmd.none )
+            ( { model | hideColors = Set.union model.hideColors (Set.fromList colorList) }, Cmd.none )
 
         ResetSomeColors colorList ->
-            ( ({ model | hideColors = Set.diff model.hideColors (Set.fromList colorList) }), Cmd.none )
+            ( { model | hideColors = Set.diff model.hideColors (Set.fromList colorList) }, Cmd.none )
 
         SetWordsPerLine wordString ->
             ( (case
