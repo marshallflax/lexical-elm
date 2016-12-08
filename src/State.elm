@@ -49,9 +49,9 @@ update msg model =
             ( { model | hideColors = toggleSet color model.hideColors }, Cmd.none )
 
         ToggleColor which newColor ->
-            ( (if (String.length newColor == 0) then
+            ( if (String.length newColor == 0) then
                 model
-               else
+              else
                 let
                     currentColoredWord =
                         nonMaybeColoredWord (Array.get which model.words)
@@ -60,7 +60,6 @@ update msg model =
                         { currentColoredWord | colors = toggleSet newColor currentColoredWord.colors }
                 in
                     { model | words = Array.set which modifiedColoredWord model.words }
-              )
             , Cmd.none
             )
 
@@ -74,15 +73,14 @@ update msg model =
             ( { model | hideColors = Set.diff model.hideColors (Set.fromList colorList) }, Cmd.none )
 
         SetWordsPerLine wordString ->
-            ( (case
+            ( case
                 String.toInt wordString
-               of
+              of
                 Err msg ->
                     model
 
                 Ok val ->
                     { model | wordsPerLine = val }
-              )
             , Cmd.none
             )
 
@@ -93,15 +91,6 @@ toggleSet element set =
         (Set.remove element set)
     else
         (Set.insert element set)
-
-
-countWordsMatching : Model -> Int
-countWordsMatching model =
-    let
-        desired =
-            (currentWordFromIndex model).normalized
-    in
-        Array.length (Array.filter (\cw -> (cw.normalized == desired)) model.words)
 
 
 countWords : Model -> Int
@@ -131,5 +120,14 @@ partitionedList model =
 
 
 wordToMatch : Model -> ColoredWord
-wordToMatch model =
-    currentWordFromIndex model
+wordToMatch =
+    currentWordFromIndex
+
+
+countWordsMatching : Model -> Int
+countWordsMatching model =
+    let
+        desired =
+            (currentWordFromIndex model).normalized
+    in
+        Array.length (Array.filter (\cw -> (cw.normalized == desired)) model.words)
