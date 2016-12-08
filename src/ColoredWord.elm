@@ -65,3 +65,23 @@ normalize text =
         (Regex.regex "[^a-z0-9]")
         (\_ -> "")
         (String.toLower text)
+
+
+dumpColoredWord : ColoredWord -> String
+dumpColoredWord cw =
+    if (Set.isEmpty cw.colors) then
+        cw.text
+    else
+        cw.text ++ "<" ++ (String.join "," (Set.toList cw.colors)) ++ ">"
+
+
+matchingWordsForColor : String -> Array ColoredWord -> List String
+matchingWordsForColor color coloredWordList =
+    List.filterMap
+        (\cw ->
+            if (Set.member color cw.colors) then
+                Just cw.text
+            else
+                Nothing
+        )
+        (Array.toList coloredWordList)

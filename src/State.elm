@@ -119,30 +119,10 @@ currentWordFromIndex model =
     nonMaybeColoredWord (Array.get model.workingWord model.words)
 
 
-dumpColoredWord : ColoredWord -> String
-dumpColoredWord cw =
-    if (Set.isEmpty cw.colors) then
-        cw.text
-    else
-        cw.text ++ "<" ++ (String.join "," (Set.toList cw.colors)) ++ ">"
-
-
 dumpState : Model -> String
 dumpState model =
     List.map dumpColoredWord (Array.toList model.words)
         |> (String.join " ")
-
-
-matchingWordsForColor : String -> Array ColoredWord -> List String
-matchingWordsForColor color coloredWordList =
-    List.filterMap
-        (\cw ->
-            if (Set.member color cw.colors) then
-                Just cw.text
-            else
-                Nothing
-        )
-        (Array.toList coloredWordList)
 
 
 indexedList : Model -> List ( Int, ColoredWord )
