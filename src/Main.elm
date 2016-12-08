@@ -6,7 +6,6 @@ import Html exposing (Html, button, div, span, text, input, p, table, tr, td)
 import Html.Attributes exposing (style, value, checked, type_, readonly, placeholder, href)
 import Html.Events exposing (onClick, onInput, onMouseEnter)
 import List.Split
-import Regex exposing (Regex, Match)
 import Set exposing (Set)
 import Types exposing (..)
 import State exposing (..)
@@ -23,11 +22,6 @@ main: Program Never Model Msg
 main =
     Html.program
         { init = (model, Cmd.none), view = myView, update = myUpdate, subscriptions = subscriptions }
-
-
-rainbowList : List (List String)
-rainbowList =
-    [ [ "Aqua", "Blue", "Green", "DarkTurquoise", "Fuschia", "Lime", "Plum" ], [ "Beige", "Indigo", "Purple", "Crimson", "Violet", "Coral", "Pink", "Gold" ] ]
 
 
 
@@ -47,20 +41,6 @@ matchingWordsForColor color coloredWordList =
                 Nothing
         )
         (Array.toList coloredWordList)
-
-
-countWordsMatching : Model -> Int
-countWordsMatching model =
-    let
-        desired =
-            (currentWordFromIndex model).normalized
-    in
-        Array.length (Array.filter (\cw -> (cw.normalized == desired)) model.words)
-
-
-countWords : Model -> Int
-countWords model =
-    Array.length model.words
 
 
 colorStyles : Set String -> ColoredWord -> ColoredWord -> Html.Attribute msg
@@ -86,11 +66,6 @@ colorStyles excludeSet coloredWord currentWord =
             style (( "background", "linear-gradient(90deg," ++ String.join "," (Set.toList colorSet) ++ ")" ) :: matchingStyle)
 
 
-currentWordFromIndex : Model -> ColoredWord
-currentWordFromIndex model =
-    nonMaybeColoredWord (Array.get model.workingWord model.words)
-
-
 enableButton : List String -> Html Msg
 enableButton cs =
     button [ onClick (HideSomeColors cs) ] [ text "hide" ]
@@ -100,19 +75,6 @@ disableButton : List String -> Html Msg
 disableButton cs =
     button [ onClick (ResetSomeColors cs) ] [ text "reset" ]
 
-
-dumpColoredWord : ColoredWord -> String
-dumpColoredWord cw =
-    if (Set.isEmpty cw.colors) then
-        cw.text
-    else
-        cw.text ++ "<" ++ (String.join "," (Set.toList cw.colors)) ++ ">"
-
-
-dumpState : Model -> String
-dumpState model =
-    List.map dumpColoredWord (Array.toList model.words)
-        |> (String.join " ")
 
 
 type Id

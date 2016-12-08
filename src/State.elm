@@ -3,7 +3,12 @@ module State exposing (..)
 import Array exposing (Array)
 import Regex exposing (Regex, Match)
 import Types exposing (..)
-import Set exposing(Set)
+import Set exposing (Set)
+
+
+rainbowList : List (List String)
+rainbowList =
+    [ [ "Aqua", "Blue", "Green", "DarkTurquoise", "Fuschia", "Lime", "Plum" ], [ "Beige", "Indigo", "Purple", "Crimson", "Violet", "Coral", "Pink", "Gold" ] ]
 
 
 nonMaybeColoredWord : Maybe ColoredWord -> ColoredWord
@@ -137,3 +142,32 @@ toggleSet element set =
         (Set.remove element set)
     else
         (Set.insert element set)
+countWordsMatching : Model -> Int
+countWordsMatching model =
+    let
+        desired =
+            (currentWordFromIndex model).normalized
+    in
+        Array.length (Array.filter (\cw -> (cw.normalized == desired)) model.words)
+
+
+countWords : Model -> Int
+countWords model =
+    Array.length model.words
+
+
+currentWordFromIndex : Model -> ColoredWord
+currentWordFromIndex model =
+    nonMaybeColoredWord (Array.get model.workingWord model.words)
+dumpColoredWord : ColoredWord -> String
+dumpColoredWord cw =
+    if (Set.isEmpty cw.colors) then
+        cw.text
+    else
+        cw.text ++ "<" ++ (String.join "," (Set.toList cw.colors)) ++ ">"
+
+
+dumpState : Model -> String
+dumpState model =
+    List.map dumpColoredWord (Array.toList model.words)
+        |> (String.join " ")
