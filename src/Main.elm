@@ -31,17 +31,6 @@ colorStyle colorName =
     style [ ( "backgroundColor", colorName ) ]
 
 
-matchingWordsForColor : String -> Array ColoredWord -> List String
-matchingWordsForColor color coloredWordList =
-    List.filterMap
-        (\cw ->
-            if (Set.member color cw.colors) then
-                Just cw.text
-            else
-                Nothing
-        )
-        (Array.toList coloredWordList)
-
 
 colorStyles : Set String -> ColoredWord -> ColoredWord -> Html.Attribute msg
 colorStyles excludeSet coloredWord currentWord =

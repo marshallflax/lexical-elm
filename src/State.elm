@@ -142,6 +142,8 @@ toggleSet element set =
         (Set.remove element set)
     else
         (Set.insert element set)
+
+
 countWordsMatching : Model -> Int
 countWordsMatching model =
     let
@@ -159,6 +161,8 @@ countWords model =
 currentWordFromIndex : Model -> ColoredWord
 currentWordFromIndex model =
     nonMaybeColoredWord (Array.get model.workingWord model.words)
+
+
 dumpColoredWord : ColoredWord -> String
 dumpColoredWord cw =
     if (Set.isEmpty cw.colors) then
@@ -171,3 +175,15 @@ dumpState : Model -> String
 dumpState model =
     List.map dumpColoredWord (Array.toList model.words)
         |> (String.join " ")
+
+
+matchingWordsForColor : String -> Array ColoredWord -> List String
+matchingWordsForColor color coloredWordList =
+    List.filterMap
+        (\cw ->
+            if (Set.member color cw.colors) then
+                Just cw.text
+            else
+                Nothing
+        )
+        (Array.toList coloredWordList)
