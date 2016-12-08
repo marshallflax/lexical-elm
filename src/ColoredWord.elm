@@ -14,12 +14,9 @@ type alias ColoredWord =
 
 splitIntoColorwords : String -> Array ColoredWord
 splitIntoColorwords input =
-    let
-        chunkArray : Array String
-        chunkArray =
-            Array.fromList (Regex.split Regex.All (Regex.regex "\\s+") input)
-    in
-        Array.map chunkToColoredword chunkArray
+    (Regex.split Regex.All (Regex.regex "\\s+") input)
+        |> Array.fromList
+        |> Array.map chunkToColoredword
 
 
 nonMaybeColoredWord : Maybe ColoredWord -> ColoredWord
