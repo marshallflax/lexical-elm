@@ -87,8 +87,8 @@ normalize text =
         (String.toLower text)
 
 
-myUpdate : Msg -> Model -> ( Model, Cmd Msg )
-myUpdate msg model =
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
     case msg of
         SetText newtext ->
             ( { model
