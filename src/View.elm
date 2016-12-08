@@ -1,12 +1,10 @@
 module View exposing (root)
 
-import Array exposing (Array)
 import ColoredWord exposing (..)
 import Css
 import Html exposing (Html, button, div, span, text, input, p, table, tr, td)
 import Html.Attributes exposing (style, value, checked, type_, readonly, placeholder, href)
 import Html.Events exposing (onClick, onInput, onMouseEnter)
-import List.Split
 import Set exposing (Set)
 import State exposing (..)
 import Types exposing (..)
@@ -136,22 +134,10 @@ root model =
         , Html.p
             []
             (let
-                indexedList : List ( Int, ColoredWord )
-                indexedList =
-                    (Array.toIndexedList model.words)
-
-                partitionedList : List (List ( Int, ColoredWord ))
-                partitionedList =
-                    List.Split.chunksOfLeft model.wordsPerLine indexedList
-
-                wordToMatch : ColoredWord
-                wordToMatch =
-                    currentWordFromIndex model
-
                 renderWord : ( Int, ColoredWord ) -> Html Msg
                 renderWord ( index, w ) =
                     span
-                        [ colorStyles model.hideColors w wordToMatch
+                        [ colorStyles model.hideColors w (wordToMatch model)
                         , onClick (ToggleColor index model.workingColor)
                         , onMouseEnter (SetCurrentWord index)
                         ]
@@ -170,7 +156,7 @@ root model =
                     List.map renderLine partitionedList
              in
                 -- renderWords indexedList
-                renderPartitioned partitionedList
+                renderPartitioned (partitionedList model)
             )
         , p [ style [ ( "fontSize", "10%" ) ] ]
             [ text "(c) marshall.flax@gmail.com; licensed "

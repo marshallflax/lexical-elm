@@ -2,6 +2,7 @@ module State exposing (..)
 
 import Array exposing (Array)
 import ColoredWord exposing (..)
+import List.Split
 import Set exposing (Set)
 import Types exposing (..)
 
@@ -142,3 +143,18 @@ matchingWordsForColor color coloredWordList =
                 Nothing
         )
         (Array.toList coloredWordList)
+
+
+indexedList : Model -> List ( Int, ColoredWord )
+indexedList model =
+    (Array.toIndexedList model.words)
+
+
+partitionedList : Model -> List (List ( Int, ColoredWord ))
+partitionedList model =
+    List.Split.chunksOfLeft model.wordsPerLine (indexedList model)
+
+
+wordToMatch : Model -> ColoredWord
+wordToMatch model =
+    currentWordFromIndex model
