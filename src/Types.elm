@@ -1,14 +1,8 @@
 module Types exposing (..)
 
-import Set exposing (Set)
 import Array exposing (Array)
-
-
-type alias ColoredWord =
-    { colors : Set String
-    , text : String
-    , normalized : String
-    }
+import ColoredWord exposing (..)
+import Set exposing (Set)
 
 
 type alias Model =

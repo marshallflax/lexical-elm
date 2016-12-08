@@ -1,6 +1,7 @@
 module View exposing (root)
 
 import Array exposing (Array)
+import ColoredWord exposing (..)
 import Css
 import Html exposing (Html, button, div, span, text, input, p, table, tr, td)
 import Html.Attributes exposing (style, value, checked, type_, readonly, placeholder, href)
