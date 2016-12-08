@@ -16,6 +16,16 @@ nonMaybeColoredWord =
     Maybe.withDefault { text = "", colors = Set.empty, normalized = "" }
 
 
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Sub.none
+
+
+init : ( Model, Cmd msg )
+init =
+    ( model, Cmd.none )
+
+
 model : Model
 model =
     { text = "Hello"

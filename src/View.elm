@@ -7,8 +7,8 @@ import Html.Attributes exposing (style, value, checked, type_, readonly, placeho
 import Html.Events exposing (onClick, onInput, onMouseEnter)
 import List.Split
 import Set exposing (Set)
-import Types exposing (..)
 import State exposing (..)
+import Types exposing (..)
 
 
 colorStyle : String -> Html.Attribute msg

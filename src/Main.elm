@@ -1,17 +1,12 @@
-module Main exposing (..)
+module Main exposing (main)
 
-import Html
-import Types exposing (..)
-import State exposing (..)
+import Html exposing (program)
+import State exposing (model, myUpdate, subscriptions, init)
+import Types exposing (Model, Msg)
 import View exposing (root)
-
-
-subscriptions : Model -> Sub Msg
-subscriptions _ =
-    Sub.none
 
 
 main : Program Never Model Msg
 main =
-    Html.program
-        { init = ( model, Cmd.none ), view = root, update = myUpdate, subscriptions = subscriptions }
+    program
+        { init = init, view = root, update = myUpdate, subscriptions = subscriptions }
