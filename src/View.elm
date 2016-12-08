@@ -143,20 +143,12 @@ root model =
                         ]
                         [ text (" " ++ w.text ++ " ") ]
 
-                renderWords : List ( Int, ColoredWord ) -> List (Html Msg)
-                renderWords indexedList =
-                    List.map renderWord indexedList
-
                 renderLine : List ( Int, ColoredWord ) -> Html Msg
                 renderLine listPart =
-                    Html.div [ stylesheet.class MyClass ] (renderWords listPart)
-
-                renderPartitioned : List (List ( Int, ColoredWord )) -> List (Html Msg)
-                renderPartitioned partitionedList =
-                    List.map renderLine partitionedList
+                    Html.div [ stylesheet.class MyClass ]
+                        (List.map renderWord listPart)
              in
-                -- renderWords indexedList
-                renderPartitioned (partitionedList model)
+                List.map renderLine (partitionedList model)
             )
         , p [ style [ ( "fontSize", "10%" ) ] ]
             [ text "(c) marshall.flax@gmail.com; licensed "
