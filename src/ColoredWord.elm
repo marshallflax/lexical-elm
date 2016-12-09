@@ -74,11 +74,11 @@ normalize text =
 
 
 dumpColoredWord : ColoredWord -> String
-dumpColoredWord cw =
-    if (Set.isEmpty cw.colors) then
-        cw.text
+dumpColoredWord {colors, text} =
+    if (Set.isEmpty colors) then
+        text
     else
-        cw.text ++ "<" ++ (String.join "," (Set.toList cw.colors)) ++ ">"
+        text ++ "<" ++ (String.join "," (Set.toList colors)) ++ ">"
 
 
 matchingWordsForColor : String -> Array ColoredWord -> List String
