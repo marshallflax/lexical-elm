@@ -114,7 +114,7 @@ root model =
                             (renderWord
                                 model.hideColors
                                 model.workingColor
-                                (wordToMatch model)
+                                (currentWordFromIndex model)
                             )
                             listPart
                         )

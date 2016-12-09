@@ -119,9 +119,8 @@ partitionedList model =
     List.Split.chunksOfLeft model.wordsPerLine (indexedList model)
 
 
-wordToMatch : Model -> ColoredWord
-wordToMatch =
-    currentWordFromIndex
+
+
 
 
 countWordsMatching : Model -> Int
