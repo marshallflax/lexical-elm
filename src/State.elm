@@ -109,14 +109,10 @@ dumpState model =
         |> (String.join " ")
 
 
-indexedList : Model -> List ( Int, ColoredWord )
-indexedList model =
-    (Array.toIndexedList model.words)
-
-
 partitionedList : Model -> List (List ( Int, ColoredWord ))
 partitionedList model =
-    List.Split.chunksOfLeft model.wordsPerLine (indexedList model)
+    (Array.toIndexedList model.words)
+        |> List.Split.chunksOfLeft model.wordsPerLine
 
 
 countWordsMatching : Model -> Int

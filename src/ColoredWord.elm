@@ -42,15 +42,15 @@ chunkToColoredword str =
                 |> List.head
                 |> Maybe.map .submatches
 
-        theTextMap : String
-        theTextMap =
+        text : String
+        text =
             textAndColors
                 |> Maybe.andThen List.head
                 |> Maybe.withDefault Nothing
                 |> Maybe.withDefault str
 
-        theColors : Set String
-        theColors =
+        colors : Set String
+        colors =
             textAndColors
                 |> Maybe.map (List.drop 1)
                 |> Maybe.andThen List.head
@@ -59,9 +59,9 @@ chunkToColoredword str =
                 |> Maybe.map Set.fromList
                 |> Maybe.withDefault Set.empty
     in
-        { text = theTextMap
-        , colors = theColors
-        , normalized = normalize theTextMap
+        { text = text
+        , colors = colors
+        , normalized = normalize text
         }
 
 
