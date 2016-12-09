@@ -119,10 +119,6 @@ partitionedList model =
     List.Split.chunksOfLeft model.wordsPerLine (indexedList model)
 
 
-
-
-
-
 countWordsMatching : Model -> Int
 countWordsMatching model =
     let

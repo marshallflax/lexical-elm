@@ -5,11 +5,20 @@ import Regex
 import Set exposing (Set)
 
 
+type alias NormalizedWord a =
+    { a | normalized : String }
+
+
+type alias ColorSetWord a =
+    { a | colors : Set String }
+
+
+type alias TextWord a =
+    { a | text : String }
+
+
 type alias ColoredWord =
-    { colors : Set String
-    , text : String
-    , normalized : String
-    }
+    ColorSetWord (NormalizedWord (TextWord {}))
 
 
 splitIntoColorwords : String -> Array ColoredWord
