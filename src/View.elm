@@ -1,6 +1,6 @@
 module View exposing (root)
 
-import ColoredWord exposing (..)
+import ColoredWord exposing (ColoredWord, matchingWordsForColor)
 import ColoredWordView exposing (..)
 import Css
 import Html exposing (Html, button, div, span, text, input, p, table, tr, td)
