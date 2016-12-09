@@ -9,7 +9,7 @@ type alias NormalizedWord a =
     { a | normalized : String }
 
 
-type alias ColorSetWord a =
+type alias WithColors a =
     { a | colors : Set String }
 
 
@@ -18,7 +18,7 @@ type alias TextWord a =
 
 
 type alias ColoredWord =
-    ColorSetWord (NormalizedWord (TextWord {}))
+    NormalizedWord (WithColors (TextWord {}))
 
 
 splitIntoColorwords : String -> Array ColoredWord
@@ -74,7 +74,7 @@ normalize text =
 
 
 dumpColoredWord : ColoredWord -> String
-dumpColoredWord {colors, text} =
+dumpColoredWord { colors, text } =
     if (Set.isEmpty colors) then
         text
     else
@@ -82,12 +82,12 @@ dumpColoredWord {colors, text} =
 
 
 matchingWordsForColor : String -> Array ColoredWord -> List String
-matchingWordsForColor color coloredWordList =
-    List.filterMap
-        (\cw ->
-            if (Set.member color cw.colors) then
-                Just cw.text
-            else
-                Nothing
-        )
-        (Array.toList coloredWordList)
+matchingWordsForColor specifiedColor coloredWordList =
+    (Array.toList coloredWordList)
+        |> List.filterMap
+            (\{ colors, text } ->
+                if (Set.member specifiedColor colors) then
+                    Just text
+                else
+                    Nothing
+            )
