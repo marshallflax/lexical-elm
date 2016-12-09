@@ -107,17 +107,14 @@ root model =
         , Html.p
             []
             (let
+                doWord : (Int, ColoredWord) -> Html Msg
+                doWord =
+                    renderWord model.hideColors model.workingColor (currentWordFromIndex model)
+
                 renderLine : List ( Int, ColoredWord ) -> Html Msg
                 renderLine listPart =
                     Html.div [ stylesheet.class MyClass ]
-                        (List.map
-                            (renderWord
-                                model.hideColors
-                                model.workingColor
-                                (currentWordFromIndex model)
-                            )
-                            listPart
-                        )
+                        (List.map doWord listPart)
              in
                 List.map renderLine (partitionedList model)
             )
