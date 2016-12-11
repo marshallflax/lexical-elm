@@ -109,23 +109,29 @@ root model =
             , colorStyle model.workingColor
             ]
             []
-        , Html.p
+        , Html.table
             []
-            (let
-                doWord : ( Int, ColoredWord ) -> Html Msg
-                doWord =
-                    renderWord model.hideColors model.workingColor model.workingNormalized
+            [ tr []
+                [ td [ style [ ( "width", "800px" ), ( "vertical-align", "top" ) ] ]
+                    (let
+                        doWord : ( Int, ColoredWord ) -> Html Msg
+                        doWord =
+                            renderWord model.hideColors model.workingColor model.workingNormalized
 
-                renderLine : List ( Int, ColoredWord ) -> Html Msg
-                renderLine listPart =
-                    Html.div [ stylesheet.class MyClass ]
-                        (List.map doWord listPart)
-             in
-                List.map renderLine (partitionedList model)
-            )
+                        renderLine : List ( Int, ColoredWord ) -> Html Msg
+                        renderLine listPart =
+                            Html.div [ stylesheet.class MyClass ]
+                                (List.map doWord listPart)
+                     in
+                        List.map renderLine (partitionedList model)
+                    )
+                , td [ style [ ( "width", "800px" ), ( "vertical-align", "top" ) ] ]
+                    [ NGramView.renderFrequencies model.frequencies ]
+                ]
+            ]
         , p [ style [ ( "fontSize", "10%" ) ] ]
             [ text "(c) marshall.flax@gmail.com; licensed "
             , Html.a [ href "https://www.gnu.org/licenses/gpl-3.0.en.html" ] [ text "GPL3.0 +" ]
             ]
-        , NGramView.renderFrequencies model.frequencies
+        , div [] [ NGramView.renderFrequencies model.frequencies ]
         ]
