@@ -13,8 +13,8 @@ colorStyle colorName =
     style [ ( "backgroundColor", colorName ) ]
 
 
-colorStyles : Set String -> ColoredWord -> ColoredWord -> Html.Attribute msg
-colorStyles excludeSet coloredWord currentWord =
+colorStyles : Set String -> ColoredWord -> String -> Html.Attribute msg
+colorStyles excludeSet coloredWord currentWordNormalized =
     let
         colorSet =
             Set.diff coloredWord.colors excludeSet
@@ -23,7 +23,7 @@ colorStyles excludeSet coloredWord currentWord =
             Set.size colorSet
 
         matchingStyle =
-            if (coloredWord.normalized == currentWord.normalized) then
+            if (coloredWord.normalized == currentWordNormalized) then
                 [ ( "borderStyle", "solid" ), ( "borderColor", "black" ) ]
             else
                 [ ( "borderStyle", "solid" ), ( "borderColor", "transparent" ) ]
@@ -36,10 +36,10 @@ colorStyles excludeSet coloredWord currentWord =
             style (( "background", "linear-gradient(90deg," ++ String.join "," (Set.toList colorSet) ++ ")" ) :: matchingStyle)
 
 
-renderWord : Set String -> String -> ColoredWord -> ( Int, ColoredWord ) -> Html Msg
-renderWord hideColors currentColor currentWord ( index, w ) =
+renderWord : Set String -> String -> String -> ( Int, ColoredWord ) -> Html Msg
+renderWord hideColors currentColor currentWordNormalized ( index, w ) =
     span
-        [ colorStyles hideColors w currentWord
+        [ colorStyles hideColors w currentWordNormalized
         , onClick (ToggleColor index currentColor)
         , onMouseEnter (SetCurrentWord index)
         ]

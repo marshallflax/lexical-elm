@@ -114,7 +114,7 @@ root model =
             (let
                 doWord : ( Int, ColoredWord ) -> Html Msg
                 doWord =
-                    renderWord model.hideColors model.workingColor (currentWordFromIndex model.workingWord model)
+                    renderWord model.hideColors model.workingColor model.workingNormalized
 
                 renderLine : List ( Int, ColoredWord ) -> Html Msg
                 renderLine listPart =
