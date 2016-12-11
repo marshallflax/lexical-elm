@@ -13,7 +13,7 @@ type alias Model =
     , workingWord : Int
     , hideColors : Set String
     , wordsPerLine : Int
-    , frequencies : FreqInfo String
+    , frequencies : FreqInfo
     }
 
 
