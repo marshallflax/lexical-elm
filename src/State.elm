@@ -2,7 +2,9 @@ module State exposing (..)
 
 import Array exposing (Array)
 import ColoredWord exposing (..)
+import Dict exposing (..)
 import List.Split
+import NGram exposing (..)
 import Set exposing (Set)
 import Types exposing (..)
 
@@ -30,6 +32,7 @@ model =
     , workingWord = -1
     , hideColors = Set.empty
     , wordsPerLine = 10
+    , frequencies = Dict.empty
     }
 
 
@@ -37,7 +40,17 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         SetText newtext ->
-            ( { model | text = newtext, words = splitIntoColorwords newtext }, Cmd.none )
+            ( let
+                words =
+                    splitIntoColorwords newtext
+              in
+                { model
+                    | text = newtext
+                    , words = words
+                    , frequencies = countFreq (Array.map .text words)
+                }
+            , Cmd.none
+            )
 
         SetCurrentColor newDefaultColor ->
             ( { model | workingColor = newDefaultColor }, Cmd.none )

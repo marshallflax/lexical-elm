@@ -3,6 +3,7 @@ module Types exposing (..)
 import Array exposing (Array)
 import ColoredWord exposing (..)
 import Set exposing (Set)
+import NGram exposing (..)
 
 
 type alias Model =
@@ -12,6 +13,7 @@ type alias Model =
     , workingWord : Int
     , hideColors : Set String
     , wordsPerLine : Int
+    , frequencies : FreqInfo String
     }
 
 

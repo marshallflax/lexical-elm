@@ -88,7 +88,11 @@ root model =
         , Html.p
             []
             [ button [ onClick EnableAllColors ] [ text "ResetHiding" ]
-            , input [ value (toString model.wordsPerLine), onInput SetWordsPerLine ] [ text "WordsPerLine" ]
+            , input
+                [ value (toString model.wordsPerLine)
+                , onInput SetWordsPerLine
+                ]
+                [ text "WordsPerLine" ]
             , span []
                 [ text
                     (toString (countWordsMatching model)
@@ -107,7 +111,7 @@ root model =
         , Html.p
             []
             (let
-                doWord : (Int, ColoredWord) -> Html Msg
+                doWord : ( Int, ColoredWord ) -> Html Msg
                 doWord =
                     renderWord model.hideColors model.workingColor (currentWordFromIndex model)
 
@@ -122,4 +126,5 @@ root model =
             [ text "(c) marshall.flax@gmail.com; licensed "
             , Html.a [ href "https://www.gnu.org/licenses/gpl-3.0.en.html" ] [ text "GPL3.0 +" ]
             ]
+        , div [] [ text (toString model.frequencies) ]
         ]

@@ -6,19 +6,27 @@ import List exposing (..)
 import Set exposing (..)
 
 
-type alias FreqInfo a =
-    Dict a (Set Int)
+type alias FreqInfo comparable1 =
+    Dict comparable1 (Set Int)
 
 
-countFreq : Array a -> FreqInfo a
+countFreq : Array comparable1 -> FreqInfo comparable1
 countFreq array =
     let
-        fold : ( Int, a ) -> FreqInfo a -> FreqInfo a
-        fold ( count, val ) dict =
-            dict
+        fold : ( Int, comparable1 ) -> FreqInfo comparable1 -> FreqInfo comparable1
+        fold ( index, val ) dict =
+            let
+                newSet : Set Int
+                newSet =
+                    case
+                        Dict.get val dict
+                    of
+                        Nothing ->
+                            Set.insert index Set.empty
 
-        start : FreqInfo a
-        start =
-            Dict.empty
+                        Just set ->
+                            Set.insert index set
+            in
+                Dict.insert val newSet dict
     in
-        List.foldl fold start (Array.toIndexedList array)
+        List.foldl fold Dict.empty (Array.toIndexedList array)
