@@ -35,5 +35,5 @@ renderSet wordToSet =
             span [] [ text (" " ++ word ++ " ") ]
     in
         td
-        []
+            [ style [ ( "border", "solid" ) ] ]
             (List.map doWord (Dict.keys wordToSet))
