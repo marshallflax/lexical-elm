@@ -3,6 +3,7 @@ module NGramView exposing (..)
 import Dict exposing (..)
 import Html exposing (Html, button, div, span, text, input, p, table, tr, td)
 import Html.Attributes exposing (style, value, checked, type_, readonly, placeholder, href)
+import Html.Events exposing (onClick, onInput, onMouseEnter)
 import NGram exposing (..)
 import Types exposing (..)
 
@@ -32,7 +33,9 @@ renderSet wordToSet =
     let
         doWord : String -> Html Msg
         doWord word =
-            span [] [ text (" " ++ word ++ " ") ]
+            span
+                [ onClick (SetCurrentNormalized word) ]
+                [ text (" " ++ word ++ " ") ]
     in
         td
             [ style [ ( "border", "solid" ) ] ]
