@@ -23,13 +23,13 @@ init =
     ( model, Cmd.none )
 
 
-
 model : Model
 model =
     { text = "Hello"
     , workingColor = ""
     , words = Array.fromList []
     , workingWord = -1
+    , workingNormalized = ""
     , hideColors = Set.empty
     , wordsPerLine = 10
     , frequencies = NGram.empty
@@ -56,7 +56,12 @@ update msg model =
             ( { model | workingColor = newDefaultColor }, Cmd.none )
 
         SetCurrentWord index ->
-            ( { model | workingWord = index }, Cmd.none )
+            ( { model
+                | workingWord = index
+                , workingNormalized = (currentWordFromIndex index model).normalized
+              }
+            , Cmd.none
+            )
 
         ToggleColorEnabled color ->
             ( { model | hideColors = toggleSet color model.hideColors }, Cmd.none )
@@ -111,9 +116,9 @@ countWords model =
     Array.length model.words
 
 
-currentWordFromIndex : Model -> ColoredWord
-currentWordFromIndex model =
-    nonMaybeColoredWord (Array.get model.workingWord model.words)
+currentWordFromIndex : Int -> Model -> ColoredWord
+currentWordFromIndex index model =
+    nonMaybeColoredWord (Array.get index model.words)
 
 
 dumpState : Model -> String
@@ -130,8 +135,4 @@ partitionedList model =
 
 countWordsMatching : Model -> Int
 countWordsMatching model =
-    let
-        desired =
-            (currentWordFromIndex model).normalized
-    in
-        Array.length (Array.filter (\cw -> (cw.normalized == desired)) model.words)
+    Array.length (Array.filter (\cw -> (cw.normalized == model.workingNormalized)) model.words)

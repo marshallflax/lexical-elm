@@ -57,7 +57,7 @@ root model =
         [ Css.style [ Html.Attributes.scoped True ] stylesheet
         , span
             []
-            [ text (toString (Set.toList ((currentWordFromIndex model).colors))) ]
+            [ text (toString (Set.toList ((currentWordFromIndex model.workingWord model).colors))) ]
         , p [] []
         , input
             [ value (dumpState model)
@@ -114,7 +114,7 @@ root model =
             (let
                 doWord : ( Int, ColoredWord ) -> Html Msg
                 doWord =
-                    renderWord model.hideColors model.workingColor (currentWordFromIndex model)
+                    renderWord model.hideColors model.workingColor (currentWordFromIndex model.workingWord model)
 
                 renderLine : List ( Int, ColoredWord ) -> Html Msg
                 renderLine listPart =
