@@ -23,6 +23,7 @@ type Msg
     | SetCurrentColor String
     | ToggleColor Int String
     | SetCurrentWord Int
+    | SetCurrentNormalized String
     | ToggleColorEnabled String
     | EnableAllColors
     | HideSomeColors (List String)

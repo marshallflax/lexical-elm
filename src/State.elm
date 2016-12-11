@@ -63,6 +63,14 @@ update msg model =
             , Cmd.none
             )
 
+        SetCurrentNormalized text ->
+            ( { model
+                | workingWord = -1
+                , workingNormalized = text
+              }
+            , Cmd.none
+            )
+
         ToggleColorEnabled color ->
             ( { model | hideColors = toggleSet color model.hideColors }, Cmd.none )
 
