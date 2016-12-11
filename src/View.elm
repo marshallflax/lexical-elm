@@ -9,6 +9,7 @@ import Html.Events exposing (onClick, onInput, onMouseEnter)
 import Set exposing (Set)
 import State exposing (..)
 import Types exposing (..)
+import NGramView exposing (..)
 
 
 enableButton : List String -> Html Msg
@@ -126,5 +127,5 @@ root model =
             [ text "(c) marshall.flax@gmail.com; licensed "
             , Html.a [ href "https://www.gnu.org/licenses/gpl-3.0.en.html" ] [ text "GPL3.0 +" ]
             ]
-        , div [] [ text (toString model.frequencies) ]
+        , NGramView.renderFrequencies model.frequencies
         ]
