@@ -2,7 +2,6 @@ module State exposing (..)
 
 import Array exposing (Array)
 import ColoredWord exposing (..)
-import Dict exposing (..)
 import List.Split
 import NGram exposing (..)
 import Set exposing (Set)
@@ -24,6 +23,7 @@ init =
     ( model, Cmd.none )
 
 
+
 model : Model
 model =
     { text = "Hello"
@@ -32,7 +32,7 @@ model =
     , workingWord = -1
     , hideColors = Set.empty
     , wordsPerLine = 10
-    , frequencies = Dict.empty
+    , frequencies = NGram.empty
     }
 
 
@@ -47,7 +47,7 @@ update msg model =
                 { model
                     | text = newtext
                     , words = words
-                    , frequencies = countFreq (Array.map .text words)
+                    , frequencies = countFreq (Array.map .normalized words)
                 }
             , Cmd.none
             )
