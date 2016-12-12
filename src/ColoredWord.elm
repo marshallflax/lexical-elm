@@ -21,9 +21,24 @@ type alias ColoredWord =
     NormalizedWord (WithColors (TextWord {}))
 
 
+tokenize : String -> List String
+tokenize input =
+    let
+        nonword : String
+        nonword =
+            " \\f\\n\\r\\t\\v\\u00a0\\u1680\\u180e\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff"
+
+        pattern : String
+        pattern =
+            "[^" ++ nonword ++ "]+[" ++ nonword ++ "]*"
+    in
+        Regex.find Regex.All (Regex.regex pattern) input
+            |> List.map .match
+
+
 splitIntoColorwords : String -> Array ColoredWord
 splitIntoColorwords input =
-    (Regex.split Regex.All (Regex.regex "\\s+") input)
+    tokenize input
         |> Array.fromList
         |> Array.map chunkToColoredword
 
