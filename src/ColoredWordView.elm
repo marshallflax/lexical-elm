@@ -13,6 +13,14 @@ colorStyle colorName =
     style [ ( "backgroundColor", colorName ) ]
 
 
+matchingStyle : Bool -> List ( String, String )
+matchingStyle matches =
+    if matches then
+        [ ( "borderStyle", "solid" ), ( "borderColor", "black" ) ]
+    else
+        [ ( "borderStyle", "solid" ), ( "borderColor", "transparent" ) ]
+
+
 colorStyles : Set String -> ColoredWord -> String -> Html.Attribute msg
 colorStyles excludeSet coloredWord currentWordNormalized =
     let
@@ -22,18 +30,15 @@ colorStyles excludeSet coloredWord currentWordNormalized =
         size =
             Set.size colorSet
 
-        matchingStyle =
-            if (coloredWord.normalized == currentWordNormalized) then
-                [ ( "borderStyle", "solid" ), ( "borderColor", "black" ) ]
-            else
-                [ ( "borderStyle", "solid" ), ( "borderColor", "transparent" ) ]
+        isMatch =
+            coloredWord.normalized == currentWordNormalized
     in
         if (size == 0) then
-            style matchingStyle
+            style (matchingStyle isMatch)
         else if (size <= 1) then
-            style (( "backgroundColor", String.join "," (Set.toList colorSet) ) :: matchingStyle)
+            style (( "backgroundColor", String.join "," (Set.toList colorSet) ) :: (matchingStyle isMatch))
         else
-            style (( "background", "linear-gradient(90deg," ++ String.join "," (Set.toList colorSet) ++ ")" ) :: matchingStyle)
+            style (( "background", "linear-gradient(90deg," ++ String.join "," (Set.toList colorSet) ++ ")" ) :: (matchingStyle isMatch))
 
 
 renderWord : Set String -> String -> String -> ( Int, ColoredWord ) -> Html Msg
