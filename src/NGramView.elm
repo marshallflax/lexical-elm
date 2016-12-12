@@ -6,37 +6,40 @@ import Html.Attributes exposing (style, value, checked, type_, readonly, placeho
 import Html.Events exposing (onClick, onInput, onMouseEnter)
 import NGram exposing (..)
 import Types exposing (..)
+import ColoredWordView exposing (..)
 
 
-renderFrequencies : FreqInfo -> Html Msg
-renderFrequencies ( _, freqToWordSet ) =
+renderFrequencies : String -> FreqInfo -> Html Msg
+renderFrequencies currentWord ( x, freqToWordSet ) =
     table
-        [ style [ ( "border", "solid" ) ]
+        [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ]
         ]
         (List.map
-            renderFrequency
+            (renderFrequency currentWord)
             (List.reverse (Dict.toList freqToWordSet))
         )
 
 
-renderFrequency : ( Int, WordToSet ) -> Html Msg
-renderFrequency ( size, wordToSet ) =
+renderFrequency : String -> ( Int, WordToSet ) -> Html Msg
+renderFrequency currentWord ( size, wordToSet ) =
     tr []
-        [ td []
+        [ td [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ] ]
             [ text (toString size) ]
-        , renderSet wordToSet
+        , renderSet currentWord wordToSet
         ]
 
 
-renderSet : WordToSet -> Html Msg
-renderSet wordToSet =
+renderSet : String -> WordToSet -> Html Msg
+renderSet currentWord wordToSet =
     let
         doWord : String -> Html Msg
         doWord word =
             span
-                [ onClick (SetCurrentNormalized word) ]
+                [ onClick (SetCurrentNormalized word)
+                , style (matchingStyle (word == currentWord))
+                ]
                 [ text (" " ++ word ++ " ") ]
     in
         td
-            [ style [ ( "border", "solid" ) ] ]
+            [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ] ]
             (List.map doWord (Dict.keys wordToSet))
