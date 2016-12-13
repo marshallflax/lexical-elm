@@ -50,4 +50,21 @@ countList array =
 
 countFreq : Array String -> FreqInfo
 countFreq array =
-    { words = countList (Array.toList array), n2 = Dict.empty }
+    let
+        wordList : List String
+        wordList =
+            Array.toList array
+
+        shiftedList : List String
+        shiftedList =
+            List.drop 1 wordList
+
+        conc : String -> String -> String
+        conc a b =
+            a ++ " " ++ b
+
+        pairedList : List String
+        pairedList =
+            List.map2 conc wordList shiftedList
+    in
+        { words = countList wordList, n2 = countList pairedList }
