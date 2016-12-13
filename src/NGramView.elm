@@ -1,12 +1,12 @@
 module NGramView exposing (..)
 
-import Dict exposing (..)
-import Html exposing (Html, button, div, span, text, input, p, table, tr, td)
-import Html.Attributes exposing (style, value, checked, type_, readonly, placeholder, href)
-import Html.Events exposing (onClick, onInput, onMouseEnter)
+import ColoredWordView exposing (matchingStyle)
+import Dict exposing (Dict)
+import Html exposing (Html, table, tr, td, text, span)
+import Html.Attributes exposing (style)
+import Html.Events exposing (onClick)
 import NGram exposing (..)
 import Types exposing (..)
-import ColoredWordView exposing (..)
 
 
 renderFrequencies : String -> FreqInfo -> Html Msg
