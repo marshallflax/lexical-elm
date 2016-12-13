@@ -67,4 +67,4 @@ countFreq array =
         pairedList =
             List.map2 conc wordList shiftedList
     in
-        { words = countList wordList, n2 = countList pairedList }
+        { words = countList wordList, n2 = Dict.remove 1 (countList pairedList) }
