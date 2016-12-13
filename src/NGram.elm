@@ -19,8 +19,8 @@ empty =
     { words = Dict.empty, n2 = Dict.empty }
 
 
-countFreq : Array String -> FreqInfo
-countFreq array =
+countList : List String -> Dict Int (List String)
+countList array =
     let
         foldWordToCount : String -> Dict String Int -> Dict String Int
         foldWordToCount val dict =
@@ -36,10 +36,7 @@ countFreq array =
 
         wordToCount : Dict String Int
         wordToCount =
-            List.foldl
-                foldWordToCount
-                Dict.empty
-                (Array.toList array)
+            List.foldl foldWordToCount Dict.empty array
 
         freqToWordToCount : Dict Int (List String)
         freqToWordToCount =
@@ -48,4 +45,9 @@ countFreq array =
                 Dict.empty
                 (List.reverse (Dict.toList wordToCount))
     in
-        { words = freqToWordToCount, n2 = Dict.empty }
+        freqToWordToCount
+
+
+countFreq : Array String -> FreqInfo
+countFreq array =
+    { words = countList (Array.toList array), n2 = Dict.empty }
