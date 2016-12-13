@@ -126,7 +126,7 @@ root model =
                         List.map renderLine (partitionedList model)
                     )
                 , td [ style [ ( "width", "800px" ), ( "vertical-align", "top" ) ] ]
-                    [ NGramView.renderFrequencies model.workingNormalized model.frequencies ]
+                    [ NGramView.renderFrequencies model.workingNormalized model.frequencies.words ]
                 ]
             ]
         , p [ style [ ( "fontSize", "10%" ) ] ]

@@ -1,9 +1,9 @@
 module Types exposing (..)
 
 import Array exposing (Array)
-import ColoredWord exposing (..)
+import ColoredWord exposing (ColoredWord)
+import NGram exposing (FreqInfo)
 import Set exposing (Set)
-import NGram exposing (..)
 
 
 type alias Model =

@@ -6,12 +6,12 @@ import List exposing (..)
 
 
 type alias FreqInfo =
-    Dict Int (List String)
+    { words : Dict Int (List String) }
 
 
 empty : FreqInfo
 empty =
-    Dict.empty
+    { words = Dict.empty }
 
 
 countFreq : Array String -> FreqInfo
@@ -43,4 +43,4 @@ countFreq array =
                 Dict.empty
                 (List.reverse (Dict.toList wordToCount))
     in
-        freqToWordToCount
+        { words = freqToWordToCount }
