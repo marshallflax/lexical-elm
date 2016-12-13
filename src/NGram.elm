@@ -22,27 +22,19 @@ countFreq : Array String -> FreqInfo
 countFreq array =
     let
         foldWordToCount ( index, val ) dict =
-            Dict.insert val (1 + Maybe.withDefault 0 (Dict.get val dict)) dict
-
-        foldLengthToWTS : ( String, Int ) -> Dict Int (List String) -> Dict Int (List String)
-        foldLengthToWTS ( val, count ) dict =
-            let
-                newWordToCount : List String
-                newWordToCount =
-                    case
-                        Dict.get count dict
-                    of
-                        Nothing ->
-                            [ val ]
-
-                        Just wordToCount ->
-                            val :: wordToCount
-            in
-                Dict.insert count newWordToCount dict
+            Dict.insert val
+                (1 + Maybe.withDefault 0 (Dict.get val dict))
+                dict
 
         wordToCount : WordToCount
         wordToCount =
             List.foldl foldWordToCount Dict.empty (Array.toIndexedList array)
+
+        foldLengthToWTS : ( String, Int ) -> Dict Int (List String) -> Dict Int (List String)
+        foldLengthToWTS ( val, count ) dict =
+            Dict.insert count
+                (val :: Maybe.withDefault [] (Dict.get count dict))
+                dict
 
         freqToWordToCount : Dict Int (List String)
         freqToWordToCount =
