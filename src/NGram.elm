@@ -6,12 +6,17 @@ import List exposing (..)
 
 
 type alias FreqInfo =
-    { words : Dict Int (List String) }
+    { words :
+        Dict Int (List String)
+    , n2 :
+        Dict Int (List String)
+        -- n-grams stored as space-delimited strings, so i can index by 'em
+    }
 
 
 empty : FreqInfo
 empty =
-    { words = Dict.empty }
+    { words = Dict.empty, n2 = Dict.empty }
 
 
 countFreq : Array String -> FreqInfo
@@ -43,4 +48,4 @@ countFreq array =
                 Dict.empty
                 (List.reverse (Dict.toList wordToCount))
     in
-        { words = freqToWordToCount }
+        { words = freqToWordToCount, n2 = Dict.empty }
