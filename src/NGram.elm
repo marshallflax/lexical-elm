@@ -5,12 +5,8 @@ import Dict exposing (..)
 import List exposing (..)
 
 
-type alias WordToCount =
-    Dict String Int
-
-
 type alias FreqInfo =
-    ( WordToCount, Dict Int (List String) )
+    ( Dict String Int, Dict Int (List String) )
 
 
 empty : FreqInfo
@@ -21,14 +17,11 @@ empty =
 countFreq : Array String -> FreqInfo
 countFreq array =
     let
-        foldWordToCount ( index, val ) dict =
+        foldWordToCount : String -> Dict String Int -> Dict String Int
+        foldWordToCount val dict =
             Dict.insert val
                 (1 + Maybe.withDefault 0 (Dict.get val dict))
                 dict
-
-        wordToCount : WordToCount
-        wordToCount =
-            List.foldl foldWordToCount Dict.empty (Array.toIndexedList array)
 
         foldLengthToWTS : ( String, Int ) -> Dict Int (List String) -> Dict Int (List String)
         foldLengthToWTS ( val, count ) dict =
@@ -36,8 +29,18 @@ countFreq array =
                 (val :: Maybe.withDefault [] (Dict.get count dict))
                 dict
 
+        wordToCount : Dict String Int
+        wordToCount =
+            List.foldl
+                foldWordToCount
+                Dict.empty
+                (Array.toList array)
+
         freqToWordToCount : Dict Int (List String)
         freqToWordToCount =
-            List.foldl foldLengthToWTS Dict.empty (List.reverse (Dict.toList wordToCount))
+            List.foldl
+                foldLengthToWTS
+                Dict.empty
+                (List.reverse (Dict.toList wordToCount)) -- Reverse since we build List with :: within the foldl
     in
         ( wordToCount, freqToWordToCount )
