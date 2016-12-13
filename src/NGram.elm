@@ -8,6 +8,7 @@ import List exposing (..)
 type alias WordToCount =
     Dict String Int
 
+
 type alias FreqInfo =
     ( WordToCount, Dict Int (List String) )
 
@@ -20,33 +21,31 @@ empty =
 countFreq : Array String -> FreqInfo
 countFreq array =
     let
-        foldWordToSet ( index, val ) dict =
+        foldWordToCount ( index, val ) dict =
             Dict.insert val (1 + Maybe.withDefault 0 (Dict.get val dict)) dict
 
         foldLengthToWTS : ( String, Int ) -> Dict Int (List String) -> Dict Int (List String)
-        foldLengthToWTS ( val, setSize ) dict =
+        foldLengthToWTS ( val, count ) dict =
             let
-                newWordToSet : List String
-                newWordToSet =
+                newWordToCount : List String
+                newWordToCount =
                     case
-                        Dict.get
-                            setSize
-                            dict
+                        Dict.get count dict
                     of
                         Nothing ->
                             [ val ]
 
-                        Just wordToSet ->
-                            val :: wordToSet
+                        Just wordToCount ->
+                            val :: wordToCount
             in
-                Dict.insert setSize newWordToSet dict
+                Dict.insert count newWordToCount dict
 
-        wordToSet : WordToCount
-        wordToSet =
-            List.foldl foldWordToSet Dict.empty (Array.toIndexedList array)
+        wordToCount : WordToCount
+        wordToCount =
+            List.foldl foldWordToCount Dict.empty (Array.toIndexedList array)
 
-        freqToWordToSet : Dict Int (List String)
-        freqToWordToSet =
-            List.foldl foldLengthToWTS Dict.empty (List.reverse (Dict.toList wordToSet))
+        freqToWordToCount : Dict Int (List String)
+        freqToWordToCount =
+            List.foldl foldLengthToWTS Dict.empty (List.reverse (Dict.toList wordToCount))
     in
-        ( wordToSet, freqToWordToSet )
+        ( wordToCount, freqToWordToCount )
