@@ -11,7 +11,7 @@ type alias WordToSet =
 
 
 type alias FreqInfo =
-    ( WordToSet, Dict Int WordToSet )
+    ( WordToSet, Dict Int (List String) )
 
 
 empty : FreqInfo
@@ -37,14 +37,14 @@ countFreq array =
             in
                 Dict.insert val newSet dict
 
-        foldLengthToWTS : ( String, Set Int ) -> Dict Int WordToSet -> Dict Int WordToSet
+        foldLengthToWTS : ( String, Set Int ) -> Dict Int (List String) -> Dict Int (List String)
         foldLengthToWTS ( val, set ) dict =
             let
                 setSize : Int
                 setSize =
                     Set.size set
 
-                newWordToSet : WordToSet
+                newWordToSet : List String
                 newWordToSet =
                     case
                         Dict.get
@@ -52,10 +52,10 @@ countFreq array =
                             dict
                     of
                         Nothing ->
-                            Dict.insert val set Dict.empty
+                            [val]
 
                         Just wordToSet ->
-                            Dict.insert val set wordToSet
+                            val :: wordToSet
             in
                 Dict.insert setSize newWordToSet dict
 
@@ -63,7 +63,7 @@ countFreq array =
         wordToSet =
             List.foldl foldWordToSet Dict.empty (Array.toIndexedList array)
 
-        freqToWordToSet : Dict Int WordToSet
+        freqToWordToSet : Dict Int (List String)
         freqToWordToSet =
             List.foldl foldLengthToWTS Dict.empty (Dict.toList wordToSet)
     in

@@ -10,27 +10,27 @@ import ColoredWordView exposing (..)
 
 
 renderFrequencies : String -> FreqInfo -> Html Msg
-renderFrequencies currentWord ( x, freqToWordSet ) =
+renderFrequencies currentWord ( x, freqToWords ) =
     table
         [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ]
         ]
         (List.map
             (renderFrequency currentWord)
-            (List.reverse (Dict.toList freqToWordSet))
+            (List.reverse (Dict.toList freqToWords))
         )
 
 
-renderFrequency : String -> ( Int, WordToSet ) -> Html Msg
-renderFrequency currentWord ( size, wordToSet ) =
+renderFrequency : String -> ( Int, (List String) ) -> Html Msg
+renderFrequency currentWord ( size, words ) =
     tr []
         [ td [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ] ]
             [ text (toString size) ]
-        , renderSet currentWord wordToSet
+        , renderWords currentWord words
         ]
 
 
-renderSet : String -> WordToSet -> Html Msg
-renderSet currentWord wordToSet =
+renderWords : String -> List String -> Html Msg
+renderWords currentWord words =
     let
         doWord : String -> Html Msg
         doWord word =
@@ -42,4 +42,4 @@ renderSet currentWord wordToSet =
     in
         td
             [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ] ]
-            (List.map doWord (Dict.keys wordToSet))
+            (List.map doWord words)
