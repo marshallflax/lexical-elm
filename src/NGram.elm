@@ -6,12 +6,12 @@ import List exposing (..)
 
 
 type alias FreqInfo =
-    ( Dict String Int, Dict Int (List String) )
+    Dict Int (List String)
 
 
 empty : FreqInfo
 empty =
-    ( Dict.empty, Dict.empty )
+    Dict.empty
 
 
 countFreq : Array String -> FreqInfo
@@ -41,6 +41,6 @@ countFreq array =
             List.foldl
                 foldLengthToWTS
                 Dict.empty
-                (List.reverse (Dict.toList wordToCount)) -- Reverse since we build List with :: within the foldl
+                (List.reverse (Dict.toList wordToCount))
     in
-        ( wordToCount, freqToWordToCount )
+        freqToWordToCount
