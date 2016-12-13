@@ -3,15 +3,13 @@ module NGram exposing (..)
 import Array exposing (..)
 import Dict exposing (..)
 import List exposing (..)
-import Set exposing (..)
 
 
-type alias WordToSet =
-    Dict String (Set Int)
-
+type alias WordToCount =
+    Dict String Int
 
 type alias FreqInfo =
-    ( WordToSet, Dict Int (List String) )
+    ( WordToCount, Dict Int (List String) )
 
 
 empty : FreqInfo
@@ -23,27 +21,11 @@ countFreq : Array String -> FreqInfo
 countFreq array =
     let
         foldWordToSet ( index, val ) dict =
+            Dict.insert val (1 + Maybe.withDefault 0 (Dict.get val dict)) dict
+
+        foldLengthToWTS : ( String, Int ) -> Dict Int (List String) -> Dict Int (List String)
+        foldLengthToWTS ( val, setSize ) dict =
             let
-                newSet : Set Int
-                newSet =
-                    case
-                        Dict.get val dict
-                    of
-                        Nothing ->
-                            Set.insert index Set.empty
-
-                        Just set ->
-                            Set.insert index set
-            in
-                Dict.insert val newSet dict
-
-        foldLengthToWTS : ( String, Set Int ) -> Dict Int (List String) -> Dict Int (List String)
-        foldLengthToWTS ( val, set ) dict =
-            let
-                setSize : Int
-                setSize =
-                    Set.size set
-
                 newWordToSet : List String
                 newWordToSet =
                     case
@@ -52,19 +34,19 @@ countFreq array =
                             dict
                     of
                         Nothing ->
-                            [val]
+                            [ val ]
 
                         Just wordToSet ->
                             val :: wordToSet
             in
                 Dict.insert setSize newWordToSet dict
 
-        wordToSet : WordToSet
+        wordToSet : WordToCount
         wordToSet =
             List.foldl foldWordToSet Dict.empty (Array.toIndexedList array)
 
         freqToWordToSet : Dict Int (List String)
         freqToWordToSet =
-            List.foldl foldLengthToWTS Dict.empty (Dict.toList wordToSet)
+            List.foldl foldLengthToWTS Dict.empty (List.reverse (Dict.toList wordToSet))
     in
         ( wordToSet, freqToWordToSet )

@@ -132,5 +132,7 @@ root model =
         , p [ style [ ( "fontSize", "10%" ) ] ]
             [ text "(c) marshall.flax@gmail.com; licensed "
             , Html.a [ href "https://www.gnu.org/licenses/gpl-3.0.en.html" ] [ text "GPL3.0 +" ]
+            , text " "
+            , Html.a [ href "github.com:marshallflax/lexical-elm.git" ] [ text "source" ]
             ]
         ]
