@@ -1,16 +1,15 @@
-module NGramView exposing (..)
+module NGramView exposing (renderFrequencies)
 
 import ColoredWordView exposing (matchingStyle)
-import Dict exposing (Dict)
+import Dict exposing (..)
 import Html exposing (Html, table, tr, td, text, span)
 import Html.Attributes exposing (style)
 import Html.Events exposing (onClick)
-import NGram exposing (..)
 import Types exposing (..)
 
 
-renderFrequencies : String -> FreqInfo -> Html Msg
-renderFrequencies currentWord ( x, freqToWords ) =
+renderFrequencies : String -> Dict Int (List String) -> Html Msg
+renderFrequencies currentWord freqToWords =
     table
         [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ]
         ]
@@ -20,7 +19,7 @@ renderFrequencies currentWord ( x, freqToWords ) =
         )
 
 
-renderFrequency : String -> ( Int, (List String) ) -> Html Msg
+renderFrequency : String -> ( Int, List String ) -> Html Msg
 renderFrequency currentWord ( size, words ) =
     tr []
         [ td [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ] ]
