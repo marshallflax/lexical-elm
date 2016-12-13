@@ -127,6 +127,8 @@ root model =
                     )
                 , td [ style [ ( "width", "800px" ), ( "vertical-align", "top" ) ] ]
                     [ NGramView.renderFrequencies model.workingNormalized model.frequencies.words ]
+                , td [ style [ ( "width", "800px" ), ( "vertical-align", "top" ) ] ]
+                    [ NGramView.renderFrequencies model.workingNormalized model.frequencies.n2 ]
                 ]
             ]
         , p [ style [ ( "fontSize", "10%" ) ] ]

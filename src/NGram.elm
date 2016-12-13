@@ -61,7 +61,7 @@ countFreq array =
 
         conc : String -> String -> String
         conc a b =
-            a ++ " " ++ b
+            a ++ "_" ++ b
 
         pairedList : List String
         pairedList =

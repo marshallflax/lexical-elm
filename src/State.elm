@@ -4,6 +4,7 @@ import Array exposing (Array)
 import ColoredWord exposing (..)
 import List.Split
 import NGram exposing (..)
+import Regex exposing (..)
 import Set exposing (Set)
 import Types exposing (..)
 
@@ -66,7 +67,7 @@ update msg model =
         SetCurrentNormalized text ->
             ( { model
                 | workingWord = -1
-                , workingNormalized = Set.insert text Set.empty
+                , workingNormalized = Set.fromList (Regex.split Regex.All (Regex.regex "_") text)
               }
             , Cmd.none
             )

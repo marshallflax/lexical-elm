@@ -83,7 +83,8 @@ chunkToColoredword str =
 normalize : String -> String
 normalize text =
     Regex.replace Regex.All
-        (Regex.regex "[^a-z0-9'’]") -- both apostrophe and single-quote!
+        (Regex.regex "[^_a-z0-9'’]")
+        -- both apostrophe and single-quote!
         (\_ -> "")
         (String.toLower text)
 
