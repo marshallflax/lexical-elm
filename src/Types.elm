@@ -11,7 +11,7 @@ type alias Model =
     , workingColor : String
     , words : Array ColoredWord
     , workingWord : Int
-    , workingNormalized : String
+    , workingNormalized : Set String
     , hideColors : Set String
     , wordsPerLine : Int
     , frequencies : FreqInfo

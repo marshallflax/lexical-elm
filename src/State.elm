@@ -29,7 +29,7 @@ model =
     , workingColor = ""
     , words = Array.fromList []
     , workingWord = -1
-    , workingNormalized = ""
+    , workingNormalized = Set.empty
     , hideColors = Set.empty
     , wordsPerLine = 10
     , frequencies = NGram.empty
@@ -58,7 +58,7 @@ update msg model =
         SetCurrentWord index ->
             ( { model
                 | workingWord = index
-                , workingNormalized = (currentWordFromIndex index model).normalized
+                , workingNormalized = Set.insert (currentWordFromIndex index model).normalized Set.empty
               }
             , Cmd.none
             )
@@ -66,7 +66,7 @@ update msg model =
         SetCurrentNormalized text ->
             ( { model
                 | workingWord = -1
-                , workingNormalized = text
+                , workingNormalized = Set.insert text Set.empty
               }
             , Cmd.none
             )
@@ -143,4 +143,4 @@ partitionedList model =
 
 countWordsMatching : Model -> Int
 countWordsMatching model =
-    Array.length (Array.filter (\cw -> (cw.normalized == model.workingNormalized)) model.words)
+    Array.length (Array.filter (\cw -> (Set.member cw.normalized model.workingNormalized)) model.words)

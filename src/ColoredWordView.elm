@@ -21,8 +21,8 @@ matchingStyle matches =
         [ ( "borderStyle", "solid" ), ( "borderColor", "transparent" ) ]
 
 
-colorStyles : Set String -> ColoredWord -> String -> Html.Attribute msg
-colorStyles excludeSet coloredWord currentWordNormalized =
+colorStyles : Set String -> ColoredWord -> Set String -> Html.Attribute msg
+colorStyles excludeSet coloredWord currentWordsNormalized =
     let
         colorSet =
             Set.diff coloredWord.colors excludeSet
@@ -31,7 +31,7 @@ colorStyles excludeSet coloredWord currentWordNormalized =
             Set.size colorSet
 
         isMatch =
-            coloredWord.normalized == currentWordNormalized
+            Set.member coloredWord.normalized currentWordsNormalized
     in
         if (size == 0) then
             style (matchingStyle isMatch)
@@ -41,10 +41,10 @@ colorStyles excludeSet coloredWord currentWordNormalized =
             style (( "background", "linear-gradient(90deg," ++ String.join "," (Set.toList colorSet) ++ ")" ) :: (matchingStyle isMatch))
 
 
-renderWord : Set String -> String -> String -> ( Int, ColoredWord ) -> Html Msg
-renderWord hideColors currentColor currentWordNormalized ( index, w ) =
+renderWord : Set String -> String -> Set String -> ( Int, ColoredWord ) -> Html Msg
+renderWord hideColors currentColor currentWordsNormalized ( index, w ) =
     span
-        [ colorStyles hideColors w currentWordNormalized
+        [ colorStyles hideColors w currentWordsNormalized
         , onClick (ToggleColor index currentColor)
         , onMouseEnter (SetCurrentWord index)
         ]

@@ -5,37 +5,38 @@ import Dict exposing (..)
 import Html exposing (Html, table, tr, td, text, span)
 import Html.Attributes exposing (style)
 import Html.Events exposing (onClick)
+import Set exposing (..)
 import Types exposing (..)
 
 
-renderFrequencies : String -> Dict Int (List String) -> Html Msg
-renderFrequencies currentWord freqToWords =
+renderFrequencies : Set String -> Dict Int (List String) -> Html Msg
+renderFrequencies currentWordsNormalized freqToWords =
     table
         [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ]
         ]
         (List.map
-            (renderFrequency currentWord)
+            (renderFrequency currentWordsNormalized)
             (List.reverse (Dict.toList freqToWords))
         )
 
 
-renderFrequency : String -> ( Int, List String ) -> Html Msg
-renderFrequency currentWord ( size, words ) =
+renderFrequency : Set String -> ( Int, List String ) -> Html Msg
+renderFrequency currentWordsNormalized ( size, words ) =
     tr []
         [ td [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ] ]
             [ text (toString size) ]
-        , renderWords currentWord words
+        , renderWords currentWordsNormalized words
         ]
 
 
-renderWords : String -> List String -> Html Msg
-renderWords currentWord words =
+renderWords : Set String -> List String -> Html Msg
+renderWords currentWordsNormalized words =
     let
         doWord : String -> Html Msg
         doWord word =
             span
                 [ onClick (SetCurrentNormalized word)
-                , style (matchingStyle (word == currentWord))
+                , style (matchingStyle (Set.member word currentWordsNormalized))
                 ]
                 [ text (" " ++ word ++ " ") ]
     in
