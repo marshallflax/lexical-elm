@@ -1,9 +1,10 @@
 module ColoredWordView exposing (..)
 
 import ColoredWord exposing (..)
-import Html exposing (Html, button, div, span, text, input, p, table, tr, td)
+import Html exposing (..)
 import Html.Attributes exposing (style, value, checked, type_, readonly, placeholder, href)
-import Html.Events exposing (onClick, onInput, onMouseEnter)
+import Html.Events exposing (on, onClick, onInput, onMouseEnter)
+import Json.Decode as JD
 import Set exposing (Set)
 import Types exposing (..)
 
@@ -46,6 +47,22 @@ renderWord hideColors currentColor currentWordsNormalized ( index, w ) =
     span
         [ colorStyles hideColors w currentWordsNormalized
         , onClick (ToggleColor index currentColor)
-        , onMouseEnter (SetCurrentWord index)
+          -- , onMouseEnter (SetCurrentWord index)
+        , onShiftEvent "mouseenter" (SetCurrentWord index)
         ]
         [ text (" " ++ w.text ++ " ") ]
+
+
+onShiftEvent : String -> msg -> Attribute msg
+onShiftEvent eventName message =
+    let
+        hasShift : msg -> Bool -> JD.Decoder msg
+        hasShift message shiftKey =
+            if shiftKey then
+                JD.succeed message
+            else
+                JD.fail "No shift key"
+    in
+        on eventName <|
+            JD.andThen (hasShift message) <|
+                JD.at [ "shiftKey" ] JD.bool
