@@ -21,20 +21,17 @@ subscriptions _ =
 
 init : ( Model, Cmd msg )
 init =
-    ( model, Cmd.none )
-
-
-model : Model
-model =
-    { text = "Hello"
-    , workingColor = ""
-    , words = Array.fromList []
-    , workingWord = -1
-    , workingNormalized = Set.empty
-    , hideColors = Set.empty
-    , wordsPerLine = 10
-    , frequencies = FreqInfo.empty
-    }
+    ( { text = "Hello"
+      , workingColor = ""
+      , words = Array.fromList []
+      , workingWord = -1
+      , workingNormalized = Set.empty
+      , hideColors = Set.empty
+      , wordsPerLine = 10
+      , frequencies = FreqInfo.empty
+      }
+    , Cmd.none
+    )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -147,4 +144,9 @@ partitionedList model =
 
 countWordsMatching : Model -> Int
 countWordsMatching model =
-    Array.length (Array.filter (\cw -> (Set.member cw.normalized model.workingNormalized)) model.words)
+    let
+        matches coloredWord =
+            Set.member coloredWord.normalized model.workingNormalized
+    in
+        Array.length
+            (Array.filter matches model.words)
