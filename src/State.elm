@@ -66,8 +66,11 @@ update msg model =
 
         SetCurrentNormalized text ->
             ( { model
-                | workingWord = -1
-                , workingNormalized = Set.fromList (Regex.split Regex.All (Regex.regex "_") text)
+                | workingWord =
+                    -1
+                , workingNormalized =
+                    -- include full text in split so we know to show 2-grams cheaply
+                    Set.insert text (Set.fromList (Regex.split Regex.All (Regex.regex "_") text))
               }
             , Cmd.none
             )
