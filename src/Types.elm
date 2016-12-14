@@ -2,7 +2,7 @@ module Types exposing (..)
 
 import Array exposing (Array)
 import ColoredWord exposing (ColoredWord)
-import NGram exposing (FreqInfo)
+import FreqInfo exposing (FreqInfo)
 import Set exposing (Set)
 
 

@@ -3,7 +3,7 @@ module State exposing (..)
 import Array exposing (Array)
 import ColoredWord exposing (..)
 import List.Split
-import NGram exposing (..)
+import FreqInfo exposing (..)
 import Regex exposing (..)
 import Set exposing (Set)
 import Types exposing (..)
@@ -33,7 +33,7 @@ model =
     , workingNormalized = Set.empty
     , hideColors = Set.empty
     , wordsPerLine = 10
-    , frequencies = NGram.empty
+    , frequencies = FreqInfo.empty
     }
 
 

@@ -9,7 +9,7 @@ import Html.Events exposing (onClick, onInput, onMouseEnter)
 import Set exposing (Set)
 import State exposing (..)
 import Types exposing (..)
-import NGramView exposing (..)
+import FreqInfoView exposing (..)
 
 
 enableButton : List String -> Html Msg
@@ -126,9 +126,9 @@ root model =
                         List.map renderLine (partitionedList model)
                     )
                 , td [ style [ ( "width", "800px" ), ( "vertical-align", "top" ) ] ]
-                    [ NGramView.renderFrequencies model.workingNormalized model.frequencies.words ]
+                    [ FreqInfoView.renderFrequencies model.workingNormalized model.frequencies.words ]
                 , td [ style [ ( "width", "400px" ), ( "vertical-align", "top" ) ] ]
-                    [ NGramView.renderFrequencies model.workingNormalized model.frequencies.n2 ]
+                    [ FreqInfoView.renderFrequencies model.workingNormalized model.frequencies.n2 ]
                 ]
             ]
         , p [ style [ ( "fontSize", "20%" ) ] ]

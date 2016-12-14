@@ -1,4 +1,4 @@
-module NGram exposing (..)
+module FreqInfo exposing (..)
 
 import Array exposing (..)
 import Dict exposing (..)
@@ -67,4 +67,9 @@ countFreq array =
         pairedList =
             List.map2 conc wordList shiftedList
     in
-        { words = countList wordList, n2 = Dict.remove 1 (countList pairedList) }
+        { words =
+            countList wordList
+        , n2 =
+            -- remove singleton 2-grams
+            Dict.remove 1 (countList pairedList)
+        }

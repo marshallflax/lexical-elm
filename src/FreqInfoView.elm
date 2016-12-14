@@ -1,4 +1,4 @@
-module NGramView exposing (renderFrequencies)
+module FreqInfoView exposing (renderFrequencies)
 
 import ColoredWordView exposing (matchingStyle)
 import Dict exposing (..)
