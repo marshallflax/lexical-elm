@@ -4,9 +4,9 @@ import ColoredWordView exposing (matchingStyle)
 import Dict exposing (..)
 import Html exposing (Html, table, tr, td, text, span)
 import Html.Attributes exposing (style)
-import Html.Events exposing (onClick)
 import Set exposing (..)
 import Types exposing (..)
+import ViewUtil exposing (..)
 
 
 renderFrequencies : Set String -> Dict Int (List String) -> Html Msg
@@ -35,7 +35,7 @@ renderWords currentWordsNormalized words =
         doWord : String -> Html Msg
         doWord word =
             span
-                [ onClick (SetCurrentNormalized word)
+                [ onShiftedMouseEnter (SetCurrentNormalized word)
                 , style (matchingStyle (Set.member word currentWordsNormalized))
                 ]
                 [ text (" " ++ word ++ " ") ]
