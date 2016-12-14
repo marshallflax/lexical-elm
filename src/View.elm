@@ -127,11 +127,11 @@ root model =
                     )
                 , td [ style [ ( "width", "800px" ), ( "vertical-align", "top" ) ] ]
                     [ NGramView.renderFrequencies model.workingNormalized model.frequencies.words ]
-                , td [ style [ ( "width", "800px" ), ( "vertical-align", "top" ) ] ]
+                , td [ style [ ( "width", "400px" ), ( "vertical-align", "top" ) ] ]
                     [ NGramView.renderFrequencies model.workingNormalized model.frequencies.n2 ]
                 ]
             ]
-        , p [ style [ ( "fontSize", "10%" ) ] ]
+        , p [ style [ ( "fontSize", "20%" ) ] ]
             [ text "(c) marshall.flax@gmail.com; licensed "
             , Html.a [ href "https://www.gnu.org/licenses/gpl-3.0.en.html" ] [ text "GPL3.0 +" ]
             , text " "
