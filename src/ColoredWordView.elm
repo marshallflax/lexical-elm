@@ -4,9 +4,9 @@ import ColoredWord exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (style, value, checked, type_, readonly, placeholder, href)
 import Html.Events exposing (on, onClick, onInput, onMouseEnter)
-import Json.Decode
 import Set exposing (Set)
 import Types exposing (..)
+import ViewUtil exposing (..)
 
 
 colorStyle : String -> Html.Attribute msg
@@ -47,30 +47,6 @@ renderWord hideColors currentColor currentWordsNormalized ( index, w ) =
     span
         [ colorStyles hideColors w currentWordsNormalized
         , onClick (ToggleColor index currentColor)
-          -- , onMouseEnter (SetCurrentWord index)
-        , onShiftedEvent "mouseenter" (SetCurrentWord index)
+        , onShiftedMouseEnter (SetCurrentWord index)
         ]
         [ text (" " ++ w.text ++ " ") ]
-
-
-onShiftedEvent : String -> msg -> Attribute msg
-onShiftedEvent eventName message =
-    let
-        hasShift : msg -> Bool -> Json.Decode.Decoder msg
-        hasShift message shiftKey =
-            if shiftKey then
-                Json.Decode.succeed message
-            else
-                Json.Decode.fail "No shift key"
-
-        onEventName : Json.Decode.Decoder msg -> Attribute msg
-        onEventName =
-            Html.Events.on eventName
-
-        extractShiftKey : Json.Decode.Decoder Bool
-        extractShiftKey =
-            Json.Decode.at [ "shiftKey" ] Json.Decode.bool
-    in
-        onEventName <|
-            Json.Decode.andThen (hasShift message) <|
-                extractShiftKey
