@@ -1,15 +1,15 @@
 module View exposing (root)
 
 import ColoredWord exposing (ColoredWord, matchingWordsForColor)
-import ColoredWordView exposing (..)
+import ColoredWordView exposing (colorStyle, renderWord)
 import Css
+import FreqInfoView exposing (renderFrequencies)
 import Html exposing (Html, button, div, span, text, input, p, table, tr, td)
 import Html.Attributes exposing (style, value, checked, type_, readonly, placeholder, href)
 import Html.Events exposing (onClick, onInput, onMouseEnter)
 import Set exposing (Set)
-import State exposing (..)
+import State exposing (countWords, countWordsMatching, currentWordFromIndex, dumpState, partitionedList, rainbowList)
 import Types exposing (..)
-import FreqInfoView exposing (..)
 
 
 enableButton : List String -> Html Msg
