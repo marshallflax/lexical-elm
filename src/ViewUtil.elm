@@ -5,21 +5,31 @@ import Html.Events
 import Html
 
 
-onBooleanEvent : String -> String -> (Bool -> Json.Decode.Decoder msg) -> Html.Attribute msg
-onBooleanEvent modifier eventName toMsg =
+onBooleanEvent : String -> (Bool -> Json.Decode.Decoder msg) -> String -> Html.Attribute msg
+onBooleanEvent modifier boolToMsg eventName =
     Json.Decode.at [ modifier ] Json.Decode.bool
-        |> Json.Decode.andThen toMsg
+        |> Json.Decode.andThen boolToMsg
         |> Html.Events.on eventName
 
 
-messageIfTrue : msg -> Bool -> Json.Decode.Decoder msg
-messageIfTrue message bool =
-    if bool then
-        Json.Decode.succeed message
-    else
-        Json.Decode.fail ("No match")
+onModifiedEvent : String -> (Bool -> Bool) -> String -> msg -> Html.Attribute msg
+onModifiedEvent modifier modifierTest eventName message =
+    onBooleanEvent
+        modifier
+        (\modifierTrue ->
+            if (modifierTest modifierTrue) then
+                Json.Decode.succeed message
+            else
+                Json.Decode.fail ("Not relevant")
+        )
+        eventName
 
 
 onShiftedMouseEnter : msg -> Html.Attribute msg
-onShiftedMouseEnter message =
-    onBooleanEvent "shiftKey" "mouseenter" (messageIfTrue message)
+onShiftedMouseEnter =
+    onModifiedEvent "shiftKey" identity "mouseenter"
+
+
+onUnShiftedMouseEnter : msg -> Html.Attribute msg
+onUnShiftedMouseEnter =
+    onModifiedEvent "shiftKey" not "mouseenter"
