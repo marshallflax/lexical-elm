@@ -2,28 +2,21 @@ module ViewUtil exposing (onShiftedMouseEnter, onUnShiftedMouseEnter)
 
 import Html
 import Html.Events
-import Json.Decode
+import Json.Decode as JD
 
 
-applyTest : (modifier -> Bool) -> msg -> modifier -> Json.Decode.Decoder msg
+applyTest : (modifier -> Bool) -> msg -> modifier -> JD.Decoder msg
 applyTest modifierTest message modifierValue =
     if (modifierTest modifierValue) then
-        Json.Decode.succeed message
+        JD.succeed message
     else
-        Json.Decode.fail ("Not relevant")
+        JD.fail ("Not relevant")
 
 
 forBooleanModifier : String -> String -> (Bool -> Bool) -> msg -> Html.Attribute msg
 forBooleanModifier modifier eventName modifierCriteria message =
-    Json.Decode.at [ modifier ] Json.Decode.bool
-        |> Json.Decode.andThen (applyTest modifierCriteria message)
-        |> Html.Events.on eventName
-
-
-forStringModifier : String -> String -> (String -> Bool) -> msg -> Html.Attribute msg
-forStringModifier modifier eventName modifierCriteria message =
-    Json.Decode.at [ modifier ] Json.Decode.string
-        |> Json.Decode.andThen (applyTest modifierCriteria message)
+    JD.at [ modifier ] JD.bool
+        |> JD.andThen (applyTest modifierCriteria message)
         |> Html.Events.on eventName
 
 
