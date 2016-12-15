@@ -13,18 +13,25 @@ applyTest modifierTest message modifierValue =
         Json.Decode.fail ("Not relevant")
 
 
-onModifiedEvent : String -> String -> (Bool -> Bool) -> msg -> Html.Attribute msg
-onModifiedEvent modifier eventName modifierCriteria message =
+forBooleanModifier : String -> String -> (Bool -> Bool) -> msg -> Html.Attribute msg
+forBooleanModifier modifier eventName modifierCriteria message =
     Json.Decode.at [ modifier ] Json.Decode.bool
+        |> Json.Decode.andThen (applyTest modifierCriteria message)
+        |> Html.Events.on eventName
+
+
+forStringModifier : String -> String -> (String -> Bool) -> msg -> Html.Attribute msg
+forStringModifier modifier eventName modifierCriteria message =
+    Json.Decode.at [ modifier ] Json.Decode.string
         |> Json.Decode.andThen (applyTest modifierCriteria message)
         |> Html.Events.on eventName
 
 
 onShiftedMouseEnter : msg -> Html.Attribute msg
 onShiftedMouseEnter =
-    onModifiedEvent "shiftKey" "mouseenter" identity
+    forBooleanModifier "shiftKey" "mouseenter" identity
 
 
 onUnShiftedMouseEnter : msg -> Html.Attribute msg
 onUnShiftedMouseEnter =
-    onModifiedEvent "shiftKey" "mouseenter" not
+    forBooleanModifier "shiftKey" "mouseenter" not
