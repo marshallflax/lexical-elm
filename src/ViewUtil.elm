@@ -1,35 +1,30 @@
-module ViewUtil exposing (onShiftedMouseEnter)
+module ViewUtil exposing (onShiftedMouseEnter, onUnShiftedMouseEnter)
 
-import Json.Decode
-import Html.Events
 import Html
+import Html.Events
+import Json.Decode
 
 
-onBooleanEvent : String -> (Bool -> Json.Decode.Decoder msg) -> String -> Html.Attribute msg
-onBooleanEvent modifier boolToMsg eventName =
+applyTest : (modifier -> Bool) -> msg -> modifier -> Json.Decode.Decoder msg
+applyTest modifierTest message modifierValue =
+    if (modifierTest modifierValue) then
+        Json.Decode.succeed message
+    else
+        Json.Decode.fail ("Not relevant")
+
+
+onModifiedEvent : String -> String -> (Bool -> Bool) -> msg -> Html.Attribute msg
+onModifiedEvent modifier eventName modifierCriteria message =
     Json.Decode.at [ modifier ] Json.Decode.bool
-        |> Json.Decode.andThen boolToMsg
+        |> Json.Decode.andThen (applyTest modifierCriteria message)
         |> Html.Events.on eventName
-
-
-onModifiedEvent : String -> (Bool -> Bool) -> String -> msg -> Html.Attribute msg
-onModifiedEvent modifier modifierTest eventName message =
-    onBooleanEvent
-        modifier
-        (\modifierTrue ->
-            if (modifierTest modifierTrue) then
-                Json.Decode.succeed message
-            else
-                Json.Decode.fail ("Not relevant")
-        )
-        eventName
 
 
 onShiftedMouseEnter : msg -> Html.Attribute msg
 onShiftedMouseEnter =
-    onModifiedEvent "shiftKey" identity "mouseenter"
+    onModifiedEvent "shiftKey" "mouseenter" identity
 
 
 onUnShiftedMouseEnter : msg -> Html.Attribute msg
 onUnShiftedMouseEnter =
-    onModifiedEvent "shiftKey" not "mouseenter"
+    onModifiedEvent "shiftKey" "mouseenter" not
