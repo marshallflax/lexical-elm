@@ -1,4 +1,4 @@
-module View exposing (root)
+module View exposing (subscriptions, root)
 
 import ColoredWord exposing (ColoredWord, matchingWordsForColor)
 import ColoredWordView exposing (colorStyle, renderWord)
@@ -7,9 +7,15 @@ import FreqInfoView exposing (renderFrequencies)
 import Html exposing (Html, button, div, span, text, input, p, table, tr, td)
 import Html.Attributes exposing (style, value, checked, type_, readonly, placeholder, href)
 import Html.Events exposing (onClick, onInput, onMouseEnter)
+import Keyboard
 import Set exposing (Set)
 import State exposing (countWords, countWordsMatching, currentWordFromIndex, dumpState, partitionedList, rainbowList)
 import Types exposing (..)
+
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Keyboard.downs KeyMsg
 
 
 enableButton : List String -> Html Msg
@@ -77,7 +83,7 @@ root model =
                             , checked (Set.member l model.hideColors)
                             ]
                             []
-                        , button [ colorStyle l, onClick (SetCurrentColor l) ] [ text l ]
+                        , button [ Html.Attributes.attribute "id" ("colorButton" ++ l), colorStyle l, onClick (SetCurrentColor l) ] [ text l ]
                         ]
 
                 doRow : List String -> Html Msg
@@ -131,6 +137,7 @@ root model =
                     [ FreqInfoView.renderFrequencies model.workingNormalized model.frequencies.n2 ]
                 ]
             ]
+        , p [] [ text (toString model.lastKeyCode) ]
         , p [ style [ ( "fontSize", "20%" ) ] ]
             [ text "(c) marshall.flax@gmail.com; licensed "
             , Html.a [ href "https://www.gnu.org/licenses/gpl-3.0.en.html" ] [ text "GPL3.0 +" ]

@@ -1,9 +1,10 @@
 module State exposing (..)
 
 import Array exposing (Array)
+import Char exposing (..)
 import ColoredWord exposing (..)
-import List.Split
 import FreqInfo exposing (..)
+import List.Split
 import Regex exposing (..)
 import Set exposing (Set)
 import Types exposing (..)
@@ -12,11 +13,6 @@ import Types exposing (..)
 rainbowList : List (List String)
 rainbowList =
     [ [ "Aqua", "Blue", "Green", "DarkTurquoise", "Fuchsia", "Lime", "Plum", "Yellow" ], [ "Beige", "Indigo", "Purple", "Crimson", "Violet", "Coral", "Pink", "Gold" ] ]
-
-
-subscriptions : Model -> Sub Msg
-subscriptions _ =
-    Sub.none
 
 
 init : ( Model, Cmd msg )
@@ -29,6 +25,7 @@ init =
       , hideColors = Set.empty
       , wordsPerLine = 10
       , frequencies = FreqInfo.empty
+      , lastKeyCode = Char.toCode '!'
       }
     , Cmd.none
     )
@@ -110,6 +107,9 @@ update msg model =
                     { model | wordsPerLine = val }
             , Cmd.none
             )
+
+        KeyMsg code ->
+            ( { model | lastKeyCode = code }, Cmd.none )
 
 
 toggleSet : comparable1 -> Set comparable1 -> Set comparable1

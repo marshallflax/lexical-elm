@@ -3,6 +3,7 @@ module Types exposing (..)
 import Array exposing (Array)
 import ColoredWord exposing (ColoredWord)
 import FreqInfo exposing (FreqInfo)
+import Keyboard exposing (..)
 import Set exposing (Set)
 
 
@@ -15,6 +16,7 @@ type alias Model =
     , hideColors : Set String
     , wordsPerLine : Int
     , frequencies : FreqInfo
+    , lastKeyCode : Keyboard.KeyCode
     }
 
 
@@ -29,3 +31,4 @@ type Msg
     | HideSomeColors (List String)
     | ResetSomeColors (List String)
     | SetWordsPerLine String
+    | KeyMsg Keyboard.KeyCode
