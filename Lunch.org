@@ -1,5 +1,6 @@
-* Elm Lunch-and-Learn -- http://github.com:marshallflax/lexical-elm
+* Elm Lunch-and-Learn -- [[https://github.com/marshallflax/lexical-elm/][https://github.com/marshallflax/lexical-elm/]]
 ** What is [[http://elm-lang.org/][Elm]]?
+*** [[https://en.wikipedia.org/wiki/Functional_reactive_programming][Functional Reactive Programming]]
 *** Pure-function -- no side effects ever -- language that compiles to Javascript on the browser
 *** Efficient language-enforced Model/View/Controller framework
 *** Very strongly typed
@@ -13,8 +14,6 @@
 ***** If the API is increased, bump the "minor"
 ***** If an existing interface is changed, bump the "major"
 **** Subset of Haskell, but without higher-order types
-*** [[https://en.wikipedia.org/wiki/Functional_reactive_programming][Functional Reactive Programming]]
-*** Model, View, Controller separation enforced at the language level
 ** What is a functional programming language?
 *** In a functional language all data is *immutable*
 **** Managing state is always the hard part
@@ -33,6 +32,7 @@
 **** model => view
 **** view => [new_commands]
 ** Q: But how can this work? [[https://en.wikipedia.org/wiki/Persistent_data_structure][Persistent Data Structures]]
+***
 ** Q: But how can this work? [[https://en.wikipedia.org/wiki/Algebraic_data_type][Algebraic Data Types]]
 ** Q: But how can this work? A: Records
 *** info = {a: 2, b: 23, c: "Hello"}; info2 = {info | b = 4}
