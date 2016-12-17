@@ -25,18 +25,22 @@
 ***** Observing an object is error-prone
 ***** No language-level support for immutable objects
 *** Functional languages there are no "variables", only new "final" values
-*** No confusion between ":=" and "=" or between "=" and "==".  No confusion between final and immutable
+*** No confusion between ":=" and "=" or between "=" and "==".  No confusion between final and immutable.
 ** What is a reactive framework?
 *** Elm architecture based on three functions
 **** command + current_model => new_model + [new_commands]
 **** model => view
 **** view => [new_commands]
+*** But also, MexicoMarker/MagicMarker/FeedInfo/eBlotter are a reactive framework
+**** Engine receives commands and emits updates.
+**** Rendering ("view") is always downstream, except that it emits messages to the engine
 ** Q: But how can this work? A: _Persistent Data Structures_
 *** Classic example is the singly-linked list
 **** The empty list [] is immutable
 **** Prepending -- "a" :: [] -- creates a new immutable list of length 1
 **** Prepending again -- "b" :: ("a" :: []) creates a new list of len 2
 **** I can prepend "c" to ["b" "a"] and you can prepend "d" to ["b" "a"]
+***** The tail of my ["c" "b" "a"] and the tail of your ["d" "b" "a"] are the same
 **** Utterly thread-safe ... only the Javascript-level GC has to be correct
 *** Also: Sets, Maps, Arrays
 **** Very smart algorithms behind the scenes
@@ -50,18 +54,22 @@
 ***** (Nothing) -- i.e. we have no data
 **** Every code that processes a "Maybe" *must* handle both cases
 **** NullPointerExceptions impossible
-*** SessionCommand = LoginCommand String String | LogoutCommand** Q: But how can this work? A: Records
+*** SessionCommand = LoginCommand String String | LogoutCommand
+** Q: But how can this work? A: Records
 *** info = {a: 2, b: 23, c: "Hello"}; info2 = {info | b = 4}
 *** Type system is smart..deduces {a: Int, b: Int, c: String}
 **** But explicit declarations will help you when you're confused
 **** Sometimes hard to get code to compile, since type system has no humor
 ***** But hard to write bugs that pass the compiler...a fair trade!!!
-** Structuring a program
-*** Main: [[file:src/Main.elm][Main.elm]] : initial_model, updating_model, view, subscriptions
-*** Types: [[file:src/Types.elm][Types.elm]] : Model contains state; Msg is ADT of commands
-*** Controller: [[file:src/State.elm][State.elm]] : How command create a new model from old model
-*** View: [[file:src/View.elm][View.elm]] : How to construct HTML from the model
-*** Component: [[file:src/FreqInfo.elm][FreqInfo.elm]] : Business logic for some analytics
-*** ComponentDisplay: [[file:src/FreqInfoView.elm][FreqInfoView.elm]] : How to render above analytics
-*** AnotherComponent: [[file:src/ColoredWord.elm][ColoredWord.elm]] : Splitting into words and colors
-*** AnotherDisplay: [[file:src/ColoredWordView.elm][ColoredWordView.elm]] : Rendering the above
+** A sample program -- [[http://localhost:8000/src/Main.elm][elm-reactor]]
+*** Top-level
+**** Main: [[file:src/Main.elm][Main.elm]] : initial_model, updating_model, view, subscriptions
+**** Types: [[file:src/Types.elm][Types.elm]] : Model contains state; Msg is ADT of commands
+**** Controller: [[file:src/State.elm][State.elm]] : How commands create a new model from old model
+**** View: [[file:src/View.elm][View.elm]] : How to construct HTML from the model**
+*** One module
+**** [[file:src/FreqInfo.elm][FreqInfo.elm]] : Business logic for some analytics
+**** [[file:src/FreqInfoView.elm][FreqInfoView.elm]] : How to render above analytics
+*** Another module
+**** [[file:src/ColoredWord.elm][ColoredWord.elm]] : Splitting into words and colors
+**** [[file:src/ColoredWordView.elm][ColoredWordView.elm]] : Rendering the above
