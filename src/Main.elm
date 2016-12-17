@@ -10,7 +10,7 @@ main : Program Never Types.Model Types.Msg
 main =
     Html.program
         { init = State.init
-        , view = View.root
         , update = State.update
+        , view = View.root
         , subscriptions = View.subscriptions
         }

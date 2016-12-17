@@ -2,7 +2,7 @@ module ColoredWordView exposing (..)
 
 import ColoredWord exposing (..)
 import Html exposing (..)
-import Html.Attributes exposing (style, value, checked, type_, readonly, placeholder, href)
+import Html.Attributes exposing (value, checked, type_, readonly, placeholder, href)
 import Html.Events exposing (on, onClick, onInput, onMouseEnter)
 import Set exposing (Set)
 import Types exposing (..)
@@ -11,7 +11,7 @@ import ViewUtil exposing (..)
 
 colorStyle : String -> Html.Attribute msg
 colorStyle colorName =
-    style [ ( "backgroundColor", colorName ) ]
+    Html.Attributes.style [ ( "backgroundColor", colorName ) ]
 
 
 matchingStyle : Bool -> List ( String, String )
@@ -35,11 +35,11 @@ colorStyles excludeSet coloredWord currentWordsNormalized =
             Set.member coloredWord.normalized currentWordsNormalized
     in
         if (size == 0) then
-            style (matchingStyle isMatch)
+            Html.Attributes.style (matchingStyle isMatch)
         else if (size <= 1) then
-            style (( "backgroundColor", String.join "," (Set.toList colorSet) ) :: (matchingStyle isMatch))
+            Html.Attributes.style (( "backgroundColor", String.join "," (Set.toList colorSet) ) :: (matchingStyle isMatch))
         else
-            style (( "background", "linear-gradient(90deg," ++ String.join "," (Set.toList colorSet) ++ ")" ) :: (matchingStyle isMatch))
+            Html.Attributes.style (( "background", "linear-gradient(90deg," ++ String.join "," (Set.toList colorSet) ++ ")" ) :: (matchingStyle isMatch))
 
 
 renderWord : Set String -> String -> Set String -> ( Int, ColoredWord ) -> Html Msg
