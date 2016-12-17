@@ -31,10 +31,26 @@
 **** command + current_model => new_model + [new_commands]
 **** model => view
 **** view => [new_commands]
-** Q: But how can this work? [[https://en.wikipedia.org/wiki/Persistent_data_structure][Persistent Data Structures]]
-***
-** Q: But how can this work? [[https://en.wikipedia.org/wiki/Algebraic_data_type][Algebraic Data Types]]
-** Q: But how can this work? A: Records
+** Q: But how can this work? A: _Persistent Data Structures_
+*** Classic example is the singly-linked list
+**** The empty list [] is immutable
+**** Prepending -- "a" :: [] -- creates a new immutable list of length 1
+**** Prepending again -- "b" :: ("a" :: []) creates a new list of len 2
+**** I can prepend "c" to ["b" "a"] and you can prepend "d" to ["b" "a"]
+**** Utterly thread-safe ... only the Javascript-level GC has to be correct
+*** Also: Sets, Maps, Arrays
+**** Very smart algorithms behind the scenes
+***** Inserting into a heap involves moving around unchanged subtrees
+***** Since related datastructures share most data, comparison can be *fast*
+**** Map/Reduce approach to processing data yields hotspot-friendly code
+** Q: But how can this work? A: _Algebraic Data Structures_
+*** Classic example: Maybe d = Just d | Nothing
+**** (Maybe String) is *either*
+***** (Just String) -- i.e. (Just "Hello World!"), _or_
+***** (Nothing) -- i.e. we have no data
+**** Every code that processes a "Maybe" *must* handle both cases
+**** NullPointerExceptions impossible
+*** SessionCommand = LoginCommand String String | LogoutCommand** Q: But how can this work? A: Records
 *** info = {a: 2, b: 23, c: "Hello"}; info2 = {info | b = 4}
 *** Type system is smart..deduces {a: Int, b: Int, c: String}
 **** But explicit declarations will help you when you're confused
