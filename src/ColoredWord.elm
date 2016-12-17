@@ -21,6 +21,11 @@ type alias ColoredWord =
     NormalizedWord (WithColors (TextWord {}))
 
 
+empty : ColoredWord
+empty =
+    { text = "", colors = Set.empty, normalized = "" }
+
+
 tokenize : String -> List String
 tokenize input =
     let
@@ -41,11 +46,6 @@ splitIntoColorwords input =
     tokenize input
         |> Array.fromList
         |> Array.map chunkToColoredword
-
-
-nonMaybeColoredWord : Maybe ColoredWord -> ColoredWord
-nonMaybeColoredWord =
-    Maybe.withDefault { text = "", colors = Set.empty, normalized = "" }
 
 
 chunkToColoredword : String -> ColoredWord
@@ -99,11 +99,11 @@ dumpColoredWord { colors, text } =
 
 matchingWordsForColor : String -> Array ColoredWord -> List String
 matchingWordsForColor specifiedColor coloredWordList =
-    (Array.toList coloredWordList)
-        |> List.filterMap
-            (\{ colors, text } ->
-                if (Set.member specifiedColor colors) then
-                    Just text
-                else
-                    Nothing
-            )
+    List.filterMap
+        (\cw ->
+            if (Set.member specifiedColor cw.colors) then
+                Just cw.text
+            else
+                Nothing
+        )
+        (Array.toList coloredWordList)

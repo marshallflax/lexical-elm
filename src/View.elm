@@ -11,7 +11,6 @@ import Keyboard
 import Set exposing (Set)
 import State exposing (countWords, countWordsMatching, currentWordFromIndex, dumpState, partitionedList, rainbowList)
 import Types exposing (..)
-import ViewUtil exposing (..)
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =

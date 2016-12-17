@@ -60,8 +60,7 @@ update msg model =
 
         SetCurrentNormalized text ->
             ( { model
-                | workingWord =
-                    -1
+                | workingWord = -1
                 , workingNormalized =
                     -- include full text in split so we know to show 2-grams cheaply
                     Set.insert text (Set.fromList (Regex.split Regex.All (Regex.regex "_") text))
@@ -78,7 +77,8 @@ update msg model =
               else
                 let
                     currentColoredWord =
-                        nonMaybeColoredWord (Array.get which model.words)
+                        Array.get which model.words
+                            |> Maybe.withDefault ColoredWord.empty
 
                     modifiedColoredWord =
                         { currentColoredWord | colors = toggleSet newColor currentColoredWord.colors }
@@ -115,9 +115,9 @@ update msg model =
 toggleSet : comparable1 -> Set comparable1 -> Set comparable1
 toggleSet element set =
     if (Set.member element set) then
-        (Set.remove element set)
+        Set.remove element set
     else
-        (Set.insert element set)
+        Set.insert element set
 
 
 countWords : Model -> Int
@@ -127,7 +127,8 @@ countWords model =
 
 currentWordFromIndex : Int -> Model -> ColoredWord
 currentWordFromIndex index model =
-    nonMaybeColoredWord (Array.get index model.words)
+    Array.get index model.words
+        |> Maybe.withDefault ColoredWord.empty
 
 
 dumpState : Model -> String
