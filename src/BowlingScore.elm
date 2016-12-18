@@ -69,6 +69,7 @@ testFrameIfication =
             [ { throws = [ 1 ], expected = [ Partial 1 ] }
             , { throws = [ 1, 1 ], expected = [ Open 1 1 ] }
             , { throws = [ 1, 1, 1 ], expected = [ Open 1 1, Partial 1 ] }
+            , { throws = [ 10, 1, 2 ], expected = [ Strike, Open 1 2 ] }
             ]
     )
 
@@ -76,6 +77,7 @@ testFrameIfication =
 type Frame
     = Partial Int
     | Open Int Int
+    | Strike
 
 
 frameify : Throws -> List Frame
@@ -101,9 +103,12 @@ frameHelper throws currentFrames =
                 ( throws, currentFrames )
 
             Just throw1 ->
-                case next of
-                    Nothing ->
-                        frameHelper (List.drop 2 throws) (Array.push (Partial throw1) currentFrames)
+                if (throw1 == 10) then
+                    frameHelper (List.drop 1 throws) (Array.push (Strike) currentFrames)
+                else
+                    case next of
+                        Nothing ->
+                            frameHelper (List.drop 2 throws) (Array.push (Partial throw1) currentFrames)
 
-                    Just throw2 ->
-                        frameHelper (List.drop 2 throws) (Array.push (Open throw1 throw2) currentFrames)
+                        Just throw2 ->
+                            frameHelper (List.drop 2 throws) (Array.push (Open throw1 throw2) currentFrames)
