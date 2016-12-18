@@ -1,6 +1,6 @@
 module BowlingScore exposing (testResults)
 
-import Array exposing (..)
+import Array exposing (Array, empty, push)
 import List exposing (foldl)
 import Testing exposing (TestResult)
 
@@ -97,6 +97,8 @@ frameify throws =
         Array.toList computedFrame
 
 
+{-| Recursively removes one or two throws from the first list and appends one frame to the second array -- until the first list is empty
+-}
 frameHelper : ( Throws, Array Frame ) -> ( Throws, Array Frame )
 frameHelper ( throws, currentFrames ) =
     case List.head throws of
