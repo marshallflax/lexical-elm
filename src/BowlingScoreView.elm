@@ -1,10 +1,9 @@
 module BowlingScoreView exposing (..)
 
-import BowlingScore exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Testing exposing (..)
 import Types exposing (..)
-
 
 showTestResults : List TestResult -> Html Msg
 showTestResults testList =

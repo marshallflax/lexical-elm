@@ -27,7 +27,7 @@ init =
       , wordsPerLine = 10
       , frequencies = FreqInfo.empty
       , lastKeyCode = Char.toCode '!'
-      , bowlingResults = List.map BowlingScore.runTest BowlingScore.tests
+      , bowlingResults = BowlingScore.testResults
       }
     , Cmd.none
     )
