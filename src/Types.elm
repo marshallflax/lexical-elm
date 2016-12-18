@@ -5,6 +5,7 @@ import ColoredWord exposing (ColoredWord)
 import FreqInfo exposing (FreqInfo)
 import Keyboard exposing (..)
 import Set exposing (Set)
+import BowlingScore
 
 
 type alias Model =
@@ -17,6 +18,7 @@ type alias Model =
     , wordsPerLine : Int
     , frequencies : FreqInfo
     , lastKeyCode : Keyboard.KeyCode
+    , bowlingResults : List BowlingScore.TestResult
     }
 
 

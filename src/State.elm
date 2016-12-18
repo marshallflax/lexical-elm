@@ -1,6 +1,7 @@
 module State exposing (..)
 
 import Array exposing (Array)
+import BowlingScore
 import Char exposing (..)
 import ColoredWord exposing (..)
 import FreqInfo exposing (..)
@@ -26,6 +27,7 @@ init =
       , wordsPerLine = 10
       , frequencies = FreqInfo.empty
       , lastKeyCode = Char.toCode '!'
+      , bowlingResults = List.map BowlingScore.runTest BowlingScore.tests
       }
     , Cmd.none
     )

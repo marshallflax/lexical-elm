@@ -1,5 +1,6 @@
 module View exposing (subscriptions, root)
 
+import BowlingScoreView
 import ColoredWord exposing (ColoredWord, matchingWordsForColor)
 import ColoredWordView exposing (colorStyle, renderWord)
 import Css
@@ -11,6 +12,7 @@ import Keyboard
 import Set exposing (Set)
 import State exposing (countWords, countWordsMatching, currentWordFromIndex, dumpState, partitionedList, rainbowList)
 import Types exposing (..)
+
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
@@ -145,4 +147,5 @@ root model =
             , text " "
             , Html.a [ href "https://raw.githubusercontent.com/marshallflax/lexical-elm/master/index.html" ] [ text "latest" ]
             ]
+        , (BowlingScoreView.showTestResults model.bowlingResults)
         ]
