@@ -1,8 +1,10 @@
 module BowlingScore exposing (testResults)
 
 import Array exposing (Array, empty, push)
+import Debug
 import List exposing (foldl)
 import Testing exposing (TestResult)
+import Transducer exposing (..)
 
 
 type alias Throws =
@@ -86,15 +88,6 @@ testFrameIfication =
             , { throws = [ 3, 7, 1, 2 ], expected = [ Spare 3, Open 1 2 ] }
             ]
     )
-
-
-frameify : Throws -> List Frame
-frameify throws =
-    let
-        ( remainingThrows, computedFrame ) =
-            frameHelper ( throws, Array.empty )
-    in
-        Array.toList computedFrame
 
 
 {-| Recursively removes one or two throws from the first list and appends one frame to the second array -- until the first list is empty
@@ -224,3 +217,68 @@ score throws =
             List.foldl scoreFold ( PostOpen, 0, 1 ) (frameify throws)
     in
         finalScore
+
+
+partitionBy : (List a -> Bool) -> Transducer a (List a) r (List a)
+partitionBy pred =
+    { init =
+        \reduce r -> ( [], r )
+    , step =
+        \reduce input ( hold, r ) ->
+            let
+                merged =
+                    hold ++ [ input ]
+            in
+                if (pred merged) then
+                    Debug.log "true: " ( [], reduce merged r )
+                else
+                    Debug.log "false: " ( merged, r )
+    , complete =
+        \reduce ( hold, r ) ->
+            if (List.isEmpty hold) then
+                r
+            else
+                reduce hold r
+    }
+
+
+frameify : Throws -> List Frame
+frameify throws =
+    let
+        completeFrame : List Int -> Bool
+        completeFrame throws =
+            (List.length (Debug.log "completeFrame" throws) >= 2)
+                || ((List.foldl (+) 0 throws) >= 10)
+
+        listToFrame : List Int -> Frame
+        listToFrame throws =
+            case List.head throws of
+                Nothing ->
+                    Partial -1
+
+                Just throw1 ->
+                    if (throw1 == 10) then
+                        Strike
+                    else
+                        case List.head (List.drop 1 throws) of
+                            Nothing ->
+                                Partial throw1
+
+                            Just throw2 ->
+                                if (throw1 + throw2 == 10) then
+                                    Spare throw1
+                                else
+                                    Open throw1 throw2
+    in
+        transduceList (partitionBy completeFrame) (List.reverse throws)
+            |> List.reverse
+            |> List.map listToFrame
+
+
+frameifyOld : Throws -> List Frame
+frameifyOld throws =
+    let
+        ( remainingThrows, computedFrame ) =
+            frameHelper ( throws, Array.empty )
+    in
+        Array.toList computedFrame
