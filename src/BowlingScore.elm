@@ -70,6 +70,7 @@ testFrameIfication =
             , { throws = [ 1, 1 ], expected = [ Open 1 1 ] }
             , { throws = [ 1, 1, 1 ], expected = [ Open 1 1, Partial 1 ] }
             , { throws = [ 10, 1, 2 ], expected = [ Strike, Open 1 2 ] }
+            , { throws = [ 3, 7, 1, 2 ], expected = [ Spare 3, Open 1 2 ] }
             ]
     )
 
@@ -77,6 +78,7 @@ testFrameIfication =
 type Frame
     = Partial Int
     | Open Int Int
+    | Spare Int
     | Strike
 
 
@@ -91,24 +93,20 @@ frameify throws =
 
 frameHelper : Throws -> Array Frame -> ( Throws, Array Frame )
 frameHelper throws currentFrames =
-    let
-        head =
-            List.head throws
+    case List.head throws of
+        Nothing ->
+            ( throws, currentFrames )
 
-        next =
-            List.head (List.drop 1 throws)
-    in
-        case head of
-            Nothing ->
-                ( throws, currentFrames )
+        Just throw1 ->
+            if (throw1 == 10) then
+                frameHelper (List.drop 1 throws) (Array.push (Strike) currentFrames)
+            else
+                case List.head (List.drop 1 throws) of
+                    Nothing ->
+                        frameHelper (List.drop 2 throws) (Array.push (Partial throw1) currentFrames)
 
-            Just throw1 ->
-                if (throw1 == 10) then
-                    frameHelper (List.drop 1 throws) (Array.push (Strike) currentFrames)
-                else
-                    case next of
-                        Nothing ->
-                            frameHelper (List.drop 2 throws) (Array.push (Partial throw1) currentFrames)
-
-                        Just throw2 ->
+                    Just throw2 ->
+                        if (throw1 + throw2 == 10) then
+                            frameHelper (List.drop 2 throws) (Array.push (Spare throw1) currentFrames)
+                        else
                             frameHelper (List.drop 2 throws) (Array.push (Open throw1 throw2) currentFrames)
