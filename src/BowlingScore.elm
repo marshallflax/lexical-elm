@@ -13,9 +13,18 @@ type alias Score =
     Int
 
 
-score : Throws -> Score
-score throws =
-    List.foldl (+) 0 throws
+type Frame
+    = Partial Int
+    | Open Int Int
+    | Spare Int
+    | Strike
+
+
+type Mode
+    = PostOpen
+    | PostSpare
+    | PostStrike
+    | PostAndPostPostStrike
 
 
 testResults : List TestResult
@@ -44,6 +53,10 @@ testGameScore =
             [ { throws = [ 1 ], expected = 1 }
             , { throws = [ 1, 1 ], expected = 2 }
             , { throws = [ 1, 1, 1 ], expected = 2 }
+            , { throws = [ 10, 1 ], expected = 12 }
+            , { throws = [ 10, 1, 3 ], expected = 18 }
+            , { throws = [ 3, 7, 1, 3 ], expected = 15 }
+            , { throws = List.repeat 12 10, expected = 300 }
             ]
     )
 
@@ -75,38 +88,137 @@ testFrameIfication =
     )
 
 
-type Frame
-    = Partial Int
-    | Open Int Int
-    | Spare Int
-    | Strike
-
-
 frameify : Throws -> List Frame
 frameify throws =
     let
         ( remainingThrows, computedFrame ) =
-            frameHelper throws Array.empty
+            frameHelper ( throws, Array.empty )
     in
         Array.toList computedFrame
 
 
-frameHelper : Throws -> Array Frame -> ( Throws, Array Frame )
-frameHelper throws currentFrames =
+frameHelper : ( Throws, Array Frame ) -> ( Throws, Array Frame )
+frameHelper ( throws, currentFrames ) =
     case List.head throws of
         Nothing ->
             ( throws, currentFrames )
 
         Just throw1 ->
-            if (throw1 == 10) then
-                frameHelper (List.drop 1 throws) (Array.push (Strike) currentFrames)
-            else
-                case List.head (List.drop 1 throws) of
-                    Nothing ->
-                        frameHelper (List.drop 2 throws) (Array.push (Partial throw1) currentFrames)
+            let
+                recurse ( num, frame ) =
+                    frameHelper ( (List.drop num throws), (Array.push frame currentFrames) )
+            in
+                if (throw1 == 10) then
+                    recurse ( 1, Strike )
+                else
+                    case List.head (List.drop 1 throws) of
+                        Nothing ->
+                            recurse ( 1, Partial throw1 )
 
-                    Just throw2 ->
-                        if (throw1 + throw2 == 10) then
-                            frameHelper (List.drop 2 throws) (Array.push (Spare throw1) currentFrames)
-                        else
-                            frameHelper (List.drop 2 throws) (Array.push (Open throw1 throw2) currentFrames)
+                        Just throw2 ->
+                            if (throw1 + throw2 == 10) then
+                                recurse ( 2, Spare throw1 )
+                            else
+                                recurse ( 2, Open throw1 throw2 )
+
+
+naivePoints : Frame -> Score
+naivePoints frame =
+    case frame of
+        Strike ->
+            10
+
+        Spare _ ->
+            10
+
+        Open t1 t2 ->
+            t1 + t2
+
+        Partial t1 ->
+            t1
+
+
+firstThrowPoints : Frame -> Score
+firstThrowPoints frame =
+    case frame of
+        Strike ->
+            10
+
+        Spare t1 ->
+            t1
+
+        Open t1 _ ->
+            t1
+
+        Partial t1 ->
+            t1
+
+
+computeNormalNextMode : Frame -> Mode
+computeNormalNextMode frame =
+    case frame of
+        Strike ->
+            PostStrike
+
+        Spare _ ->
+            PostSpare
+
+        Open _ _ ->
+            PostOpen
+
+        Partial _ ->
+            PostOpen
+
+
+computePostStrikeMode : ( Frame, Int ) -> Mode
+computePostStrikeMode ( frame, whichFrame ) =
+    case frame of
+        Strike ->
+            if (whichFrame <= 10) then
+                PostAndPostPostStrike
+            else
+                PostSpare
+
+        Spare _ ->
+            PostSpare
+
+        Open _ _ ->
+            PostOpen
+
+        Partial _ ->
+            PostOpen
+
+
+scoreFold : Frame -> ( Mode, Score, Int ) -> ( Mode, Score, Int )
+scoreFold frame ( currentMode, currentScore, whichFrame ) =
+    let
+        basePoints =
+            if (whichFrame <= 10) then
+                currentScore + (naivePoints frame)
+            else
+                currentScore
+
+        nextFrame =
+            whichFrame + 1
+    in
+        case currentMode of
+            PostOpen ->
+                ( computeNormalNextMode frame, basePoints, nextFrame )
+
+            PostSpare ->
+                ( computeNormalNextMode frame, basePoints + firstThrowPoints frame, nextFrame )
+
+            PostStrike ->
+                ( computePostStrikeMode ( frame, whichFrame ), basePoints + naivePoints frame, nextFrame )
+
+            PostAndPostPostStrike ->
+                ( computePostStrikeMode ( frame, whichFrame ), basePoints + 2 * (naivePoints frame), nextFrame )
+
+
+score : Throws -> Score
+score throws =
+    let
+        ( finalMode, finalScore, finalFrame ) =
+            List.foldl scoreFold ( PostOpen, 0, 1 ) (frameify throws)
+    in
+        finalScore
