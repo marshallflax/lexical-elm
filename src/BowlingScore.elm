@@ -244,9 +244,9 @@ frameify throws =
         xform =
             (partitionBy completeFrame) >>> (Transducer.map listToFrame)
     in
-        transduceListL xform throws |> List.reverse
+        transduceListL xform throws
 
 
 transduceListL : Transducer a b (List b) s -> List a -> List b
-transduceListL =
-    transduce List.foldl (::) []
+transduceListL xform list =
+    (transduce List.foldl (::) []) xform list |> List.reverse
