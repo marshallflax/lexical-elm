@@ -191,7 +191,7 @@ score throws =
         finalScore
 
 
-partitionBy : (List a -> Bool) -> Transducer a (List a) r (List a)
+partitionBy : (List a -> Bool) -> Transducer.Transducer a (List a) r (List a)
 partitionBy pred =
     { init =
         \reduce r -> ( [], r )
@@ -246,7 +246,6 @@ frameify throws =
             (partitionBy completeFrame)
     in
         transduceArray
-            frameTransducer
+            (frameTransducer >>> Transducer.map listToFrame)
             (Array.fromList throws)
-            |> Array.map listToFrame
             |> Array.toList
