@@ -1,6 +1,5 @@
 module BowlingScore exposing (testResults)
 
-import Array exposing (..)
 import List exposing (foldl)
 import Testing exposing (TestResult)
 import Transducer exposing (..)
@@ -245,5 +244,9 @@ frameify throws =
         xform =
             (partitionBy completeFrame) >>> (Transducer.map listToFrame)
     in
-        transduceArray xform (Array.fromList throws)
-            |> Array.toList
+        transduceListL xform throws |> List.reverse
+
+
+transduceListL : Transducer a b (List b) s -> List a -> List b
+transduceListL =
+    transduce List.foldl (::) []
