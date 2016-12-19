@@ -199,10 +199,10 @@ partitionBy pred =
         \reduce input ( hold, r ) ->
             let
                 merged =
-                    hold ++ [ input ]
+                    input :: hold
             in
                 if (pred merged) then
-                    ( [], reduce merged r )
+                    ( [], reduce (List.reverse merged) r )
                 else
                     ( merged, r )
     , complete =
@@ -210,7 +210,7 @@ partitionBy pred =
             if (List.isEmpty hold) then
                 r
             else
-                reduce hold r
+                reduce (List.reverse hold) r
     }
 
 
@@ -240,7 +240,13 @@ frameify throws =
                                     Spare throw1
                                 else
                                     Open throw1 throw2
+
+        frameTransducer : Transducer Int (List Int) r (List Int)
+        frameTransducer =
+            (partitionBy completeFrame)
     in
-        transduceArray (partitionBy completeFrame) (Array.fromList throws)
+        transduceArray
+            frameTransducer
+            (Array.fromList throws)
             |> Array.map listToFrame
             |> Array.toList
