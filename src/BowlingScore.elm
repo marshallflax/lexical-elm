@@ -1,7 +1,6 @@
 module BowlingScore exposing (testResults)
 
-import Array exposing (Array, empty, push)
-import Debug
+import Array exposing (..)
 import List exposing (foldl)
 import Testing exposing (TestResult)
 import Transducer exposing (..)
@@ -88,33 +87,6 @@ testFrameIfication =
             , { throws = [ 3, 7, 1, 2 ], expected = [ Spare 3, Open 1 2 ] }
             ]
     )
-
-
-{-| Recursively removes one or two throws from the first list and appends one frame to the second array -- until the first list is empty
--}
-frameHelper : ( Throws, Array Frame ) -> ( Throws, Array Frame )
-frameHelper ( throws, currentFrames ) =
-    case List.head throws of
-        Nothing ->
-            ( throws, currentFrames )
-
-        Just throw1 ->
-            let
-                recurse ( num, frame ) =
-                    frameHelper ( (List.drop num throws), (Array.push frame currentFrames) )
-            in
-                if (throw1 == 10) then
-                    recurse ( 1, Strike )
-                else
-                    case List.head (List.drop 1 throws) of
-                        Nothing ->
-                            recurse ( 1, Partial throw1 )
-
-                        Just throw2 ->
-                            if (throw1 + throw2 == 10) then
-                                recurse ( 2, Spare throw1 )
-                            else
-                                recurse ( 2, Open throw1 throw2 )
 
 
 naivePoints : Frame -> Score
@@ -230,9 +202,9 @@ partitionBy pred =
                     hold ++ [ input ]
             in
                 if (pred merged) then
-                    Debug.log "true: " ( [], reduce merged r )
+                    ( [], reduce merged r )
                 else
-                    Debug.log "false: " ( merged, r )
+                    ( merged, r )
     , complete =
         \reduce ( hold, r ) ->
             if (List.isEmpty hold) then
@@ -247,8 +219,7 @@ frameify throws =
     let
         completeFrame : List Int -> Bool
         completeFrame throws =
-            (List.length (Debug.log "completeFrame" throws) >= 2)
-                || ((List.foldl (+) 0 throws) >= 10)
+            (List.length throws >= 2) || ((List.foldl (+) 0 throws) >= 10)
 
         listToFrame : List Int -> Frame
         listToFrame throws =
@@ -270,15 +241,6 @@ frameify throws =
                                 else
                                     Open throw1 throw2
     in
-        transduceList (partitionBy completeFrame) (List.reverse throws)
-            |> List.reverse
-            |> List.map listToFrame
-
-
-frameifyOld : Throws -> List Frame
-frameifyOld throws =
-    let
-        ( remainingThrows, computedFrame ) =
-            frameHelper ( throws, Array.empty )
-    in
-        Array.toList computedFrame
+        transduceArray (partitionBy completeFrame) (Array.fromList throws)
+            |> Array.map listToFrame
+            |> Array.toList
