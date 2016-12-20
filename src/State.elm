@@ -60,6 +60,18 @@ updateModelWithNewText newText model =
         }
 
 
+setWordsPerLine : String -> Model -> Model
+setWordsPerLine wordString model =
+    case
+        String.toInt wordString
+    of
+        Err msg ->
+            model
+
+        Ok val ->
+            { model | wordsPerLine = val }
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -116,16 +128,7 @@ update msg model =
             ( { model | hideColors = Set.diff model.hideColors (Set.fromList colorList) }, Cmd.none )
 
         SetWordsPerLine wordString ->
-            ( case
-                String.toInt wordString
-              of
-                Err msg ->
-                    model
-
-                Ok val ->
-                    { model | wordsPerLine = val }
-            , Cmd.none
-            )
+            ( setWordsPerLine wordString model, Cmd.none )
 
         KeyMsg code ->
             ( { model | lastKeyCode = code }, Cmd.none )
@@ -146,10 +149,16 @@ update msg model =
                 Json.Decode.decodeString Types.savedModelDecoder msg
             of
                 Ok decodedModel ->
-                    ( updateModelWithNewText ("Got: " ++ decodedModel.text) model, Cmd.none )
+                    ( { model | wordsPerLine = decodedModel.wordsPerLine }
+                        |> updateModelWithNewText ("Got: " ++ decodedModel.text)
+                    , Cmd.none
+                    )
 
                 Err msg ->
-                    ( updateModelWithNewText msg model, Cmd.none )
+                    ( model
+                        |> updateModelWithNewText msg
+                    , Cmd.none
+                    )
 
 
 toggleSet : comparable1 -> Set comparable1 -> Set comparable1
