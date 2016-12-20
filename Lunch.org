@@ -64,7 +64,7 @@
 **** But explicit declarations will help you when you're confused
 **** Sometimes hard to get code to compile, since type system has no humor
 ***** But hard to write bugs that pass the compiler...a fair trade!!!
-** A sample program -- [[http://localhost:8000/src/Main.elm][elm-reactor]]
+** A sample program -- using [[http://localhost:8000/src/Main.elm][elm-reactor]] to dynamically redeploy
 *** Top-level
 **** Main: [[file:src/Main.elm][Main.elm]] : initial_model, updating_model, view, subscriptions
 **** Types: [[file:src/Types.elm][Types.elm]] : Model contains state; Msg is ADT of commands
