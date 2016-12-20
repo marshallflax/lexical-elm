@@ -12,15 +12,10 @@ main =
         { init = State.init
         , update = State.update
         , view = View.root
-        , subscriptions = myBatch [ View.viewSubscriptions, State.webSubscriptions ]
+        , subscriptions = combineSubscriptions [ View.viewSubscriptions, State.webSubscriptions ]
         }
 
 
-myBatch : List (d -> Sub msg) -> (d -> Sub msg)
-myBatch list model =
-    Sub.batch (mapWithConstant model list)
-
-
-mapWithConstant : a -> List (a -> b) -> List b
-mapWithConstant constantA =
-    List.map ((|>) constantA)
+combineSubscriptions : List (m -> Sub msg) -> (m -> Sub msg)
+combineSubscriptions list model =
+    Sub.batch (List.map ((|>) model) list)

@@ -8,14 +8,14 @@
 *** Very strongly typed
 **** ClassCastException impossible
 **** NullPointerException impossible
-**** Generics typesafe
+**** Generics enforced by compiler
 **** Missing "case" statement in "switch" impossible
 **** Actually-strong typing enables "semantic versioning"
 ***** Major.minor.patch
 ***** If the API provided by a package is unchanged, bump the "patch"
 ***** If the API is increased, bump the "minor"
 ***** If an existing interface is changed, bump the "major"
-**** Subset of Haskell, but without higher-order types
+**** Subset of Haskell, but without higher-order types or laziness
 ** What is a functional programming language?
 *** In a functional language all data is *immutable*
 **** Managing state is always the hard part
