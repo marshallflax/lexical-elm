@@ -12,5 +12,5 @@ main =
         { init = State.init
         , update = State.update
         , view = View.root
-        , subscriptions = View.subscriptions
+        , subscriptions = \model -> Sub.batch [ View.viewSubscriptions model, State.webSubscriptions model ]
         }

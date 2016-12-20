@@ -5,24 +5,23 @@ import BowlingScore
 import BowlingScoreView
 import Char exposing (..)
 import ColoredWord exposing (..)
+import Json.Decode
 import FreqInfo exposing (..)
-import Json.Decode exposing (..)
-import Json.Encode exposing (..)
 import List.Split
 import Regex exposing (..)
 import Set exposing (Set)
-import Table
 import Types exposing (..)
+import WebSocket
 
 
-encodeSavedModel : SavedModel a -> String
-encodeSavedModel model =
-    Json.Encode.encode 0
-        (Json.Encode.object
-            [ ( "text", Json.Encode.string model.text )
-            , ( "wordsPerLine", Json.Encode.int model.wordsPerLine )
-            ]
-        )
+echoServer : String
+echoServer =
+    "wss://echo.websocket.org"
+
+
+webSubscriptions : Model -> Sub Msg
+webSubscriptions model =
+    WebSocket.listen echoServer WebsocketMessage
 
 
 rainbowList : List (List String)
@@ -48,21 +47,24 @@ init =
     )
 
 
+updateModelWithNewText : String -> Model -> Model
+updateModelWithNewText newText model =
+    let
+        words =
+            splitIntoColorwords newText
+    in
+        { model
+            | text = newText
+            , words = words
+            , frequencies = countFreq (Array.map .normalized words)
+        }
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        SetText newtext ->
-            ( let
-                words =
-                    splitIntoColorwords newtext
-              in
-                { model
-                    | text = newtext
-                    , words = words
-                    , frequencies = countFreq (Array.map .normalized words)
-                }
-            , Cmd.none
-            )
+        SetText newText ->
+            ( updateModelWithNewText newText model, Cmd.none )
 
         SetCurrentColor newDefaultColor ->
             ( { model | workingColor = newDefaultColor }, Cmd.none )
@@ -133,11 +135,21 @@ update msg model =
 
         SaveModel ->
             let
-                x : String
-                x =
+                encoded : String
+                encoded =
                     Debug.log "serialized" (encodeSavedModel model)
             in
-                ( model, Cmd.none )
+                ( model, WebSocket.send echoServer encoded )
+
+        WebsocketMessage msg ->
+            case
+                Json.Decode.decodeString Types.savedModelDecoder msg
+            of
+                Ok decodedModel ->
+                    ( updateModelWithNewText ("Got: " ++ decodedModel.text) model, Cmd.none )
+
+                Err msg ->
+                    ( updateModelWithNewText msg model, Cmd.none )
 
 
 toggleSet : comparable1 -> Set comparable1 -> Set comparable1

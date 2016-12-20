@@ -1,4 +1,4 @@
-module View exposing (subscriptions, root)
+module View exposing (viewSubscriptions, root)
 
 import BowlingScoreView
 import ColoredWord exposing (ColoredWord, matchingWordsForColor)
@@ -14,8 +14,8 @@ import State exposing (countWords, countWordsMatching, currentWordFromIndex, dum
 import Types exposing (..)
 
 
-subscriptions : Model -> Sub Msg
-subscriptions _ =
+viewSubscriptions : Model -> Sub Msg
+viewSubscriptions _ =
     Keyboard.downs KeyMsg
 
 
