@@ -12,10 +12,15 @@ main =
         { init = State.init
         , update = State.update
         , view = View.root
-        , subscriptions = myLift [ View.viewSubscriptions, State.webSubscriptions ]
+        , subscriptions = myBatch [ View.viewSubscriptions, State.webSubscriptions ]
         }
 
 
-myLift : List (m -> Sub Types.Msg) -> m -> Sub Types.Msg
+myBatch : List (d -> Sub msg) -> (d -> Sub msg)
+myBatch list model =
+    Sub.batch (myLift list model)
+
+
+myLift : List (d -> Sub msg) -> (d -> List (Sub msg))
 myLift list model =
-    Sub.batch (List.map (\def -> def model) list)
+    List.map (\def -> def model) list
