@@ -23,4 +23,4 @@ myBatch list model =
 
 mapWithConstant : a -> List (a -> b) -> List b
 mapWithConstant constantA =
-    List.map (\f -> f constantA)
+    List.map ((|>) constantA)
