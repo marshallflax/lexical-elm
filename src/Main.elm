@@ -18,9 +18,9 @@ main =
 
 myBatch : List (d -> Sub msg) -> (d -> Sub msg)
 myBatch list model =
-    Sub.batch (myLift list model)
+    Sub.batch (mapWithConstant model list)
 
 
-myLift : List (d -> Sub msg) -> (d -> List (Sub msg))
-myLift list model =
-    List.map (\def -> def model) list
+mapWithConstant : a -> List (a -> b) -> List b
+mapWithConstant constantA =
+    List.map (\f -> f constantA)
