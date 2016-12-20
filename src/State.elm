@@ -2,13 +2,27 @@ module State exposing (..)
 
 import Array exposing (Array)
 import BowlingScore
+import BowlingScoreView
 import Char exposing (..)
 import ColoredWord exposing (..)
 import FreqInfo exposing (..)
+import Json.Decode exposing (..)
+import Json.Encode exposing (..)
 import List.Split
 import Regex exposing (..)
 import Set exposing (Set)
+import Table
 import Types exposing (..)
+
+
+encodeSavedModel : SavedModel a -> String
+encodeSavedModel model =
+    Json.Encode.encode 0
+        (Json.Encode.object
+            [ ( "text", Json.Encode.string model.text )
+            , ( "wordsPerLine", Json.Encode.int model.wordsPerLine )
+            ]
+        )
 
 
 rainbowList : List (List String)
@@ -28,6 +42,7 @@ init =
       , frequencies = FreqInfo.empty
       , lastKeyCode = Char.toCode '!'
       , bowlingResults = BowlingScore.testResults
+      , tableState = BowlingScoreView.initialTableState
       }
     , Cmd.none
     )
@@ -112,6 +127,17 @@ update msg model =
 
         KeyMsg code ->
             ( { model | lastKeyCode = code }, Cmd.none )
+
+        SetTableState tableState ->
+            ( { model | tableState = tableState }, Cmd.none )
+
+        SaveModel ->
+            let
+                x : String
+                x =
+                    Debug.log "serialized" (encodeSavedModel model)
+            in
+                ( model, Cmd.none )
 
 
 toggleSet : comparable1 -> Set comparable1 -> Set comparable1

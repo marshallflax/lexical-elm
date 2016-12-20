@@ -5,20 +5,28 @@ import ColoredWord exposing (ColoredWord)
 import FreqInfo exposing (FreqInfo)
 import Keyboard exposing (..)
 import Set exposing (Set)
+import Table
 import Testing exposing (..)
 
 
 type alias Model =
-    { text : String
-    , workingColor : String
-    , words : Array ColoredWord
-    , workingWord : Int
-    , workingNormalized : Set String
-    , hideColors : Set String
-    , wordsPerLine : Int
-    , frequencies : FreqInfo
-    , lastKeyCode : Keyboard.KeyCode
-    , bowlingResults : List Testing.TestResult
+    SavedModel
+        { workingColor : String
+        , words : Array ColoredWord
+        , workingWord : Int
+        , workingNormalized : Set String
+        , hideColors : Set String
+        , frequencies : FreqInfo
+        , lastKeyCode : Keyboard.KeyCode
+        , bowlingResults : List Testing.TestResult
+        , tableState : Table.State
+        }
+
+
+type alias SavedModel a =
+    { a
+        | text : String
+        , wordsPerLine : Int
     }
 
 
@@ -34,3 +42,5 @@ type Msg
     | ResetSomeColors (List String)
     | SetWordsPerLine String
     | KeyMsg Keyboard.KeyCode
+    | SetTableState Table.State
+    | SaveModel

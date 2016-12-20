@@ -66,6 +66,7 @@ root model =
             []
             [ text (toString (Set.toList ((currentWordFromIndex model.workingWord model).colors))) ]
         , p [] []
+        , button [ onClick SaveModel ] [ text "Save" ]
         , input
             [ value (dumpState model)
             , onInput SetText
@@ -147,5 +148,5 @@ root model =
             , text " "
             , Html.a [ href "https://raw.githubusercontent.com/marshallflax/lexical-elm/master/index.html" ] [ text "latest" ]
             ]
-        , (BowlingScoreView.showTestResults model.bowlingResults)
+        , (BowlingScoreView.showTestResults model.tableState model.bowlingResults)
         ]
