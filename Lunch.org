@@ -26,8 +26,8 @@
 ***** Thread-safety is hard
 ***** Observing an object is error-prone
 ***** No language-level support for immutable objects
-*** Functional languages there are no "variables", only new "final" values
-*** Avoid confusions!
+*** Functional languages there are no "variables", only new "final" values.
+*** Avoid many confusions!
 **** No confusion between ":=" and "="
 **** No confusion between "=" and "=="
 **** No confusion between final and immutable
@@ -48,9 +48,10 @@
 ***** The tail of my ["c" "b" "a"] and the tail of your ["d" "b" "a"] are the same
 **** Utterly thread-safe ... only the Javascript-level GC has to be correct
 *** Also: Sets, Maps, Arrays
-**** Very smart algorithms behind the scenes
+**** Smart algorithms behind the scenes
 ***** Inserting into a heap involves moving around mostly-unchanged subtrees
 ***** Since related datastructures share most data, comparison can be *fast*
+***** Standard approach is a [[https://en.wikipedia.org/wiki/Zipper_(data_structure)][zipper]] that keeps track of location within the data structure
 **** Map/Reduce approach to processing data yields hotspot-friendly code
 ***** "Fold" is the standard "Reduce" operation.
 ** Q: But how can this work? A: *Union Types* (also known as _Algebraic Data Structures_)
@@ -69,6 +70,7 @@
 **** But explicit declarations will help you when you're confused
 **** Sometimes hard to get code to compile, since type system has no humor
 ***** But hard to write bugs that pass the compiler...a fair trade!!!
+** Q: But how can this work?  A: Explicit contexts [[https://en.wikipedia.org/wiki/Monad_(functional_programming)][(Monads)]]
 ** A sample program -- using [[http://localhost:8000/src/Main.elm][elm-reactor]] to dynamically redeploy
 *** Top-level
 **** Main: [[file:src/Main.elm][Main.elm]] : initial_model, updating_model, view, subscriptions
