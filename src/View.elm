@@ -148,5 +148,10 @@ root model =
             , text " "
             , Html.a [ href "https://raw.githubusercontent.com/marshallflax/lexical-elm/master/index.html" ] [ text "latest" ]
             ]
-        , (BowlingScoreView.showTestResults model.tableState model.bowlingResults)
+        , table []
+            [ tr []
+                [ td [] [ BowlingScoreView.showTestResultsOld model.bowlingResults ]
+                , td [] [ BowlingScoreView.showTestResults model.tableState model.bowlingResults ]
+                ]
+            ]
         ]
