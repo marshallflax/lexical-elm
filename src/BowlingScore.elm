@@ -24,7 +24,7 @@ type Mode
     = PostOpen
     | PostSpare
     | PostStrike
-    | PostAndPostPostStrike
+    | PostDoubleStrike
 
 
 testResults : List TestResult
@@ -34,7 +34,7 @@ testResults =
 
 testGameScore : List TestResult
 testGameScore =
-    (let
+    let
         testGame : { throws : List Int, expected : Int } -> TestResult
         testGame { throws, expected } =
             let
@@ -48,7 +48,7 @@ testGameScore =
                     Ok context
                 else
                     Err (context ++ " but " ++ (toString computed))
-     in
+    in
         List.map testGame
             [ { throws = [ 1 ], expected = 1 }
             , { throws = [ 1, 1 ], expected = 2 }
@@ -58,12 +58,11 @@ testGameScore =
             , { throws = [ 3, 7, 1, 3 ], expected = 15 }
             , { throws = List.repeat 12 10, expected = 300 }
             ]
-    )
 
 
 testFrameIfication : List TestResult
 testFrameIfication =
-    (let
+    let
         testGame : { throws : List Int, expected : List Frame } -> TestResult
         testGame { throws, expected } =
             let
@@ -77,7 +76,7 @@ testFrameIfication =
                     Ok context
                 else
                     Err (context ++ " but " ++ (toString computed))
-     in
+    in
         List.map testGame
             [ { throws = [ 1 ], expected = [ Partial 1 ] }
             , { throws = [ 1, 1 ], expected = [ Open 1 1 ] }
@@ -85,7 +84,6 @@ testFrameIfication =
             , { throws = [ 10, 1, 2 ], expected = [ Strike, Open 1 2 ] }
             , { throws = [ 3, 7, 1, 2 ], expected = [ Spare 3, Open 1 2 ] }
             ]
-    )
 
 
 naivePoints : Frame -> Score
@@ -141,7 +139,7 @@ computePostStrikeMode ( frame, whichFrame ) =
     case frame of
         Strike ->
             if (whichFrame <= 10) then
-                PostAndPostPostStrike
+                PostDoubleStrike
             else
                 PostSpare
 
@@ -177,7 +175,7 @@ scoreFold frame ( currentMode, currentScore, whichFrame ) =
             PostStrike ->
                 ( computePostStrikeMode ( frame, whichFrame ), basePoints + naivePoints frame, nextFrame )
 
-            PostAndPostPostStrike ->
+            PostDoubleStrike ->
                 ( computePostStrikeMode ( frame, whichFrame ), basePoints + 2 * (naivePoints frame), nextFrame )
 
 
