@@ -3,7 +3,7 @@ module BowlingScore exposing (testResults)
 import List exposing (foldl)
 import Testing exposing (TestResult)
 import Transducer exposing (..)
-import ListTransducer exposing (..)
+import ListTransducer
 
 
 type alias Throws =
@@ -189,36 +189,34 @@ score throws =
         finalScore
 
 
+listToFrame : List Int -> Frame
+listToFrame throws =
+    case List.head throws of
+        Nothing ->
+            Partial -1
 
-frameify : Throws -> List Frame
+        Just throw1 ->
+            if (throw1 == 10) then
+                Strike
+            else
+                case List.head (List.drop 1 throws) of
+                    Nothing ->
+                        Partial throw1
+
+                    Just throw2 ->
+                        if (throw1 + throw2 == 10) then
+                            Spare throw1
+                        else
+                            Open throw1 throw2
+
+
+isCompleteFrame : List Int -> Bool
+isCompleteFrame throws =
+    ((List.length throws) >= 2) || ((List.sum throws) >= 10)
+
+
+frameify : List Int -> List Frame
 frameify throws =
-    let
-        completeFrame : List Int -> Bool
-        completeFrame throws =
-            (List.length throws >= 2) || ((List.foldl (+) 0 throws) >= 10)
-
-        listToFrame : List Int -> Frame
-        listToFrame throws =
-            case List.head throws of
-                Nothing ->
-                    Partial -1
-
-                Just throw1 ->
-                    if (throw1 == 10) then
-                        Strike
-                    else
-                        case List.head (List.drop 1 throws) of
-                            Nothing ->
-                                Partial throw1
-
-                            Just throw2 ->
-                                if (throw1 + throw2 == 10) then
-                                    Spare throw1
-                                else
-                                    Open throw1 throw2
-
-        xform : Transducer Int Frame r ( List Int, () )
-        xform =
-            (partitionBy completeFrame) >>> (Transducer.map listToFrame)
-    in
-        transduceListL xform throws
+    ListTransducer.transduceListL
+        ((ListTransducer.partitionBy isCompleteFrame) >>> (Transducer.map listToFrame))
+        throws

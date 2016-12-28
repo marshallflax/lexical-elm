@@ -4,11 +4,11 @@ import Transducer exposing (..)
 
 
 partitionBy : (List a -> Bool) -> Transducer a (List a) r (List a)
-partitionBy pred =
+partitionBy predicate =
     let
-        doReduce : (List a -> b -> b) -> List a -> b -> b
-        doReduce reduce list currentReduction =
-            reduce (List.reverse list) currentReduction
+        doReduce : Reducer (List a) b -> Reducer (List a) b
+        doReduce reduce list =
+            reduce (List.reverse list)
 
         doAppend : a -> List a -> List a
         doAppend input state =
@@ -22,7 +22,7 @@ partitionBy pred =
                     merged =
                         doAppend input state
                 in
-                    if (pred merged) then
+                    if (predicate merged) then
                         ( [], doReduce reduce merged currentReduction )
                     else
                         ( merged, currentReduction )
@@ -35,6 +35,9 @@ partitionBy pred =
         }
 
 
+{-|
+   we do not do "transduce List.foldr (::) [] xform list" since we want to partition from the left
+-}
 transduceListL : Transducer a b (List b) s -> List a -> List b
 transduceListL xform list =
     (transduce List.foldl (::) []) xform list |> List.reverse
