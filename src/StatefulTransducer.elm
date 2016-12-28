@@ -13,25 +13,35 @@ statefulPartitionBy predicate =
         doAppend : a -> List a -> List a
         doAppend input state =
             input :: state
-    in
-        { init =
-            \reduce r -> ( [], r )
-        , step =
-            \reduce input ( state, currentReduction ) ->
-                let
-                    merged =
-                        doAppend input state
-                in
-                    if (predicate merged) then
-                        ( [], doReduce reduce merged currentReduction )
-                    else
-                        ( merged, currentReduction )
-        , complete =
-            \reduce ( state, currentReduction ) ->
-                if (List.isEmpty state) then
-                    currentReduction
+
+        -- init : Reducer b r -> r -> ( state, r )
+        init : Reducer b r -> r -> ( List a, r )
+        init reduce r =
+            ( [], r )
+
+        -- step : Reducer b r -> Reducer a ( state, r )
+        step : Reducer (List a) r -> Reducer a ( List a, r )
+        step reduce input ( state, currentReduction ) =
+            let
+                merged =
+                    doAppend input state
+            in
+                if (predicate merged) then
+                    ( [], doReduce reduce merged currentReduction )
                 else
-                    doReduce reduce state currentReduction
+                    ( merged, currentReduction )
+
+        -- complete : Reducer b r -> ( state, r ) -> r
+        complete : Reducer (List a) r -> ( List a, r ) -> r
+        complete reduce ( state, currentReduction ) =
+            if (List.isEmpty state) then
+                currentReduction
+            else
+                doReduce reduce state currentReduction
+    in
+        { init = init
+        , step = step
+        , complete = complete
         }
 
 
