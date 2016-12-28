@@ -8,7 +8,7 @@ import StatefulTransducer
 
 
 type alias Throws =
-    List Int
+    Array Int
 
 
 type alias Score =
@@ -41,7 +41,7 @@ testGameScore =
         testGame { throws, expected } =
             let
                 computed =
-                    score throws
+                    score (Array.fromList throws)
 
                 context =
                     (toString throws) ++ " => " ++ (toString expected)
@@ -69,7 +69,7 @@ testFrameIfication =
         testGame { throws, expected } =
             let
                 computed =
-                    frameify throws |> Array.toList
+                    frameify (Array.fromList throws) |> Array.toList
 
                 context =
                     (toString throws) ++ " => " ++ (toString expected)
@@ -216,11 +216,10 @@ isCompleteFrame throws =
     ((Array.length throws) >= 2) || ((Array.foldl (+) 0 throws) >= 10)
 
 
-frameify : List Int -> Array Frame
-frameify throws =
+frameify : Array Int -> Array Frame
+frameify =
     Transducer.transduceArray
         (StatefulTransducer.statefulPartitionBy isCompleteFrame
             >>> Transducer.map Array.toList
             >>> Transducer.map listToFrame
         )
-        (Array.fromList throws)
