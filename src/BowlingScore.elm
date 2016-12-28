@@ -3,7 +3,7 @@ module BowlingScore exposing (testResults)
 import List exposing (foldl)
 import Testing exposing (TestResult)
 import Transducer exposing (..)
-import ListTransducer
+import StatefulTransducer
 
 
 type alias Throws =
@@ -217,6 +217,6 @@ isCompleteFrame throws =
 
 frameify : List Int -> List Frame
 frameify throws =
-    ListTransducer.transduceListL
-        ((ListTransducer.partitionBy isCompleteFrame) >>> (Transducer.map listToFrame))
+    StatefulTransducer.transduceListL
+        ((StatefulTransducer.statefulPartitionBy isCompleteFrame) >>> (Transducer.map listToFrame))
         throws
