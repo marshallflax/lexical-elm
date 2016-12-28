@@ -1,44 +1,40 @@
 module StatefulTransducer exposing (..)
 
+import Array exposing (Array, push)
 import Transducer exposing (Reducer, Transducer, transduce)
 
 
-statefulPartitionBy : (List a -> Bool) -> Transducer a (List a) r (List a)
+statefulPartitionBy : (Array a -> Bool) -> Transducer a (Array a) r (Array a)
 statefulPartitionBy predicate =
     let
-        -- doReduce : Reducer input result -> Reducer input result
-        doReduce : (List a -> b -> b) -> List a -> b -> b
-        doReduce reduce state currentReduction =
-            reduce (List.reverse state) currentReduction
-
-        updateState : a -> List a -> List a
-        updateState input state =
-            input :: state
+        updateState : a -> Array a -> Array a
+        updateState =
+            Array.push
 
         -- init : Reducer b r -> r -> ( state, r )
-        init : Reducer b r -> r -> ( List a, r )
+        init : Reducer b r -> r -> ( Array a, r )
         init reduce r =
-            ( [], r )
+            ( Array.empty, r )
 
         -- step : Reducer b r -> Reducer a ( state, r )
-        step : Reducer (List a) r -> Reducer a ( List a, r )
+        step : Reducer (Array a) r -> Reducer a ( Array a, r )
         step reduce input ( state, currentReduction ) =
             let
                 merged =
                     updateState input state
             in
                 if (predicate merged) then
-                    ( [], doReduce reduce merged currentReduction )
+                    ( Array.empty, reduce merged currentReduction )
                 else
                     ( merged, currentReduction )
 
         -- complete : Reducer b r -> ( state, r ) -> r
-        complete : Reducer (List a) r -> ( List a, r ) -> r
+        complete : Reducer (Array a) r -> ( Array a, r ) -> r
         complete reduce ( state, currentReduction ) =
-            if (List.isEmpty state) then
+            if (Array.isEmpty state) then
                 currentReduction
             else
-                doReduce reduce state currentReduction
+                reduce state currentReduction
     in
         { init = init, step = step, complete = complete }
 

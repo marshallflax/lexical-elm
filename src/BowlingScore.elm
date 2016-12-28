@@ -1,5 +1,6 @@
 module BowlingScore exposing (testResults)
 
+import Array exposing (Array)
 import List exposing (foldl)
 import Testing exposing (TestResult)
 import Transducer exposing (..)
@@ -210,13 +211,17 @@ listToFrame throws =
                             Open throw1 throw2
 
 
-isCompleteFrame : List Int -> Bool
+isCompleteFrame : Array Int -> Bool
 isCompleteFrame throws =
-    ((List.length throws) >= 2) || ((List.sum throws) >= 10)
+    ((Array.length throws) >= 2) || ((Array.foldl (+) 0 throws) >= 10)
 
 
 frameify : List Int -> List Frame
 frameify throws =
-    StatefulTransducer.transduceListL
-        ((StatefulTransducer.statefulPartitionBy isCompleteFrame) >>> (Transducer.map listToFrame))
-        throws
+    Transducer.transduceArray
+        (StatefulTransducer.statefulPartitionBy isCompleteFrame
+            >>> Transducer.map Array.toList
+            >>> Transducer.map listToFrame
+        )
+        (Array.fromList throws)
+        |> Array.toList
