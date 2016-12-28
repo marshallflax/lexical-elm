@@ -70,7 +70,9 @@
 **** But explicit declarations will help you when you're confused
 **** Sometimes hard to get code to compile, since type system has no humor
 ***** But hard to write bugs that pass the compiler...a fair trade!!!
-** Q: But how can this work?  A: Explicit contexts [[https://en.wikipedia.org/wiki/Monad_(functional_programming)][(Monads)]]
+** Q: But how can this work? A: Explicit contexts [[https://en.wikipedia.org/wiki/Monad_(functional_programming)][(Monads)]]
+*** Computations are "carried along" (essentially on the call stack) until they become effective
+*** Syntactic sugar
 ** A sample program -- using [[http://localhost:8000/src/Main.elm][elm-reactor]] to dynamically redeploy
 *** Top-level
 **** Main: [[file:src/Main.elm][Main.elm]] : initial_model, updating_model, view, subscriptions
@@ -83,3 +85,6 @@
 *** Another module
 **** [[file:src/ColoredWord.elm][ColoredWord.elm]] : Splitting into words and colors
 **** [[file:src/ColoredWordView.elm][ColoredWordView.elm]] : Rendering the above
+*** TDD example
+**** [[file:src/BowlingScore.elm][Bowling Kata]]
+**** [[file:src/BowlingScoreView.elm][BowlingScoreView.elm]]
