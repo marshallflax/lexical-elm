@@ -69,7 +69,7 @@ testFrameIfication =
         testGame { throws, expected } =
             let
                 computed =
-                    frameify throws
+                    frameify throws |> Array.toList
 
                 context =
                     (toString throws) ++ " => " ++ (toString expected)
@@ -185,7 +185,7 @@ score : Throws -> Score
 score throws =
     let
         ( finalMode, finalScore, finalFrame ) =
-            List.foldl scoreFold ( PostOpen, 0, 1 ) (frameify throws)
+            Array.foldl scoreFold ( PostOpen, 0, 1 ) (frameify throws)
     in
         finalScore
 
@@ -216,7 +216,7 @@ isCompleteFrame throws =
     ((Array.length throws) >= 2) || ((Array.foldl (+) 0 throws) >= 10)
 
 
-frameify : List Int -> List Frame
+frameify : List Int -> Array Frame
 frameify throws =
     Transducer.transduceArray
         (StatefulTransducer.statefulPartitionBy isCompleteFrame
@@ -224,4 +224,3 @@ frameify throws =
             >>> Transducer.map listToFrame
         )
         (Array.fromList throws)
-        |> Array.toList
