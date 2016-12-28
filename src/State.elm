@@ -1,7 +1,7 @@
 module State exposing (..)
 
 import Array exposing (Array)
-import BowlingScore
+import BowlingScoreTest
 import BowlingScoreView
 import Char exposing (..)
 import ColoredWord exposing (..)
@@ -40,7 +40,7 @@ init =
       , wordsPerLine = 10
       , frequencies = FreqInfo.empty
       , lastKeyCode = Char.toCode '!'
-      , bowlingResults = BowlingScore.testResults
+      , bowlingResults = BowlingScoreTest.testResults
       , tableState = BowlingScoreView.initialTableState
       }
     , Cmd.none
