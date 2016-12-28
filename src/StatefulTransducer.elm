@@ -6,12 +6,13 @@ import Transducer exposing (Reducer, Transducer, transduce)
 statefulPartitionBy : (List a -> Bool) -> Transducer a (List a) r (List a)
 statefulPartitionBy predicate =
     let
-        doReduce : Reducer (List a) b -> Reducer (List a) b
-        doReduce reduce list =
-            reduce (List.reverse list)
+        -- doReduce : Reducer input result -> Reducer input result
+        doReduce : (List a -> b -> b) -> List a -> b -> b
+        doReduce reduce state currentReduction =
+            reduce (List.reverse state) currentReduction
 
-        doAppend : a -> List a -> List a
-        doAppend input state =
+        updateState : a -> List a -> List a
+        updateState input state =
             input :: state
 
         -- init : Reducer b r -> r -> ( state, r )
@@ -24,7 +25,7 @@ statefulPartitionBy predicate =
         step reduce input ( state, currentReduction ) =
             let
                 merged =
-                    doAppend input state
+                    updateState input state
             in
                 if (predicate merged) then
                     ( [], doReduce reduce merged currentReduction )
@@ -39,10 +40,7 @@ statefulPartitionBy predicate =
             else
                 doReduce reduce state currentReduction
     in
-        { init = init
-        , step = step
-        , complete = complete
-        }
+        { init = init, step = step, complete = complete }
 
 
 {-|
