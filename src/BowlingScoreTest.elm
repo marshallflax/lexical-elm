@@ -5,13 +5,22 @@ import BowlingScore exposing (..)
 import Testing exposing (TestResult)
 
 
-testResults : List (Int, TestResult)
+numberList : List a -> List ( Int, a )
+numberList list =
+    case list of
+        x :: xs ->
+            List.scanl
+                (\val ( counter, _ ) -> ( 1 + counter, val ))
+                ( 1, x )
+                xs
+
+        [] ->
+            []
+
+
+testResults : List ( Int, TestResult )
 testResults =
-    let
-        results : List TestResult
-        results = testGameScore ++ testFrameIfication
-    in
-        List.map (\result -> (0, result)) results
+    numberList (testGameScore ++ testFrameIfication)
 
 
 testGameScore : List TestResult
