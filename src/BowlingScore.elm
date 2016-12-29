@@ -95,7 +95,11 @@ computePostStrikeMode ( frame, whichFrame ) =
             PostOpen
 
 
-scoreFold : Frame -> ( Mode, Score, Int ) -> ( Mode, Score, Int )
+type alias WorkingState =
+    ( Mode, Score, Int )
+
+
+scoreFold : Frame -> WorkingState -> WorkingState
 scoreFold frame ( currentMode, currentScore, whichFrame ) =
     let
         basePoints =
