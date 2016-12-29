@@ -5,9 +5,13 @@ import BowlingScore exposing (..)
 import Testing exposing (TestResult)
 
 
-testResults : List TestResult
+testResults : List (Int, TestResult)
 testResults =
-    testGameScore ++ testFrameIfication
+    let
+        results : List TestResult
+        results = testGameScore ++ testFrameIfication
+    in
+        List.map (\result -> (0, result)) results
 
 
 testGameScore : List TestResult

@@ -12,27 +12,27 @@ initialTableState =
     Table.initialSort "Text"
 
 
-showTestResults : Table.State -> List TestResult -> Html Msg
-showTestResults tableState testList =
+showTestResults : Table.State -> List ( Int, TestResult ) -> Html Msg
+showTestResults tableState numberedTestList =
     let
-        tableConfig : Table.Config TestResult Msg
+        tableConfig : Table.Config ( Int, TestResult ) Msg
         tableConfig =
             Table.config
                 { toId = toString
                 , toMsg = SetTableState
                 , columns =
-                    [ Table.stringColumn "Text" toString
+                    [ Table.stringColumn "Text" (\( row, data ) -> toString data)
                     ]
                 }
     in
-        Table.view tableConfig tableState testList
+        Table.view tableConfig tableState numberedTestList
 
 
-showTestResultsOld : List TestResult -> Html Msg
+showTestResultsOld : List ( Int, TestResult ) -> Html Msg
 showTestResultsOld testList =
     let
-        doTest : TestResult -> Html Msg
-        doTest scoreTest =
+        doTest : ( Int, TestResult ) -> Html Msg
+        doTest ( i, scoreTest ) =
             case scoreTest of
                 Result.Ok t ->
                     tr [ style [ ( "backgroundColor", "lightgreen" ) ] ] [ td [] [ (text t) ] ]

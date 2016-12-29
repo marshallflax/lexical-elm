@@ -25,7 +25,7 @@ type alias ComputedModel a =
         , hideColors : Set String
         , frequencies : FreqInfo
         , lastKeyCode : Keyboard.KeyCode
-        , bowlingResults : List Testing.TestResult
+        , bowlingResults : List (Int, Testing.TestResult)
         , tableState : Table.State
     }
 
