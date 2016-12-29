@@ -18,11 +18,11 @@ showTestResults tableState numberedTestList =
         tableConfig : Table.Config ( Int, TestResult ) Msg
         tableConfig =
             Table.config
-                { toId = toString
+                { toId = (Tuple.first >> toString)
                 , toMsg = SetTableState
                 , columns =
-                    [ Table.intColumn "Which" (\( row, data ) -> row)
-                    , Table.stringColumn "Text" (\( row, data ) -> toString data)
+                    [ Table.intColumn "Which" Tuple.first
+                    , Table.stringColumn "Text" (Tuple.second >> toString)
                     ]
                 }
     in
