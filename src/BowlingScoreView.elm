@@ -2,7 +2,7 @@ module BowlingScoreView exposing (initialTableState, showTestResults, showTestRe
 
 import Html exposing (Html, table, tr, td, text)
 import Html.Attributes exposing (style)
-import Table
+import Table exposing (defaultCustomizations)
 import Testing exposing (TestResult)
 import Types exposing (Msg(SetTableState))
 
@@ -15,15 +15,32 @@ initialTableState =
 showTestResults : Table.State -> List ( Int, TestResult ) -> Html Msg
 showTestResults =
     Table.view
-        (Table.config
+        (Table.customConfig
             { toId = Tuple.first >> toString
             , toMsg = SetTableState
             , columns =
                 [ Table.intColumn "Which" Tuple.first
                 , Table.stringColumn "Text" (Tuple.second >> toString)
                 ]
+            , customizations =
+                { defaultCustomizations | rowAttrs = toRowAttrs }
             }
         )
+
+
+toRowAttrs : ( Int, TestResult ) -> List (Html.Attribute Msg)
+toRowAttrs ( row, result ) =
+    [ style
+        [ ( "background"
+          , case result of
+                Result.Ok _ ->
+                    "lightgreen"
+
+                Result.Err _ ->
+                    "red"
+          )
+        ]
+    ]
 
 
 showTestResultsOld : List ( Int, TestResult ) -> Html Msg
