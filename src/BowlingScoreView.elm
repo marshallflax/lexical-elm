@@ -1,15 +1,10 @@
-module BowlingScoreView exposing (..)
+module BowlingScoreView exposing (initialTableState, showTestResults, showTestResultsOld)
 
-import Html exposing (..)
-import Html.Attributes exposing (..)
+import Html exposing (Html, table, tr, td, text)
+import Html.Attributes
 import Table
-import Testing exposing (..)
-import Types exposing (..)
-
-
-showTestResults : Table.State -> List TestResult -> Html Msg
-showTestResults tableState testList =
-    Table.view tableConfig tableState testList
+import Testing exposing (TestResult)
+import Types exposing (Msg(SetTableState))
 
 
 initialTableState : Table.State
@@ -17,15 +12,20 @@ initialTableState =
     Table.initialSort "Text"
 
 
-tableConfig : Table.Config TestResult Msg
-tableConfig =
-    Table.config
-        { toId = toString
-        , toMsg = SetTableState
-        , columns =
-            [ Table.stringColumn "Text" toString
-            ]
-        }
+showTestResults : Table.State -> List TestResult -> Html Msg
+showTestResults tableState testList =
+    let
+        tableConfig : Table.Config TestResult Msg
+        tableConfig =
+            Table.config
+                { toId = toString
+                , toMsg = SetTableState
+                , columns =
+                    [ Table.stringColumn "Text" toString
+                    ]
+                }
+    in
+        Table.view tableConfig tableState testList
 
 
 showTestResultsOld : List TestResult -> Html Msg
