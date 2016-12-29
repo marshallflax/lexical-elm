@@ -35,9 +35,15 @@ showTestResultsOld testList =
         doTest ( i, scoreTest ) =
             case scoreTest of
                 Result.Ok t ->
-                    tr [ style [ ( "backgroundColor", "lightgreen" ) ] ] [ td [] [ (text t) ] ]
+                    tr [ style [ ( "backgroundColor", "lightgreen" ) ] ]
+                        [ td [] [ (text (toString i)) ]
+                        , td [] [ (text t) ]
+                        ]
 
                 Result.Err t ->
-                    tr [ style [ ( "backgroundColor", "red" ) ] ] [ td [] [ (text t) ] ]
+                    tr [ style [ ( "backgroundColor", "red" ) ] ]
+                        [ td [] [ (text (toString i)) ]
+                        , td [] [ (text t) ]
+                        ]
     in
         table [] (List.map doTest testList)
