@@ -13,20 +13,17 @@ initialTableState =
 
 
 showTestResults : Table.State -> List ( Int, TestResult ) -> Html Msg
-showTestResults tableState numberedTestList =
-    let
-        tableConfig : Table.Config ( Int, TestResult ) Msg
-        tableConfig =
-            Table.config
-                { toId = (Tuple.first >> toString)
-                , toMsg = SetTableState
-                , columns =
-                    [ Table.intColumn "Which" Tuple.first
-                    , Table.stringColumn "Text" (Tuple.second >> toString)
-                    ]
-                }
-    in
-        Table.view tableConfig tableState numberedTestList
+showTestResults =
+    Table.view
+        (Table.config
+            { toId = Tuple.first >> toString
+            , toMsg = SetTableState
+            , columns =
+                [ Table.intColumn "Which" Tuple.first
+                , Table.stringColumn "Text" (Tuple.second >> toString)
+                ]
+            }
+        )
 
 
 showTestResultsOld : List ( Int, TestResult ) -> Html Msg
