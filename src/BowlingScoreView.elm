@@ -1,7 +1,7 @@
 module BowlingScoreView exposing (initialTableState, showTestResults, showTestResultsOld)
 
 import Html exposing (Html, table, tr, td, text)
-import Html.Attributes
+import Html.Attributes exposing (style)
 import Table
 import Testing exposing (TestResult)
 import Types exposing (Msg(SetTableState))
@@ -35,9 +35,9 @@ showTestResultsOld testList =
         doTest scoreTest =
             case scoreTest of
                 Result.Ok t ->
-                    tr [ Html.Attributes.style [ ( "backgroundColor", "lightgreen" ) ] ] [ td [] [ (text t) ] ]
+                    tr [ style [ ( "backgroundColor", "lightgreen" ) ] ] [ td [] [ (text t) ] ]
 
                 Result.Err t ->
-                    tr [ Html.Attributes.style [ ( "backgroundColor", "red" ) ] ] [ td [] [ (text t) ] ]
+                    tr [ style [ ( "backgroundColor", "red" ) ] ] [ td [] [ (text t) ] ]
     in
         table [] (List.map doTest testList)
