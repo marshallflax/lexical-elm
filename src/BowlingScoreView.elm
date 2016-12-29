@@ -9,7 +9,7 @@ import Types exposing (Msg(SetTableState))
 
 initialTableState : Table.State
 initialTableState =
-    Table.initialSort "Text"
+    Table.initialSort "Which"
 
 
 showTestResults : Table.State -> List ( Int, TestResult ) -> Html Msg
@@ -21,7 +21,8 @@ showTestResults tableState numberedTestList =
                 { toId = toString
                 , toMsg = SetTableState
                 , columns =
-                    [ Table.stringColumn "Text" (\( row, data ) -> toString data)
+                    [ Table.intColumn "Which" (\( row, data ) -> row)
+                    , Table.stringColumn "Text" (\( row, data ) -> toString data)
                     ]
                 }
     in
