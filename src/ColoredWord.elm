@@ -99,11 +99,6 @@ dumpColoredWord { colors, text } =
 
 matchingWordsForColor : String -> Array ColoredWord -> List String
 matchingWordsForColor specifiedColor coloredWordList =
-    List.filterMap
-        (\cw ->
-            if (Set.member specifiedColor cw.colors) then
-                Just cw.text
-            else
-                Nothing
-        )
-        (Array.toList coloredWordList)
+    Array.filter (\cw -> Set.member specifiedColor cw.colors) coloredWordList
+        |> Array.map .text
+        |> Array.toList
