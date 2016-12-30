@@ -8,6 +8,7 @@ import ColoredWord exposing (..)
 import Json.Decode
 import FreqInfo exposing (..)
 import List.Split
+import Misc
 import Regex exposing (..)
 import Set exposing (Set)
 import Types exposing (..)
@@ -100,7 +101,7 @@ update msg model =
             )
 
         ToggleColorEnabled color ->
-            ( { model | hideColors = toggleSet color model.hideColors }, Cmd.none )
+            ( { model | hideColors = Misc.toggleSet color model.hideColors }, Cmd.none )
 
         ToggleColor which newColor ->
             ( if (String.length newColor == 0) then
@@ -112,7 +113,7 @@ update msg model =
                             |> Maybe.withDefault ColoredWord.empty
 
                     modifiedColoredWord =
-                        { currentColoredWord | colors = toggleSet newColor currentColoredWord.colors }
+                        { currentColoredWord | colors = Misc.toggleSet newColor currentColoredWord.colors }
                 in
                     { model | words = Array.set which modifiedColoredWord model.words }
             , Cmd.none
@@ -161,14 +162,6 @@ update msg model =
                     )
 
 
-toggleSet : comparable1 -> Set comparable1 -> Set comparable1
-toggleSet element set =
-    if (Set.member element set) then
-        Set.remove element set
-    else
-        Set.insert element set
-
-
 countWords : Model -> Int
 countWords model =
     Array.length model.words
@@ -198,5 +191,4 @@ countWordsMatching model =
         matches coloredWord =
             Set.member coloredWord.normalized model.workingNormalized
     in
-        Array.length
-            (Array.filter matches model.words)
+        Array.filter matches model.words |> Array.length
