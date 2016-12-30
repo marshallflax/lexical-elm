@@ -29,13 +29,13 @@ empty =
 tokenize : String -> List String
 tokenize input =
     let
-        nonword : String
-        nonword =
+        whiteSpaceChar : String
+        whiteSpaceChar =
             " \\f\\n\\r\\t\\v\\u00a0\\u1680\\u180e\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff"
 
         pattern : String
         pattern =
-            "[^" ++ nonword ++ "]+[" ++ nonword ++ "]*"
+            "[^" ++ whiteSpaceChar ++ "]+[" ++ whiteSpaceChar ++ "]*"
     in
         Regex.find Regex.All (Regex.regex pattern) input
             |> List.map .match
