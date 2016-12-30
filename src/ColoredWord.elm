@@ -18,7 +18,7 @@ type alias TextWord a =
 
 
 type alias ColoredWord =
-    NormalizedWord (WithColors (TextWord {}))
+    WithColors (TextWord (NormalizedWord {}))
 
 
 empty : ColoredWord
@@ -97,7 +97,7 @@ dumpColoredWord { colors, text } =
         text ++ "<" ++ (String.join "," (Set.toList colors)) ++ ">"
 
 
-matchingWordsForColor : String -> Array ColoredWord -> List String
+matchingWordsForColor : String -> Array (WithColors (TextWord a)) -> List String
 matchingWordsForColor specifiedColor coloredWordList =
     Array.filter (\cw -> Set.member specifiedColor cw.colors) coloredWordList
         |> Array.map .text
