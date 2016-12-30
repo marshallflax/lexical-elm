@@ -9,7 +9,7 @@ import Types exposing (Msg(SetTableState))
 
 initialTableState : Table.State
 initialTableState =
-    Table.initialSort "Which"
+    Table.initialSort "Text"
 
 
 showTestResults : Table.State -> List ( Int, TestResult ) -> Html Msg
@@ -29,18 +29,13 @@ showTestResults =
 
 
 toRowAttrs : ( Int, TestResult ) -> List (Html.Attribute Msg)
-toRowAttrs ( row, result ) =
-    [ style
-        [ ( "background"
-          , case result of
-                Result.Ok _ ->
-                    "lightgreen"
+toRowAttrs ( _, result ) =
+    case result of
+        Result.Ok _ ->
+            [ style [ ( "background", "lightgreen" ) ] ]
 
-                Result.Err _ ->
-                    "red"
-          )
-        ]
-    ]
+        Result.Err _ ->
+            [ style [ ( "background", "red" ) ] ]
 
 
 showTestResultsOld : List ( Int, TestResult ) -> Html Msg
