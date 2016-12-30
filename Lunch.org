@@ -74,9 +74,11 @@
 *** Computations are "carried along" (essentially on the call stack) until they become effective
 *** Syntactic sugar
 ** Q: But how can this work? A: Virtual DOM
-*** Javascript engines are awfully fast -- especially with js that doesn't do silly things like confuse Ints and Strings
+*** Javascript engines are awfully fast -- especially with "clean" javascript
 *** DOM interaction is still slow -- the rendering engine keeps being asked to do more and more
-*** Elm does double-buffering against a "Virtual DOM", then computes the delta and sends exactly that to the actual DOM
+*** Elm does double-buffering against a "Virtual DOM"
+**** Computes the delta and sends exactly that to the actual DOM
+**** The actual DOM is write-only ... any reads are from the Virtual DOM
 ** A sample program -- using [[http://localhost:8000/src/Main.elm][elm-reactor]] to dynamically redeploy
 *** Top-level
 **** Main: [[file:src/Main.elm][Main.elm]] : initial_model, updating_model, view, subscriptions
