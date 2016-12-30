@@ -1,5 +1,6 @@
 module View exposing (viewSubscriptions, root)
 
+import Array
 import BowlingScoreView
 import ColoredWord exposing (ColoredWord, matchingWordsForColor)
 import ColoredWordView exposing (colorStyle, renderWord)
@@ -111,7 +112,7 @@ root model =
                 ]
             ]
         , input
-            [ value (String.join ", " (matchingWordsForColor model.workingColor model.words))
+            [ value (String.join ", " (matchingWordsForColor model.workingColor model.words |> Array.toList))
             , style [ ( "width", "800px" ) ]
             , readonly True
             , colorStyle model.workingColor

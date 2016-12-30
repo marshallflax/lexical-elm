@@ -97,8 +97,7 @@ dumpColoredWord { colors, text } =
         text ++ "<" ++ (String.join "," (Set.toList colors)) ++ ">"
 
 
-matchingWordsForColor : String -> Array (TextWord (WithColors a)) -> List String
+matchingWordsForColor : String -> Array (TextWord (WithColors a)) -> Array String
 matchingWordsForColor specifiedColor coloredWordList =
-    Array.filter (.colors >> Set.member specifiedColor) coloredWordList
+    Array.filter (Set.member specifiedColor << .colors) coloredWordList
         |> Array.map .text
-        |> Array.toList
