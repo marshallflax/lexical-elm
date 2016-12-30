@@ -98,6 +98,5 @@ dumpColoredWord { colors, text } =
 
 
 matchingWordsForColor : String -> Array (TextWord (WithColors a)) -> Array String
-matchingWordsForColor specifiedColor coloredWordList =
-    Array.filter (Set.member specifiedColor << .colors) coloredWordList
-        |> Array.map .text
+matchingWordsForColor specifiedColor =
+    Array.filter (Set.member specifiedColor << .colors) >> (Array.map .text)
