@@ -77,6 +77,12 @@ savedModelDecoder =
         |> required "wordsPerLine" Json.Decode.int
 
 
+type DragVerb
+    = DragStart
+    | DragEnd
+    | DragAt
+
+
 type Msg
     = SetText String
     | SetCurrentColor String
@@ -92,6 +98,4 @@ type Msg
     | SetTableState Table.State
     | SaveModel
     | WebsocketMessage String
-    | DragStart Mouse.Position
-    | DragAt Mouse.Position
-    | DragEnd Mouse.Position
+    | Drag DragVerb Mouse.Position

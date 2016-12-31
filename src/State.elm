@@ -164,14 +164,9 @@ update msg model =
                     , Cmd.none
                     )
 
-        DragStart xy ->
-            ( { model | dragState = DragController.doStart xy model.dragState }, Cmd.none )
+        Drag dragVerb xy ->
+            ( { model | dragState = DragController.do dragVerb xy model.dragState }, Cmd.none )
 
-        DragAt xy ->
-            ( { model | dragState = DragController.doAt xy model.dragState }, Cmd.none )
-
-        DragEnd xy ->
-            ( { model | dragState = DragController.doEnd xy model.dragState }, Cmd.none )
 
 
 countWords : Model -> Int

@@ -59,7 +59,7 @@ px number =
 
 onMouseDown : Attribute Msg
 onMouseDown =
-    on "mousedown" (Decode.map DragStart Mouse.position)
+    on "mousedown" (Decode.map (Drag DragStart) Mouse.position)
 
 
 dragSubscriptions : Model -> Sub Msg
@@ -69,4 +69,4 @@ dragSubscriptions model =
             Sub.none
 
         Just _ ->
-            Sub.batch [ Mouse.moves DragAt, Mouse.ups DragEnd ]
+            Sub.batch [ Mouse.moves (Drag DragAt), Mouse.ups (Drag DragEnd) ]
