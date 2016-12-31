@@ -3,10 +3,11 @@ module Types exposing (..)
 import Array exposing (Array)
 import ColoredWord exposing (ColoredWord)
 import FreqInfo exposing (FreqInfo)
+import Json.Decode exposing (..)
 import Json.Decode.Pipeline exposing (required, decode)
 import Json.Encode exposing (..)
-import Json.Decode exposing (..)
 import Keyboard exposing (..)
+import Mouse exposing (Position)
 import Set exposing (Set)
 import Table
 import Testing exposing (..)
@@ -25,8 +26,24 @@ type alias ComputedModel a =
         , hideColors : Set String
         , frequencies : FreqInfo
         , lastKeyCode : Keyboard.KeyCode
-        , bowlingResults : List (Int, Testing.TestResult)
+        , bowlingResults : List ( Int, Testing.TestResult )
         , tableState : Table.State
+        , dragState : Draggable
+    }
+
+
+type alias Draggable =
+    { position : Position
+    , drag : Maybe DragState
+    , text : String
+    , width : String
+    , height : String
+    }
+
+
+type alias DragState =
+    { start : Position
+    , current : Position
     }
 
 
@@ -75,3 +92,6 @@ type Msg
     | SetTableState Table.State
     | SaveModel
     | WebsocketMessage String
+    | DragStart Mouse.Position
+    | DragAt Mouse.Position
+    | DragEnd Mouse.Position

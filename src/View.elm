@@ -5,6 +5,7 @@ import BowlingScoreView
 import ColoredWord exposing (ColoredWord, matchingWordsForColor)
 import ColoredWordView exposing (colorStyle, renderWord)
 import Css
+import DragView
 import FreqInfoView exposing (renderFrequencies)
 import Html exposing (Html, button, div, span, text, input, p, table, tr, td)
 import Html.Attributes exposing (style, value, checked, type_, readonly, placeholder, href)
@@ -63,6 +64,7 @@ root : Model -> Html Msg
 root model =
     div []
         [ Css.style [ Html.Attributes.scoped True ] stylesheet
+        , DragView.view model.dragState
         , span
             []
             [ text (toString (Set.toList ((currentWordFromIndex model.workingWord model).colors))) ]

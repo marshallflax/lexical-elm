@@ -1,5 +1,6 @@
 module Main exposing (main)
 
+import DragView
 import Html
 import State
 import Types
@@ -12,7 +13,12 @@ main =
         { init = State.init
         , update = State.update
         , view = View.root
-        , subscriptions = combineSubscriptions [ View.viewSubscriptions, State.webSubscriptions ]
+        , subscriptions =
+            combineSubscriptions
+                [ View.viewSubscriptions
+                , State.webSubscriptions
+                , DragView.dragSubscriptions
+                ]
         }
 
 
