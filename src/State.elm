@@ -5,7 +5,7 @@ import BowlingScoreTest
 import BowlingScoreView
 import Char exposing (..)
 import ColoredWord exposing (..)
-import Drag exposing (..)
+import DragController exposing (..)
 import Json.Decode
 import FreqInfo exposing (..)
 import List.Split
@@ -165,13 +165,13 @@ update msg model =
                     )
 
         DragStart xy ->
-            ( { model | dragState = Drag.doStart xy model.dragState }, Cmd.none )
+            ( { model | dragState = DragController.doStart xy model.dragState }, Cmd.none )
 
         DragAt xy ->
-            ( { model | dragState = Drag.doAt xy model.dragState }, Cmd.none )
+            ( { model | dragState = DragController.doAt xy model.dragState }, Cmd.none )
 
         DragEnd xy ->
-            ( { model | dragState = Drag.doEnd xy model.dragState }, Cmd.none )
+            ( { model | dragState = DragController.doEnd xy model.dragState }, Cmd.none )
 
 
 countWords : Model -> Int
