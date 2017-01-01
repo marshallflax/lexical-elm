@@ -48,9 +48,6 @@ update msg model =
         SetText newText ->
             ( updateModelWithNewText newText model, Cmd.none )
 
-        SetCurrentColor newDefaultColor ->
-            ( { model | workingColor = newDefaultColor }, Cmd.none )
-
         SetCurrentWord index ->
             ( { model
                 | workingWord = index

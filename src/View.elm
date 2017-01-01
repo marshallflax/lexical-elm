@@ -88,7 +88,7 @@ root model =
                             , checked (Set.member l model.hideColors)
                             ]
                             []
-                        , button [ Html.Attributes.attribute "id" ("colorButton" ++ l), colorStyle l, onClick (SetCurrentColor l) ] [ text l ]
+                        , button [ Html.Attributes.attribute "id" ("colorButton" ++ l), colorStyle l, onClick (LexicalMessage (SetCurrentColor l)) ] [ text l ]
                         ]
 
                 doRow : List String -> Html Msg

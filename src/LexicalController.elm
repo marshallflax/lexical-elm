@@ -15,3 +15,6 @@ lexicalUpdate msg model =
 
         ResetSomeColors colorList ->
             ( { model | hideColors = Set.diff model.hideColors (Set.fromList colorList) }, Cmd.none )
+
+        SetCurrentColor newDefaultColor ->
+            ( { model | workingColor = newDefaultColor }, Cmd.none )
