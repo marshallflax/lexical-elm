@@ -47,6 +47,6 @@ renderWord hideColors currentColor currentWordsNormalized ( index, w ) =
     span
         [ colorStyles hideColors w currentWordsNormalized
         , onClick (ToggleColor index currentColor)
-        , onShiftedMouseEnter (SetCurrentWord index)
+        , onShiftedMouseEnter (LexicalMessage (SetCurrentWord index))
         ]
         [ text (" " ++ w.text ++ " ") ]

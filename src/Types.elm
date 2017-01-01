@@ -89,12 +89,12 @@ type LexicalCmd
     | HideSomeColors (List String)
     | ResetSomeColors (List String)
     | SetCurrentColor String
+    | SetCurrentWord Int
 
 
 type Msg
     = SetText String
     | ToggleColor Int String
-    | SetCurrentWord Int
     | SetCurrentNormalized String
     | ToggleColorEnabled String
     | SetWordsPerLine String

@@ -4,7 +4,7 @@ import Array
 import BowlingScoreView
 import ColoredWord exposing (ColoredWord, matchingWordsForColor)
 import ColoredWordView exposing (colorStyle, renderWord)
-import Controller exposing (countWords, countWordsMatching, currentWordFromIndex, dumpState, partitionedList, rainbowList)
+import LexicalController exposing (countWords, countWordsMatching, currentWordFromIndex, dumpState, partitionedList, rainbowList)
 import Css
 import DragView
 import FreqInfoView exposing (renderFrequencies)

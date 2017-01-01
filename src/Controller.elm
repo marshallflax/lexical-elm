@@ -25,36 +25,11 @@ webSubscriptions model =
     WebSocket.listen echoServer WebsocketMessage
 
 
-rainbowList : List (List String)
-rainbowList =
-    [ [ "Aqua", "Blue", "Green", "DarkTurquoise", "Fuchsia", "Lime", "Plum", "Yellow" ], [ "Beige", "Indigo", "Purple", "Crimson", "Violet", "Coral", "Pink", "Gold" ] ]
-
-
-setWordsPerLine : String -> Model -> Model
-setWordsPerLine wordString model =
-    case
-        String.toInt wordString
-    of
-        Err msg ->
-            model
-
-        Ok val ->
-            { model | wordsPerLine = val }
-
-
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         SetText newText ->
             ( updateModelWithNewText newText model, Cmd.none )
-
-        SetCurrentWord index ->
-            ( { model
-                | workingWord = index
-                , workingNormalized = Set.insert (currentWordFromIndex index model).normalized Set.empty
-              }
-            , Cmd.none
-            )
 
         SetCurrentNormalized text ->
             ( { model
@@ -127,35 +102,3 @@ update msg model =
 
         LexicalMessage cmd ->
             lexicalUpdate cmd model
-
-
-countWords : Model -> Int
-countWords model =
-    Array.length model.words
-
-
-currentWordFromIndex : Int -> Model -> ColoredWord
-currentWordFromIndex index model =
-    Array.get index model.words
-        |> Maybe.withDefault ColoredWord.empty
-
-
-dumpState : Model -> String
-dumpState model =
-    List.map dumpColoredWord (Array.toList model.words)
-        |> (String.join " ")
-
-
-partitionedList : Model -> List (List ( Int, ColoredWord ))
-partitionedList model =
-    (Array.toIndexedList model.words)
-        |> List.Split.chunksOfLeft model.wordsPerLine
-
-
-countWordsMatching : Model -> Int
-countWordsMatching model =
-    let
-        matches coloredWord =
-            Set.member coloredWord.normalized model.workingNormalized
-    in
-        Array.filter matches model.words |> Array.length
