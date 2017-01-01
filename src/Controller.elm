@@ -121,14 +121,14 @@ update msg model =
                     , Cmd.none
                     )
 
-        Drag key dragVerb ->
+        DragMessage key dragVerb ->
             ( { model
                 | draggables = Dict.update key (Maybe.map <| DragController.do dragVerb) model.draggables
               }
             , Cmd.none
             )
 
-        Lexical cmd ->
+        LexicalMessage cmd ->
             lexicalUpdate cmd model
 
 

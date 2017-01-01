@@ -102,5 +102,5 @@ type Msg
     | SetTableState Table.State
     | SaveModel
     | WebsocketMessage String
-    | Lexical LexicalCmd
-    | Drag String DragCmd
+    | LexicalMessage LexicalCmd
+    | DragMessage String DragCmd
