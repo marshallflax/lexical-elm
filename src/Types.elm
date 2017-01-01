@@ -90,10 +90,11 @@ type LexicalCmd
     | ResetSomeColors (List String)
     | SetCurrentColor String
     | SetCurrentWord Int
+    | SetText String
 
 
 type Msg
-    = SetText String
+    = LexicalMessage LexicalCmd
     | ToggleColor Int String
     | SetCurrentNormalized String
     | ToggleColorEnabled String
@@ -102,5 +103,4 @@ type Msg
     | SetTableState Table.State
     | SaveModel
     | WebsocketMessage String
-    | LexicalMessage LexicalCmd
     | DragMessage String DragCmd

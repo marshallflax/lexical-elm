@@ -4,7 +4,6 @@ import Array exposing (Array)
 import BowlingScoreTest
 import BowlingScoreView
 import Char exposing (..)
-import ColoredWord exposing (..)
 import Dict exposing (..)
 import FreqInfo exposing (..)
 import Mouse exposing (Position)
@@ -31,15 +30,3 @@ init =
       }
     , Cmd.none
     )
-
-updateModelWithNewText : String -> Model -> Model
-updateModelWithNewText newText model =
-    let
-        words =
-            splitIntoColorwords newText
-    in
-        { model
-            | text = newText
-            , words = words
-            , frequencies = countFreq (Array.map .normalized words)
-        }

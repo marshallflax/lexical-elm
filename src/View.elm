@@ -72,7 +72,7 @@ root model =
         , button [ onClick SaveModel ] [ text "Save" ]
         , input
             [ value (dumpState model)
-            , onInput SetText
+            , onInput (\text -> LexicalMessage (SetText text))
             , style [ ( "width", "800px" ) ]
             ]
             []

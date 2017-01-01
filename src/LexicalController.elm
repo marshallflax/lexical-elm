@@ -2,6 +2,7 @@ module LexicalController exposing (..)
 
 import Array exposing (Array)
 import ColoredWord exposing (..)
+import FreqInfo exposing (..)
 import List.Split
 import Set exposing (Set)
 import Types exposing (..)
@@ -10,6 +11,9 @@ import Types exposing (..)
 lexicalUpdate : LexicalCmd -> Model -> ( Model, Cmd Msg )
 lexicalUpdate msg model =
     case msg of
+        SetText newText ->
+            ( updateModelWithNewText newText model, Cmd.none )
+
         EnableAllColors ->
             ( { model | hideColors = Set.empty }, Cmd.none )
 
@@ -78,3 +82,16 @@ dumpState : Model -> String
 dumpState model =
     List.map dumpColoredWord (Array.toList model.words)
         |> (String.join " ")
+
+
+updateModelWithNewText : String -> Model -> Model
+updateModelWithNewText newText model =
+    let
+        words =
+            splitIntoColorwords newText
+    in
+        { model
+            | text = newText
+            , words = words
+            , frequencies = countFreq (Array.map .normalized words)
+        }

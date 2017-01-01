@@ -28,9 +28,6 @@ webSubscriptions model =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        SetText newText ->
-            ( updateModelWithNewText newText model, Cmd.none )
-
         SetCurrentNormalized text ->
             ( { model
                 | workingWord = -1
