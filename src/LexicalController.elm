@@ -3,6 +3,7 @@ module LexicalController exposing (lexicalUpdate, countWords, countWordsMatching
 import Array exposing (Array)
 import ColoredWord exposing (ColoredWord, dumpColoredWord, splitIntoColorwords)
 import FreqInfo exposing (countFreq)
+import Json.Decode
 import List.Split
 import Misc
 import Regex
@@ -10,7 +11,7 @@ import Set exposing (Set)
 import Types exposing (..)
 
 
-lexicalUpdate : LexicalCmd -> Model -> ( Model, Cmd Msg )
+lexicalUpdate : LexicalCmd -> LexicalModel -> ( LexicalModel, Cmd Msg )
 lexicalUpdate msg model =
     case msg of
         EnableAllColors ->
@@ -68,25 +69,41 @@ lexicalUpdate msg model =
         ToggleColorEnabled color ->
             ( { model | hideColors = Misc.toggleSet color model.hideColors }, Cmd.none )
 
+        WebsocketMessage msg ->
+            case
+                Json.Decode.decodeString Types.savedModelDecoder msg
+            of
+                Ok decodedModel ->
+                    ( { model | wordsPerLine = decodedModel.wordsPerLine }
+                        |> updateModelWithNewText ("Got: " ++ decodedModel.text)
+                    , Cmd.none
+                    )
 
-currentWordFromIndex : Int -> Model -> ColoredWord
+                Err msg ->
+                    ( model
+                        |> updateModelWithNewText msg
+                    , Cmd.none
+                    )
+
+
+currentWordFromIndex : Int -> LexicalModel -> ColoredWord
 currentWordFromIndex index model =
     Array.get index model.words
         |> Maybe.withDefault ColoredWord.empty
 
 
-countWords : Model -> Int
+countWords : LexicalModel -> Int
 countWords model =
     Array.length model.words
 
 
-partitionedList : Model -> List (List ( Int, ColoredWord ))
+partitionedList : LexicalModel -> List (List ( Int, ColoredWord ))
 partitionedList model =
     (Array.toIndexedList model.words)
         |> List.Split.chunksOfLeft model.wordsPerLine
 
 
-countWordsMatching : Model -> Int
+countWordsMatching : LexicalModel -> Int
 countWordsMatching model =
     let
         matches coloredWord =
@@ -100,7 +117,7 @@ rainbowList =
     [ [ "Aqua", "Blue", "Green", "DarkTurquoise", "Fuchsia", "Lime", "Plum", "Yellow" ], [ "Beige", "Indigo", "Purple", "Crimson", "Violet", "Coral", "Pink", "Gold" ] ]
 
 
-setWordsPerLine : String -> Model -> Model
+setWordsPerLine : String -> LexicalModel -> LexicalModel
 setWordsPerLine wordString model =
     case
         String.toInt wordString
@@ -112,13 +129,13 @@ setWordsPerLine wordString model =
             { model | wordsPerLine = val }
 
 
-dumpState : Model -> String
+dumpState : LexicalModel -> String
 dumpState model =
     List.map dumpColoredWord (Array.toList model.words)
         |> (String.join " ")
 
 
-updateModelWithNewText : String -> Model -> Model
+updateModelWithNewText : String -> LexicalModel -> LexicalModel
 updateModelWithNewText newText model =
     let
         words =

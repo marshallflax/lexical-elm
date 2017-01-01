@@ -15,6 +15,15 @@ import Testing exposing (TestResult)
 
 
 type alias Model =
+    { lexical : LexicalModel
+    , draggables : Dict String Draggable
+    , lastKeyCode : Keyboard.KeyCode
+    , bowlingResults : List ( Int, Testing.TestResult )
+    , tableState : Table.State
+    }
+
+
+type alias LexicalModel =
     ComputedModel SavedModel
 
 
@@ -26,10 +35,6 @@ type alias ComputedModel a =
         , workingNormalized : Set String
         , hideColors : Set String
         , frequencies : FreqInfo
-        , lastKeyCode : Keyboard.KeyCode
-        , bowlingResults : List ( Int, Testing.TestResult )
-        , tableState : Table.State
-        , draggables : Dict String Draggable
     }
 
 
@@ -58,8 +63,8 @@ encodeSavedModel : Model -> String
 encodeSavedModel model =
     Json.Encode.encode 0
         (Json.Encode.object
-            [ ( "text", Json.Encode.string model.text )
-            , ( "wordsPerLine", Json.Encode.int model.wordsPerLine )
+            [ ( "text", Json.Encode.string model.lexical.text )
+            , ( "wordsPerLine", Json.Encode.int model.lexical.wordsPerLine )
             ]
         )
 
@@ -95,6 +100,7 @@ type LexicalCmd
     | SetWordsPerLine String
     | ToggleColor Int String
     | ToggleColorEnabled String
+    | WebsocketMessage String
 
 
 type Msg
@@ -102,5 +108,4 @@ type Msg
     | KeyMsg Keyboard.KeyCode
     | SetTableState Table.State
     | SaveModel
-    | WebsocketMessage String
     | DragMessage String DragCmd

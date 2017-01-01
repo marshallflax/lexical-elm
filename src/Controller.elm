@@ -2,7 +2,6 @@ module Controller exposing (..)
 
 import Dict exposing (..)
 import DragController exposing (..)
-import Json.Decode
 import LexicalController
 import Types exposing (..)
 import WebSocket
@@ -15,14 +14,18 @@ echoServer =
 
 webSubscriptions : Model -> Sub Msg
 webSubscriptions model =
-    WebSocket.listen echoServer WebsocketMessage
+    WebSocket.listen echoServer (\msg -> LexicalMessage (WebsocketMessage msg))
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         LexicalMessage cmd ->
-            LexicalController.lexicalUpdate cmd model
+            let
+                ( newLexical, cmds ) =
+                    LexicalController.lexicalUpdate cmd model.lexical
+            in
+                ( { model | lexical = newLexical }, Cmd.none )
 
         KeyMsg code ->
             ( { model | lastKeyCode = code }, Cmd.none )
@@ -37,22 +40,6 @@ update msg model =
                     Debug.log "serialized" (encodeSavedModel model)
             in
                 ( model, WebSocket.send echoServer encoded )
-
-        WebsocketMessage msg ->
-            case
-                Json.Decode.decodeString Types.savedModelDecoder msg
-            of
-                Ok decodedModel ->
-                    ( { model | wordsPerLine = decodedModel.wordsPerLine }
-                        |> LexicalController.updateModelWithNewText ("Got: " ++ decodedModel.text)
-                    , Cmd.none
-                    )
-
-                Err msg ->
-                    ( model
-                        |> LexicalController.updateModelWithNewText msg
-                    , Cmd.none
-                    )
 
         DragMessage key dragVerb ->
             ( { model

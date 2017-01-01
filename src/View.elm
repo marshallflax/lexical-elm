@@ -67,11 +67,11 @@ root model =
         , DragView.viewDraggables model.draggables
         , span
             []
-            [ text (toString (Set.toList ((currentWordFromIndex model.workingWord model).colors))) ]
+            [ text (toString (Set.toList ((currentWordFromIndex model.lexical.workingWord model.lexical).colors))) ]
         , p [] []
         , button [ onClick SaveModel ] [ text "Save" ]
         , input
-            [ value (dumpState model)
+            [ value (dumpState model.lexical)
             , onInput (\text -> LexicalMessage (SetText text))
             , style [ ( "width", "800px" ) ]
             ]
@@ -85,7 +85,7 @@ root model =
                         [ input
                             [ type_ "checkbox"
                             , onClick (LexicalMessage (ToggleColorEnabled l))
-                            , checked (Set.member l model.hideColors)
+                            , checked (Set.member l model.lexical.hideColors)
                             ]
                             []
                         , button [ Html.Attributes.attribute "id" ("colorButton" ++ l), colorStyle l, onClick (LexicalMessage (SetCurrentColor l)) ] [ text l ]
@@ -101,23 +101,23 @@ root model =
             []
             [ button [ onClick (LexicalMessage EnableAllColors) ] [ text "ResetHiding" ]
             , input
-                [ value (toString model.wordsPerLine)
+                [ value (toString model.lexical.wordsPerLine)
                 , onInput (\number -> LexicalMessage (SetWordsPerLine number))
                 ]
                 [ text "WordsPerLine" ]
             , span []
                 [ text
-                    (toString (countWordsMatching model)
+                    (toString (countWordsMatching model.lexical)
                         ++ "/"
-                        ++ (toString (countWords model))
+                        ++ (toString (countWords model.lexical))
                     )
                 ]
             ]
         , input
-            [ value (String.join ", " (matchingWordsForColor model.workingColor model.words |> Array.toList))
+            [ value (String.join ", " (matchingWordsForColor model.lexical.workingColor model.lexical.words |> Array.toList))
             , style [ ( "width", "800px" ) ]
             , readonly True
-            , colorStyle model.workingColor
+            , colorStyle model.lexical.workingColor
             ]
             []
         , Html.table
@@ -127,19 +127,19 @@ root model =
                     (let
                         doWord : ( Int, ColoredWord ) -> Html Msg
                         doWord =
-                            renderWord model.hideColors model.workingColor model.workingNormalized
+                            renderWord model.lexical.hideColors model.lexical.workingColor model.lexical.workingNormalized
 
                         renderLine : List ( Int, ColoredWord ) -> Html Msg
                         renderLine listPart =
                             Html.div [ stylesheet.class MyClass ]
                                 (List.map doWord listPart)
                      in
-                        List.map renderLine (partitionedList model)
+                        List.map renderLine (partitionedList model.lexical)
                     )
                 , td [ style [ ( "width", "800px" ), ( "vertical-align", "top" ) ] ]
-                    [ FreqInfoView.renderFrequencies model.workingNormalized model.frequencies.words ]
+                    [ FreqInfoView.renderFrequencies model.lexical.workingNormalized model.lexical.frequencies.words ]
                 , td [ style [ ( "width", "400px" ), ( "vertical-align", "top" ) ] ]
-                    [ FreqInfoView.renderFrequencies model.workingNormalized model.frequencies.n2 ]
+                    [ FreqInfoView.renderFrequencies model.lexical.workingNormalized model.lexical.frequencies.n2 ]
                 ]
             ]
         , p [] [ text (toString model.lastKeyCode) ]
