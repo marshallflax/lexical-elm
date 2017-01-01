@@ -3,7 +3,7 @@ module Controller exposing (..)
 import Dict exposing (..)
 import DragController exposing (..)
 import Json.Decode
-import LexicalController exposing (..)
+import LexicalController
 import Types exposing (..)
 import WebSocket
 
@@ -21,7 +21,8 @@ webSubscriptions model =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-
+        LexicalMessage cmd ->
+            LexicalController.lexicalUpdate cmd model
 
         KeyMsg code ->
             ( { model | lastKeyCode = code }, Cmd.none )
@@ -43,13 +44,13 @@ update msg model =
             of
                 Ok decodedModel ->
                     ( { model | wordsPerLine = decodedModel.wordsPerLine }
-                        |> updateModelWithNewText ("Got: " ++ decodedModel.text)
+                        |> LexicalController.updateModelWithNewText ("Got: " ++ decodedModel.text)
                     , Cmd.none
                     )
 
                 Err msg ->
                     ( model
-                        |> updateModelWithNewText msg
+                        |> LexicalController.updateModelWithNewText msg
                     , Cmd.none
                     )
 
@@ -59,6 +60,3 @@ update msg model =
               }
             , Cmd.none
             )
-
-        LexicalMessage cmd ->
-            lexicalUpdate cmd model
