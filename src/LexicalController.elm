@@ -1,4 +1,4 @@
-module LexicalController exposing (lexicalUpdate, countWords, countWordsMatching, currentWordFromIndex, rainbowList, updateModelWithNewText, partitionedList, dumpState)
+module LexicalController exposing (init, lexicalUpdate, countWords, countWordsMatching, currentWordFromIndex, rainbowList, updateModelWithNewText, partitionedList, dumpState)
 
 import Array exposing (Array)
 import ColoredWord exposing (ColoredWord, dumpColoredWord, splitIntoColorwords)
@@ -9,6 +9,19 @@ import Misc
 import Regex
 import Set exposing (Set)
 import Types exposing (..)
+
+
+init : LexicalModel
+init =
+    { text = "Hello"
+    , workingColor = ""
+    , words = Array.fromList []
+    , workingWord = -1
+    , workingNormalized = Set.empty
+    , hideColors = Set.empty
+    , wordsPerLine = 10
+    , frequencies = FreqInfo.empty
+    }
 
 
 lexicalUpdate : LexicalCmd -> LexicalModel -> ( LexicalModel, Cmd Msg )

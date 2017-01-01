@@ -1,28 +1,17 @@
-module MainController exposing (..)
+module MainController exposing (init)
 
-import Array exposing (Array)
 import BowlingScoreTest
 import BowlingScoreView
 import Char
 import Dict
-import FreqInfo
+import LexicalController
 import Mouse exposing (Position)
-import Set exposing (Set)
 import Types exposing (..)
 
 
 init : ( Model, Cmd msg )
 init =
-    ( { lexical =
-            { text = "Hello"
-            , workingColor = ""
-            , words = Array.fromList []
-            , workingWord = -1
-            , workingNormalized = Set.empty
-            , hideColors = Set.empty
-            , wordsPerLine = 10
-            , frequencies = FreqInfo.empty
-            }
+    ( { lexical = LexicalController.init
       , draggables =
             Dict.empty
                 |> Dict.insert "text1" (Draggable (Position 200 200) Nothing "Text1" "100" "100")
