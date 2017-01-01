@@ -1,4 +1,4 @@
-module State exposing (..)
+module Controller exposing (..)
 
 import Array exposing (Array)
 import BowlingScoreTest
@@ -166,7 +166,6 @@ update msg model =
 
         Drag dragVerb xy ->
             ( { model | dragState = DragController.do dragVerb xy model.dragState }, Cmd.none )
-
 
 
 countWords : Model -> Int

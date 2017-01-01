@@ -4,6 +4,7 @@ import Array
 import BowlingScoreView
 import ColoredWord exposing (ColoredWord, matchingWordsForColor)
 import ColoredWordView exposing (colorStyle, renderWord)
+import Controller exposing (countWords, countWordsMatching, currentWordFromIndex, dumpState, partitionedList, rainbowList)
 import Css
 import DragView
 import FreqInfoView exposing (renderFrequencies)
@@ -12,7 +13,6 @@ import Html.Attributes exposing (style, value, checked, type_, readonly, placeho
 import Html.Events exposing (onClick, onInput, onMouseEnter)
 import Keyboard
 import Set exposing (Set)
-import State exposing (countWords, countWordsMatching, currentWordFromIndex, dumpState, partitionedList, rainbowList)
 import Types exposing (..)
 
 

@@ -1,8 +1,8 @@
 module Main exposing (main)
 
+import Controller
 import DragView
 import Html
-import State
 import Types
 import View
 
@@ -10,13 +10,13 @@ import View
 main : Program Never Types.Model Types.Msg
 main =
     Html.program
-        { init = State.init
-        , update = State.update
+        { init = Controller.init
+        , update = Controller.update
         , view = View.root
         , subscriptions =
             combineSubscriptions
                 [ View.viewSubscriptions
-                , State.webSubscriptions
+                , Controller.webSubscriptions
                 , DragView.dragSubscriptions
                 ]
         }
