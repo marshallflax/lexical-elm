@@ -46,7 +46,10 @@ init =
       , lastKeyCode = Char.toCode '!'
       , bowlingResults = BowlingScoreTest.testResults
       , tableState = BowlingScoreView.initialTableState
-      , draggables = Dict.insert "text1" (Draggable (Position 200 200) Nothing "Text" "100" "100") Dict.empty
+      , draggables =
+            Dict.empty
+                |> Dict.insert "text1" (Draggable (Position 200 200) Nothing "Text1" "100" "100")
+                |> Dict.insert "text2" (Draggable (Position 300 300) Nothing "Text2" "100" "100")
       }
     , Cmd.none
     )
@@ -165,11 +168,11 @@ update msg model =
                     , Cmd.none
                     )
 
-        Drag dragVerb xy ->
+        Drag key dragVerb xy ->
             let
                 newDraggables : Dict String Draggable
                 newDraggables =
-                    Dict.update "text1" (Maybe.map (DragController.do dragVerb xy)) model.draggables
+                    Dict.update key (Maybe.map (DragController.do dragVerb xy)) model.draggables
             in
                 ( { model | draggables = newDraggables }, Cmd.none )
 

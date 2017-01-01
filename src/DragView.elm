@@ -35,7 +35,7 @@ viewDraggables draggables =
 viewDraggable : ( String, Draggable ) -> Html Msg
 viewDraggable ( key, draggable ) =
     div
-        [ onMouseDown
+        [ onMouseDown key
         , style
             [ "background-color" => "#3C8D2F"
             , "cursor" => "move"
@@ -59,9 +59,9 @@ px number =
     toString number ++ "px"
 
 
-onMouseDown : Attribute Msg
-onMouseDown =
-    on "mousedown" (Decode.map (Drag DragStart) Mouse.position)
+onMouseDown : String -> Attribute Msg
+onMouseDown key =
+    on "mousedown" (Decode.map (Drag key DragStart) Mouse.position)
 
 
 dragSubscriptions : Model -> Sub Msg
@@ -80,4 +80,7 @@ computeSub ( key, draggable ) =
             Sub.none
 
         Just _ ->
-            Sub.batch [ Mouse.moves (Drag DragAt), Mouse.ups (Drag DragEnd) ]
+            Sub.batch
+                [ Mouse.moves (Drag key DragAt)
+                , Mouse.ups (Drag key DragEnd)
+                ]
