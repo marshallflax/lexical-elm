@@ -1,12 +1,12 @@
 module DragView exposing (dragSubscriptions, viewDraggables)
 
-import Dict exposing (..)
+import Dict exposing (Dict)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (..)
+import Html.Events
 import Json.Decode as Decode
 import Mouse exposing (Position)
-import Types exposing (..)
+import Types exposing (Model, Draggable, Msg(Drag), DragVerb(DragStart, DragAt, DragEnd))
 
 
 (=>) : a -> b -> ( a, b )
@@ -32,7 +32,7 @@ viewDraggables draggables =
 
         onMouseDown : String -> Attribute Msg
         onMouseDown key =
-            on "mousedown" (Decode.map (Drag key DragStart) Mouse.position)
+            Html.Events.on "mousedown" (Decode.map (Drag key DragStart) Mouse.position)
 
         viewDraggable : ( String, Draggable ) -> Html Msg
         viewDraggable ( key, draggable ) =
