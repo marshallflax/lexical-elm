@@ -1,8 +1,8 @@
 module LexicalController exposing (..)
 
 import Array exposing (Array)
-import ColoredWord exposing (..)
-import FreqInfo exposing (..)
+import ColoredWord exposing (ColoredWord, dumpColoredWord, splitIntoColorwords)
+import FreqInfo exposing (countFreq)
 import List.Split
 import Misc
 import Regex
