@@ -17,40 +17,39 @@ import Types exposing (..)
 viewDraggables : Dict String Draggable -> Html Msg
 viewDraggables draggables =
     let
+        px : Int -> String
+        px number =
+            toString number ++ "px"
+
+        getPosition : Draggable -> Position
+        getPosition { position, drag } =
+            case drag of
+                Nothing ->
+                    position
+
+                Just { start, current } ->
+                    Position (position.x + current.x - start.x) (position.y + current.y - start.y)
+
         viewDraggable : ( String, Draggable ) -> Html Msg
         viewDraggable ( key, draggable ) =
-            let
-                px : Int -> String
-                px number =
-                    toString number ++ "px"
-
-                getPosition : Draggable -> Position
-                getPosition { position, drag } =
-                    case drag of
-                        Nothing ->
-                            position
-
-                        Just { start, current } ->
-                            Position (position.x + current.x - start.x) (position.y + current.y - start.y)
-            in
-                div
-                    [ onMouseDown key
-                    , style
-                        [ "background-color" => "#3C8D2F"
-                        , "cursor" => "move"
-                        , "width" => "100px"
-                        , "height" => "100px"
-                        , "border-radius" => "4px"
-                        , "position" => "absolute"
-                        , "left" => px (.x (getPosition draggable))
-                        , "top" => px (.y (getPosition draggable))
-                        , "color" => "white"
-                        , "display" => "flex"
-                        , "align-items" => "center"
-                        , "justify-content" => "center"
-                        ]
+            div
+                [ onMouseDown key
+                , style
+                    [ "background-color" => "#3C8D2F"
+                    , "cursor" => "move"
+                    , "width" => "100px"
+                    , "height" => "100px"
+                    , "border-radius" => "4px"
+                    , "position" => "absolute"
+                    , "left" => px (.x (getPosition draggable))
+                    , "top" => px (.y (getPosition draggable))
+                    , "color" => "white"
+                    , "display" => "flex"
+                    , "align-items" => "center"
+                    , "justify-content" => "center"
                     ]
-                    [ text key ]
+                ]
+                [ text key ]
     in
         div []
             (List.map viewDraggable (Dict.toList draggables))
