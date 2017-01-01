@@ -1,4 +1,4 @@
-module LexicalController exposing (..)
+module LexicalController exposing (lexicalUpdate, countWords, countWordsMatching, currentWordFromIndex, rainbowList, updateModelWithNewText, partitionedList, dumpState)
 
 import Array exposing (Array)
 import ColoredWord exposing (ColoredWord, dumpColoredWord, splitIntoColorwords)
