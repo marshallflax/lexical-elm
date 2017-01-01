@@ -51,8 +51,7 @@ viewDraggable ( key, draggable ) =
             , "justify-content" => "center"
             ]
         ]
-        [ text "Drag Me!"
-        ]
+        [ text key ]
 
 
 px : Int -> String
