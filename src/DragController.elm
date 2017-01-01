@@ -4,10 +4,10 @@ import Mouse exposing (Position)
 import Types exposing (..)
 
 
-do : DragVerb -> Position-> Draggable -> Draggable
+do : DragVerb -> Position -> Draggable -> Draggable
 do verb xy ({ position, drag } as model) =
     case verb of
-        DragStart  ->
+        DragStart ->
             { model | position = position, drag = Just (DragState xy xy) }
 
         DragAt ->
@@ -22,8 +22,6 @@ do verb xy ({ position, drag } as model) =
                             position
 
                         Just { start, current } ->
-                            Position
-                                (position.x + current.x - start.x)
-                                (position.y + current.y - start.y)
+                            Position (position.x + current.x - start.x) (position.y + current.y - start.y)
             in
                 { model | position = getPosition model, drag = Nothing }
