@@ -30,6 +30,10 @@ viewDraggables draggables =
                 Just { start, current } ->
                     Position (position.x + current.x - start.x) (position.y + current.y - start.y)
 
+        onMouseDown : String -> Attribute Msg
+        onMouseDown key =
+            on "mousedown" (Decode.map (Drag key DragStart) Mouse.position)
+
         viewDraggable : ( String, Draggable ) -> Html Msg
         viewDraggable ( key, draggable ) =
             div
@@ -55,24 +59,19 @@ viewDraggables draggables =
             (List.map viewDraggable (Dict.toList draggables))
 
 
-onMouseDown : String -> Attribute Msg
-onMouseDown key =
-    on "mousedown" (Decode.map (Drag key DragStart) Mouse.position)
-
-
 dragSubscriptions : Model -> Sub Msg
 dragSubscriptions model =
-    Sub.batch (List.map computeSub (Dict.toList model.draggables))
+    let
+        computeSub : ( String, Draggable ) -> Sub Msg
+        computeSub ( key, draggable ) =
+            case draggable.drag of
+                Nothing ->
+                    Sub.none
 
-
-computeSub : ( String, Draggable ) -> Sub Msg
-computeSub ( key, draggable ) =
-    case draggable.drag of
-        Nothing ->
-            Sub.none
-
-        Just _ ->
-            Sub.batch
-                [ Mouse.moves (Drag key DragAt)
-                , Mouse.ups (Drag key DragEnd)
-                ]
+                Just _ ->
+                    Sub.batch
+                        [ Mouse.moves (Drag key DragAt)
+                        , Mouse.ups (Drag key DragEnd)
+                        ]
+    in
+        Sub.batch (List.map computeSub (Dict.toList model.draggables))
