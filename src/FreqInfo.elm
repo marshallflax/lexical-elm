@@ -1,8 +1,7 @@
 module FreqInfo exposing (..)
 
-import Array exposing (..)
-import Dict exposing (..)
-import List exposing (..)
+import Array exposing (Array, toList)
+import Dict exposing (Dict)
 
 
 type alias FreqInfo =
