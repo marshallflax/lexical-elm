@@ -81,10 +81,10 @@
 **** The actual DOM is write-only ... any reads are from the Virtual DOM
 ** A sample program -- using [[http://localhost:8000/src/Main.elm][elm-reactor]] to dynamically redeploy
 *** Top-level
-**** Main: [[file:src/Main.elm][Main.elm]] : initial_model, updating_model, view, subscriptions
-**** Types: [[file:src/Types.elm][Types.elm]] : Model contains state; Msg is ADT of commands
-**** Controller: [[file:src/State.elm][State.elm]] : How commands create a new model from old model
-**** View: [[file:src/View.elm][View.elm]] : How to construct HTML from the model**
+**** Main: [[file:src/Main.elm]] : initial_model, updating_model, view, subscriptions
+**** Types: [[file:src/Types.elm]] : Model contains state; Msg is ADT of commands
+**** Controller: [[file:src/MainController.elm]] : How commands create a new model from old model
+**** View: [[file:src/MainView.elm]] : How to construct HTML from the model**
 *** One module
 **** [[file:src/FreqInfo.elm][FreqInfo.elm]] : Business logic for some analytics
 **** [[file:src/FreqInfoView.elm][FreqInfoView.elm]] : How to render above analytics
@@ -95,3 +95,5 @@
 **** [[file:src/BowlingScore.elm][Bowling Kata]]
 **** [[file:src/BowlingScoreTest.elm]]
 **** [[file:src/BowlingScoreView.elm][BowlingScoreView.elm]]
+** Other notes
+*** Use the git...commit every time it compiles!
