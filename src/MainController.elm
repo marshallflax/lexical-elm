@@ -3,9 +3,9 @@ module MainController exposing (..)
 import Array exposing (Array)
 import BowlingScoreTest
 import BowlingScoreView
-import Char exposing (..)
-import Dict exposing (..)
-import FreqInfo exposing (..)
+import Char
+import Dict
+import FreqInfo
 import Mouse exposing (Position)
 import Set exposing (Set)
 import Types exposing (..)
