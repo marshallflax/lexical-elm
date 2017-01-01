@@ -84,7 +84,7 @@ root model =
                     td []
                         [ input
                             [ type_ "checkbox"
-                            , onClick (ToggleColorEnabled l)
+                            , onClick (LexicalMessage (ToggleColorEnabled l))
                             , checked (Set.member l model.hideColors)
                             ]
                             []

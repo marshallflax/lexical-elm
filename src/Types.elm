@@ -89,15 +89,15 @@ type LexicalCmd
     | HideSomeColors (List String)
     | ResetSomeColors (List String)
     | SetCurrentColor String
+    | SetCurrentNormalized String
     | SetCurrentWord Int
     | SetText String
-    | SetCurrentNormalized String
+    | ToggleColor Int String
+    | ToggleColorEnabled String
 
 
 type Msg
     = LexicalMessage LexicalCmd
-    | ToggleColor Int String
-    | ToggleColorEnabled String
     | SetWordsPerLine String
     | KeyMsg Keyboard.KeyCode
     | SetTableState Table.State

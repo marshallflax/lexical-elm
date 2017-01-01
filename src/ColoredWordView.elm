@@ -46,7 +46,7 @@ renderWord : Set String -> String -> Set String -> ( Int, ColoredWord ) -> Html 
 renderWord hideColors currentColor currentWordsNormalized ( index, w ) =
     span
         [ colorStyles hideColors w currentWordsNormalized
-        , onClick (ToggleColor index currentColor)
+        , onClick (LexicalMessage (ToggleColor index currentColor))
         , onShiftedMouseEnter (LexicalMessage (SetCurrentWord index))
         ]
         [ text (" " ++ w.text ++ " ") ]

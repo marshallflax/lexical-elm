@@ -6,7 +6,6 @@ import Dict exposing (..)
 import DragController exposing (..)
 import Json.Decode
 import LexicalController exposing (..)
-import Misc
 import Types exposing (..)
 import WebSocket
 
@@ -24,24 +23,7 @@ webSubscriptions model =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        ToggleColorEnabled color ->
-            ( { model | hideColors = Misc.toggleSet color model.hideColors }, Cmd.none )
 
-        ToggleColor which newColor ->
-            ( if (String.length newColor == 0) then
-                model
-              else
-                let
-                    currentColoredWord =
-                        Array.get which model.words
-                            |> Maybe.withDefault ColoredWord.empty
-
-                    modifiedColoredWord =
-                        { currentColoredWord | colors = Misc.toggleSet newColor currentColoredWord.colors }
-                in
-                    { model | words = Array.set which modifiedColoredWord model.words }
-            , Cmd.none
-            )
 
         SetWordsPerLine wordString ->
             ( setWordsPerLine wordString model, Cmd.none )

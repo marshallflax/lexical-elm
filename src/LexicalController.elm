@@ -4,6 +4,7 @@ import Array exposing (Array)
 import ColoredWord exposing (..)
 import FreqInfo exposing (..)
 import List.Split
+import Misc
 import Regex exposing (..)
 import Set exposing (Set)
 import Types exposing (..)
@@ -42,6 +43,25 @@ lexicalUpdate msg model =
                 | workingWord = index
                 , workingNormalized = Set.insert (currentWordFromIndex index model).normalized Set.empty
               }
+            , Cmd.none
+            )
+
+        ToggleColorEnabled color ->
+            ( { model | hideColors = Misc.toggleSet color model.hideColors }, Cmd.none )
+
+        ToggleColor which newColor ->
+            ( if (String.length newColor == 0) then
+                model
+              else
+                let
+                    currentColoredWord =
+                        Array.get which model.words
+                            |> Maybe.withDefault ColoredWord.empty
+
+                    modifiedColoredWord =
+                        { currentColoredWord | colors = Misc.toggleSet newColor currentColoredWord.colors }
+                in
+                    { model | words = Array.set which modifiedColoredWord model.words }
             , Cmd.none
             )
 
