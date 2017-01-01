@@ -92,13 +92,13 @@ type LexicalCmd
     | SetCurrentNormalized String
     | SetCurrentWord Int
     | SetText String
+    | SetWordsPerLine String
     | ToggleColor Int String
     | ToggleColorEnabled String
 
 
 type Msg
     = LexicalMessage LexicalCmd
-    | SetWordsPerLine String
     | KeyMsg Keyboard.KeyCode
     | SetTableState Table.State
     | SaveModel

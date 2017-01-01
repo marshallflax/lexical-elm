@@ -102,7 +102,7 @@ root model =
             [ button [ onClick (LexicalMessage EnableAllColors) ] [ text "ResetHiding" ]
             , input
                 [ value (toString model.wordsPerLine)
-                , onInput SetWordsPerLine
+                , onInput (\number -> LexicalMessage (SetWordsPerLine number))
                 ]
                 [ text "WordsPerLine" ]
             , span []

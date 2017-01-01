@@ -16,6 +16,9 @@ lexicalUpdate msg model =
         SetText newText ->
             ( updateModelWithNewText newText model, Cmd.none )
 
+        SetWordsPerLine wordString ->
+            ( setWordsPerLine wordString model, Cmd.none )
+
         SetCurrentNormalized text ->
             ( { model
                 | workingWord = -1

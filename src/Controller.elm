@@ -1,7 +1,5 @@
 module Controller exposing (..)
 
-import Array exposing (Array)
-import ColoredWord exposing (..)
 import Dict exposing (..)
 import DragController exposing (..)
 import Json.Decode
@@ -24,9 +22,6 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
 
-
-        SetWordsPerLine wordString ->
-            ( setWordsPerLine wordString model, Cmd.none )
 
         KeyMsg code ->
             ( { model | lastKeyCode = code }, Cmd.none )
