@@ -23,12 +23,12 @@ viewSubscriptions _ =
 
 enableButton : List String -> Html Msg
 enableButton cs =
-    button [ onClick (HideSomeColors cs) ] [ text "hide" ]
+    button [ onClick (Lexical (HideSomeColors cs)) ] [ text "hide" ]
 
 
 disableButton : List String -> Html Msg
 disableButton cs =
-    button [ onClick (ResetSomeColors cs) ] [ text "reset" ]
+    button [ onClick (Lexical (ResetSomeColors cs)) ] [ text "reset" ]
 
 
 type Id
@@ -99,7 +99,7 @@ root model =
             )
         , Html.p
             []
-            [ button [ onClick EnableAllColors ] [ text "ResetHiding" ]
+            [ button [ onClick (Lexical EnableAllColors) ] [ text "ResetHiding" ]
             , input
                 [ value (toString model.wordsPerLine)
                 , onInput SetWordsPerLine

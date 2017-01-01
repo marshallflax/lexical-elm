@@ -84,6 +84,12 @@ type DragCmd
     | DragAt Mouse.Position
 
 
+type LexicalCmd
+    = EnableAllColors
+    | HideSomeColors (List String)
+    | ResetSomeColors (List String)
+
+
 type Msg
     = SetText String
     | SetCurrentColor String
@@ -91,12 +97,10 @@ type Msg
     | SetCurrentWord Int
     | SetCurrentNormalized String
     | ToggleColorEnabled String
-    | EnableAllColors
-    | HideSomeColors (List String)
-    | ResetSomeColors (List String)
     | SetWordsPerLine String
     | KeyMsg Keyboard.KeyCode
     | SetTableState Table.State
     | SaveModel
     | WebsocketMessage String
+    | Lexical LexicalCmd
     | Drag String DragCmd

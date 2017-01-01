@@ -5,6 +5,7 @@ import ColoredWord exposing (..)
 import Dict exposing (..)
 import DragController exposing (..)
 import Json.Decode
+import LexicalController exposing (..)
 import List.Split
 import MainController exposing (..)
 import Misc
@@ -87,15 +88,6 @@ update msg model =
             , Cmd.none
             )
 
-        EnableAllColors ->
-            ( { model | hideColors = Set.empty }, Cmd.none )
-
-        HideSomeColors colorList ->
-            ( { model | hideColors = Set.union model.hideColors (Set.fromList colorList) }, Cmd.none )
-
-        ResetSomeColors colorList ->
-            ( { model | hideColors = Set.diff model.hideColors (Set.fromList colorList) }, Cmd.none )
-
         SetWordsPerLine wordString ->
             ( setWordsPerLine wordString model, Cmd.none )
 
@@ -130,9 +122,14 @@ update msg model =
                     )
 
         Drag key dragVerb ->
-            ( { model | draggables = Dict.update key (Maybe.map (DragController.do dragVerb)) model.draggables }
+            ( { model
+                | draggables = Dict.update key (Maybe.map <| DragController.do dragVerb) model.draggables
+              }
             , Cmd.none
             )
+
+        Lexical cmd ->
+            lexicalUpdate cmd model
 
 
 countWords : Model -> Int
