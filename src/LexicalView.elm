@@ -13,18 +13,30 @@ import Set exposing (Set)
 import Types exposing (..)
 
 
-viewLexicalModel : LexicalModel -> Html Msg
-viewLexicalModel lexicalModel =
-    div []
-        [ span [] [ text (toString (Set.toList ((currentWordFromIndex lexicalModel.workingWord lexicalModel).colors))) ]
-        , p [] []
-        , button [ onClick SaveModel ] [ text "Save" ]
-        , input
+showColorsOfCurrentWord : LexicalModel -> Html Msg
+showColorsOfCurrentWord lexicalModel =
+    span [] [ text (toString (Set.toList ((currentWordFromIndex lexicalModel.workingWord lexicalModel).colors))) ]
+
+
+showSaveButton : Html Msg
+showSaveButton =
+    button [ onClick SaveModel ] [ text "Save" ]
+
+showTextInput : LexicalModel ->  Html Msg
+showTextInput lexicalModel =
+    input
             [ value (dumpState lexicalModel)
             , onInput (\text -> LexicalMessage (SetText text))
             , style [ ( "width", "800px" ) ]
             ]
             []
+viewLexicalModel : LexicalModel -> Html Msg
+viewLexicalModel lexicalModel =
+    div []
+        [ showColorsOfCurrentWord lexicalModel
+        , p [] []
+        , showSaveButton
+        , showTextInput lexicalModel
         , div
             []
             (let
