@@ -6,7 +6,7 @@ import Html exposing (Html, table, tr, td, text, span)
 import Html.Attributes exposing (style)
 import Set exposing (..)
 import Types exposing (..)
-import ViewUtil exposing (..)
+import MiscView exposing (..)
 
 
 renderFrequencies : Set String -> Dict Int (List String) -> Html Msg

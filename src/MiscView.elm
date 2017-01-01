@@ -1,4 +1,4 @@
-module ViewUtil exposing (onShiftedMouseEnter, onUnShiftedMouseEnter)
+module MiscView exposing (onShiftedMouseEnter, onUnShiftedMouseEnter)
 
 import Html
 import Html.Events

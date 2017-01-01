@@ -6,7 +6,7 @@ import Html.Attributes exposing (value, checked, type_, readonly, placeholder, h
 import Html.Events exposing (on, onClick, onInput, onMouseEnter)
 import Set exposing (Set)
 import Types exposing (..)
-import ViewUtil exposing (..)
+import MiscView exposing (..)
 
 
 colorStyle : String -> Html.Attribute msg
