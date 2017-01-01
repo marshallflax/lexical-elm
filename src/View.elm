@@ -147,7 +147,7 @@ root model =
             [ text "(c) marshall.flax@gmail.com; licensed "
             , Html.a [ href "https://www.gnu.org/licenses/gpl-3.0.en.html" ] [ text "GPL3.0 +" ]
             , text " "
-            , Html.a [ href "https://github.com:marshallflax/lexical-elm" ] [ text "source" ]
+            , Html.a [ href "https://github.com/marshallflax/lexical-elm" ] [ text "source" ]
             , text " "
             , Html.a [ href "https://raw.githubusercontent.com/marshallflax/lexical-elm/master/index.html" ] [ text "latest" ]
             ]
