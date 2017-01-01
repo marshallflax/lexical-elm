@@ -5,9 +5,10 @@ import BowlingScoreTest
 import BowlingScoreView
 import Char exposing (..)
 import ColoredWord exposing (..)
+import Dict exposing (..)
 import DragController exposing (..)
-import Json.Decode
 import FreqInfo exposing (..)
+import Json.Decode
 import List.Split
 import Misc
 import Mouse exposing (Position)
@@ -45,7 +46,7 @@ init =
       , lastKeyCode = Char.toCode '!'
       , bowlingResults = BowlingScoreTest.testResults
       , tableState = BowlingScoreView.initialTableState
-      , dragState = Draggable (Position 200 200) Nothing "Text" "100" "100"
+      , draggables = Dict.insert "text1" (Draggable (Position 200 200) Nothing "Text" "100" "100") Dict.empty
       }
     , Cmd.none
     )
@@ -165,7 +166,12 @@ update msg model =
                     )
 
         Drag dragVerb xy ->
-            ( { model | dragState = DragController.do dragVerb xy model.dragState }, Cmd.none )
+            let
+                newDraggables : Dict String Draggable
+                newDraggables =
+                    Dict.update "text1" (Maybe.map (DragController.do dragVerb xy)) model.draggables
+            in
+                ( { model | draggables = newDraggables }, Cmd.none )
 
 
 countWords : Model -> Int

@@ -64,7 +64,7 @@ root : Model -> Html Msg
 root model =
     div []
         [ Css.style [ Html.Attributes.scoped True ] stylesheet
-        , DragView.view model.dragState
+        , DragView.viewDraggables model.draggables
         , span
             []
             [ text (toString (Set.toList ((currentWordFromIndex model.workingWord model).colors))) ]

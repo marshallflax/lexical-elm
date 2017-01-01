@@ -3,6 +3,7 @@ module Main exposing (main)
 import Controller
 import DragView
 import Html
+import Misc
 import Types
 import View
 
@@ -14,14 +15,9 @@ main =
         , update = Controller.update
         , view = View.root
         , subscriptions =
-            combineSubscriptions
+            Misc.combineSubscriptions
                 [ View.viewSubscriptions
                 , Controller.webSubscriptions
                 , DragView.dragSubscriptions
                 ]
         }
-
-
-combineSubscriptions : List (m -> Sub msg) -> (m -> Sub msg)
-combineSubscriptions list model =
-    Sub.batch (List.map ((|>) model) list)

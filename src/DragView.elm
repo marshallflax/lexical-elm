@@ -1,5 +1,6 @@
 module DragView exposing (..)
 
+import Dict exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -25,31 +26,33 @@ getPosition { position, drag } =
                 (position.y + current.y - start.y)
 
 
-view : Draggable -> Html Msg
-view draggable =
-    let
-        realPosition =
-            getPosition draggable
-    in
-        div
-            [ onMouseDown
-            , style
-                [ "background-color" => "#3C8D2F"
-                , "cursor" => "move"
-                , "width" => "100px"
-                , "height" => "100px"
-                , "border-radius" => "4px"
-                , "position" => "absolute"
-                , "left" => px realPosition.x
-                , "top" => px realPosition.y
-                , "color" => "white"
-                , "display" => "flex"
-                , "align-items" => "center"
-                , "justify-content" => "center"
-                ]
+viewDraggables : Dict String Draggable -> Html Msg
+viewDraggables draggables =
+    div []
+        (List.map viewDraggable (Dict.toList draggables))
+
+
+viewDraggable : ( String, Draggable ) -> Html Msg
+viewDraggable ( key, draggable ) =
+    div
+        [ onMouseDown
+        , style
+            [ "background-color" => "#3C8D2F"
+            , "cursor" => "move"
+            , "width" => "100px"
+            , "height" => "100px"
+            , "border-radius" => "4px"
+            , "position" => "absolute"
+            , "left" => px (.x (getPosition draggable))
+            , "top" => px (.y (getPosition draggable))
+            , "color" => "white"
+            , "display" => "flex"
+            , "align-items" => "center"
+            , "justify-content" => "center"
             ]
-            [ text "Drag Me!"
-            ]
+        ]
+        [ text "Drag Me!"
+        ]
 
 
 px : Int -> String
@@ -64,7 +67,16 @@ onMouseDown =
 
 dragSubscriptions : Model -> Sub Msg
 dragSubscriptions model =
-    case model.dragState.drag of
+    let
+        subs =
+            (List.map computeSub (Dict.toList model.draggables))
+    in
+        Sub.batch subs
+
+
+computeSub : ( String, Draggable ) -> Sub Msg
+computeSub ( key, draggable ) =
+    case draggable.drag of
         Nothing ->
             Sub.none
 

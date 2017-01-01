@@ -2,6 +2,7 @@ module Types exposing (..)
 
 import Array exposing (Array)
 import ColoredWord exposing (ColoredWord)
+import Dict exposing (Dict)
 import FreqInfo exposing (FreqInfo)
 import Json.Decode exposing (Decoder)
 import Json.Decode.Pipeline exposing (required, decode)
@@ -28,7 +29,7 @@ type alias ComputedModel a =
         , lastKeyCode : Keyboard.KeyCode
         , bowlingResults : List ( Int, Testing.TestResult )
         , tableState : Table.State
-        , dragState : Draggable
+        , draggables : Dict String Draggable
     }
 
 
