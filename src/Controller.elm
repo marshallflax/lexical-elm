@@ -7,6 +7,7 @@ import DragController exposing (..)
 import FreqInfo exposing (..)
 import Json.Decode
 import List.Split
+import MainController exposing (..)
 import Misc
 import Regex exposing (..)
 import Set exposing (Set)
@@ -28,18 +29,6 @@ rainbowList : List (List String)
 rainbowList =
     [ [ "Aqua", "Blue", "Green", "DarkTurquoise", "Fuchsia", "Lime", "Plum", "Yellow" ], [ "Beige", "Indigo", "Purple", "Crimson", "Violet", "Coral", "Pink", "Gold" ] ]
 
-
-updateModelWithNewText : String -> Model -> Model
-updateModelWithNewText newText model =
-    let
-        words =
-            splitIntoColorwords newText
-    in
-        { model
-            | text = newText
-            , words = words
-            , frequencies = countFreq (Array.map .normalized words)
-        }
 
 
 setWordsPerLine : String -> Model -> Model
