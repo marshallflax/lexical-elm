@@ -4,6 +4,7 @@ import Array exposing (Array)
 import ColoredWord exposing (..)
 import FreqInfo exposing (..)
 import List.Split
+import Regex exposing (..)
 import Set exposing (Set)
 import Types exposing (..)
 
@@ -13,6 +14,16 @@ lexicalUpdate msg model =
     case msg of
         SetText newText ->
             ( updateModelWithNewText newText model, Cmd.none )
+
+        SetCurrentNormalized text ->
+            ( { model
+                | workingWord = -1
+                , workingNormalized =
+                    -- include full text in split so we know to show 2-grams cheaply
+                    Set.insert text (Set.fromList (Regex.split Regex.All (Regex.regex "_") text))
+              }
+            , Cmd.none
+            )
 
         EnableAllColors ->
             ( { model | hideColors = Set.empty }, Cmd.none )

@@ -35,7 +35,7 @@ renderWords currentWordsNormalized words =
         doWord : String -> Html Msg
         doWord word =
             span
-                [ onShiftedMouseEnter (SetCurrentNormalized word)
+                [ onShiftedMouseEnter (LexicalMessage (SetCurrentNormalized word))
                 , style (matchingStyle (Set.member word currentWordsNormalized))
                 ]
                 [ text (" " ++ word ++ " ") ]

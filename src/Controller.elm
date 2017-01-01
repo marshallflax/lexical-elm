@@ -6,11 +6,7 @@ import Dict exposing (..)
 import DragController exposing (..)
 import Json.Decode
 import LexicalController exposing (..)
-import List.Split
-import MainController exposing (..)
 import Misc
-import Regex exposing (..)
-import Set exposing (Set)
 import Types exposing (..)
 import WebSocket
 
@@ -28,16 +24,6 @@ webSubscriptions model =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        SetCurrentNormalized text ->
-            ( { model
-                | workingWord = -1
-                , workingNormalized =
-                    -- include full text in split so we know to show 2-grams cheaply
-                    Set.insert text (Set.fromList (Regex.split Regex.All (Regex.regex "_") text))
-              }
-            , Cmd.none
-            )
-
         ToggleColorEnabled color ->
             ( { model | hideColors = Misc.toggleSet color model.hideColors }, Cmd.none )
 

@@ -91,12 +91,12 @@ type LexicalCmd
     | SetCurrentColor String
     | SetCurrentWord Int
     | SetText String
+    | SetCurrentNormalized String
 
 
 type Msg
     = LexicalMessage LexicalCmd
     | ToggleColor Int String
-    | SetCurrentNormalized String
     | ToggleColorEnabled String
     | SetWordsPerLine String
     | KeyMsg Keyboard.KeyCode
