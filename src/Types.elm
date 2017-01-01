@@ -99,4 +99,4 @@ type Msg
     | SetTableState Table.State
     | SaveModel
     | WebsocketMessage String
-    | Drag String DragVerb Mouse.Position
+    | Drag DragVerb String Mouse.Position

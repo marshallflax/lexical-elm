@@ -4,7 +4,6 @@ import Array exposing (Array)
 import ColoredWord exposing (..)
 import Dict exposing (..)
 import DragController exposing (..)
-import FreqInfo exposing (..)
 import Json.Decode
 import List.Split
 import MainController exposing (..)
@@ -131,7 +130,7 @@ update msg model =
                     , Cmd.none
                     )
 
-        Drag key dragVerb xy ->
+        Drag dragVerb key xy ->
             ( { model | draggables = Dict.update key (Maybe.map (DragController.do dragVerb xy)) model.draggables }
             , Cmd.none
             )

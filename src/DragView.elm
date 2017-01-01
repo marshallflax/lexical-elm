@@ -32,7 +32,7 @@ viewDraggables draggables =
 
         onMouseDown : String -> Attribute Msg
         onMouseDown key =
-            Html.Events.on "mousedown" (Decode.map (Drag key DragStart) Mouse.position)
+            Html.Events.on "mousedown" (Decode.map (Drag DragStart key) Mouse.position)
 
         viewDraggable : ( String, Draggable ) -> Html Msg
         viewDraggable ( key, draggable ) =
@@ -70,8 +70,8 @@ dragSubscriptions model =
 
                 Just _ ->
                     Sub.batch
-                        [ Mouse.moves (Drag key DragAt)
-                        , Mouse.ups (Drag key DragEnd)
+                        [ Mouse.moves (Drag DragAt key)
+                        , Mouse.ups (Drag DragEnd key)
                         ]
     in
         Sub.batch (List.map computeSub (Dict.toList model.draggables))
