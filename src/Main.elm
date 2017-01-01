@@ -4,9 +4,9 @@ import Controller
 import DragView
 import Html
 import MainController
+import MainView
 import Misc
 import Types
-import View
 
 
 main : Program Never Types.Model Types.Msg
@@ -14,10 +14,10 @@ main =
     Html.program
         { init = MainController.init
         , update = Controller.update
-        , view = View.root
+        , view = MainView.root
         , subscriptions =
             Misc.combineSubscriptions
-                [ View.viewSubscriptions
+                [ MainView.viewSubscriptions
                 , Controller.webSubscriptions
                 , DragView.dragSubscriptions
                 ]

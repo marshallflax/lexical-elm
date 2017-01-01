@@ -1,4 +1,4 @@
-module View exposing (viewSubscriptions, root)
+module MainView exposing (viewSubscriptions, root)
 
 import BowlingScoreView
 import Css
