@@ -15,7 +15,13 @@ import Types exposing (..)
 
 showColorsOfCurrentWord : LexicalModel -> Html Msg
 showColorsOfCurrentWord lexicalModel =
-    span [] [ text (toString (Set.toList ((currentWordFromIndex lexicalModel.workingWord lexicalModel).colors))) ]
+    span []
+        [ currentWordFromIndex lexicalModel.workingWord lexicalModel
+            |> .colors
+            |> Set.toList
+            |> toString
+            |> text
+        ]
 
 
 showSaveButton : Html Msg
@@ -40,7 +46,8 @@ colorButtons lexicalModel =
         (let
             enableButton : List String -> Html Msg
             enableButton cs =
-                button [ onClick (LexicalMessage (HideSomeColors cs)) ] [ text "hide" ]
+                button [ onClick (LexicalMessage (HideSomeColors cs)) ]
+                    [ text "hide" ]
 
             disableButton : List String -> Html Msg
             disableButton cs =
@@ -55,7 +62,12 @@ colorButtons lexicalModel =
                         , checked (Set.member l lexicalModel.hideColors)
                         ]
                         []
-                    , button [ Html.Attributes.attribute "id" ("colorButton" ++ l), colorStyle l, onClick (LexicalMessage (SetCurrentColor l)) ] [ text l ]
+                    , button
+                        [ Html.Attributes.attribute "id" ("colorButton" ++ l)
+                        , colorStyle l
+                        , onClick (LexicalMessage (SetCurrentColor l))
+                        ]
+                        [ text l ]
                     ]
 
             doRow : List String -> Html Msg
