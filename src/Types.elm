@@ -3,14 +3,14 @@ module Types exposing (..)
 import Array exposing (Array)
 import ColoredWord exposing (ColoredWord)
 import FreqInfo exposing (FreqInfo)
-import Json.Decode exposing (..)
+import Json.Decode exposing (Decoder)
 import Json.Decode.Pipeline exposing (required, decode)
-import Json.Encode exposing (..)
-import Keyboard exposing (..)
+import Json.Encode exposing (encode)
+import Keyboard exposing (KeyCode)
 import Mouse exposing (Position)
 import Set exposing (Set)
 import Table
-import Testing exposing (..)
+import Testing exposing (TestResult)
 
 
 type alias Model =
