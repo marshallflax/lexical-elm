@@ -1,4 +1,4 @@
-module DragView exposing (..)
+module DragView exposing (dragSubscriptions, viewDraggables)
 
 import Dict exposing (..)
 import Html exposing (..)
@@ -66,11 +66,7 @@ onMouseDown key =
 
 dragSubscriptions : Model -> Sub Msg
 dragSubscriptions model =
-    let
-        subs =
-            (List.map computeSub (Dict.toList model.draggables))
-    in
-        Sub.batch subs
+    Sub.batch (List.map computeSub (Dict.toList model.draggables))
 
 
 computeSub : ( String, Draggable ) -> Sub Msg
