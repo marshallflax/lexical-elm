@@ -4,16 +4,16 @@ import Mouse exposing (Position)
 import Types exposing (..)
 
 
-do : DragVerb -> Position -> Draggable -> Draggable
-do verb xy ({ position, drag } as model) =
-    case verb of
-        DragStart ->
+do : DragCmd -> Draggable -> Draggable
+do cmd ({ position, drag } as model) =
+    case cmd of
+        DragStart xy ->
             { model | position = position, drag = Just (DragState xy xy) }
 
-        DragAt ->
+        DragAt xy ->
             { model | position = position, drag = (Maybe.map (\{ start } -> DragState start xy) drag) }
 
-        DragEnd ->
+        DragEnd xy ->
             let
                 getPosition : Draggable -> Position
                 getPosition { position, drag } =

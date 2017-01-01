@@ -6,7 +6,7 @@ import Html.Attributes exposing (..)
 import Html.Events
 import Json.Decode as Decode
 import Mouse exposing (Position)
-import Types exposing (Model, Draggable, Msg(Drag), DragVerb(DragStart, DragAt, DragEnd))
+import Types exposing (Model, Draggable, Msg(Drag), DragCmd(DragStart, DragAt, DragEnd))
 
 
 (=>) : a -> b -> ( a, b )
@@ -32,7 +32,7 @@ viewDraggables draggables =
 
         onMouseDown : String -> Attribute Msg
         onMouseDown key =
-            Html.Events.on "mousedown" (Decode.map (Drag DragStart key) Mouse.position)
+            Html.Events.on "mousedown" (Decode.map (\position -> Drag key (DragStart position)) Mouse.position)
 
         viewDraggable : ( String, Draggable ) -> Html Msg
         viewDraggable ( key, draggable ) =
@@ -70,8 +70,8 @@ dragSubscriptions model =
 
                 Just _ ->
                     Sub.batch
-                        [ Mouse.moves (Drag DragAt key)
-                        , Mouse.ups (Drag DragEnd key)
+                        [ Mouse.moves (\position -> (Drag key (DragAt position)))
+                        , Mouse.ups (\position -> (Drag key (DragEnd position)))
                         ]
     in
         Sub.batch (List.map computeSub (Dict.toList model.draggables))

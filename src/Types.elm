@@ -78,10 +78,10 @@ savedModelDecoder =
         |> required "wordsPerLine" Json.Decode.int
 
 
-type DragVerb
-    = DragStart
-    | DragEnd
-    | DragAt
+type DragCmd
+    = DragStart Mouse.Position
+    | DragEnd Mouse.Position
+    | DragAt Mouse.Position
 
 
 type Msg
@@ -99,4 +99,4 @@ type Msg
     | SetTableState Table.State
     | SaveModel
     | WebsocketMessage String
-    | Drag DragVerb String Mouse.Position
+    | Drag String DragCmd

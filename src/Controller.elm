@@ -29,7 +29,6 @@ rainbowList =
     [ [ "Aqua", "Blue", "Green", "DarkTurquoise", "Fuchsia", "Lime", "Plum", "Yellow" ], [ "Beige", "Indigo", "Purple", "Crimson", "Violet", "Coral", "Pink", "Gold" ] ]
 
 
-
 setWordsPerLine : String -> Model -> Model
 setWordsPerLine wordString model =
     case
@@ -130,8 +129,8 @@ update msg model =
                     , Cmd.none
                     )
 
-        Drag dragVerb key xy ->
-            ( { model | draggables = Dict.update key (Maybe.map (DragController.do dragVerb xy)) model.draggables }
+        Drag key dragVerb ->
+            ( { model | draggables = Dict.update key (Maybe.map (DragController.do dragVerb)) model.draggables }
             , Cmd.none
             )
 
