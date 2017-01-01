@@ -13,22 +13,6 @@ import Types exposing (..)
 lexicalUpdate : LexicalCmd -> Model -> ( Model, Cmd Msg )
 lexicalUpdate msg model =
     case msg of
-        SetText newText ->
-            ( updateModelWithNewText newText model, Cmd.none )
-
-        SetWordsPerLine wordString ->
-            ( setWordsPerLine wordString model, Cmd.none )
-
-        SetCurrentNormalized text ->
-            ( { model
-                | workingWord = -1
-                , workingNormalized =
-                    -- include full text in split so we know to show 2-grams cheaply
-                    Set.insert text (Set.fromList (Regex.split Regex.All (Regex.regex "_") text))
-              }
-            , Cmd.none
-            )
-
         EnableAllColors ->
             ( { model | hideColors = Set.empty }, Cmd.none )
 
@@ -40,6 +24,22 @@ lexicalUpdate msg model =
 
         SetCurrentColor newDefaultColor ->
             ( { model | workingColor = newDefaultColor }, Cmd.none )
+
+        SetCurrentNormalized text ->
+            ( { model
+                | workingWord = -1
+                , workingNormalized =
+                    -- include full text in split so we know to show 2-grams cheaply
+                    Set.insert text (Set.fromList (Regex.split Regex.All (Regex.regex "_") text))
+              }
+            , Cmd.none
+            )
+
+        SetText newText ->
+            ( updateModelWithNewText newText model, Cmd.none )
+
+        SetWordsPerLine wordString ->
+            ( setWordsPerLine wordString model, Cmd.none )
 
         SetCurrentWord index ->
             ( { model
