@@ -5,7 +5,7 @@ import ColoredWord exposing (..)
 import FreqInfo exposing (..)
 import List.Split
 import Misc
-import Regex exposing (..)
+import Regex
 import Set exposing (Set)
 import Types exposing (..)
 
@@ -35,12 +35,6 @@ lexicalUpdate msg model =
             , Cmd.none
             )
 
-        SetText newText ->
-            ( updateModelWithNewText newText model, Cmd.none )
-
-        SetWordsPerLine wordString ->
-            ( setWordsPerLine wordString model, Cmd.none )
-
         SetCurrentWord index ->
             ( { model
                 | workingWord = index
@@ -49,8 +43,11 @@ lexicalUpdate msg model =
             , Cmd.none
             )
 
-        ToggleColorEnabled color ->
-            ( { model | hideColors = Misc.toggleSet color model.hideColors }, Cmd.none )
+        SetText newText ->
+            ( updateModelWithNewText newText model, Cmd.none )
+
+        SetWordsPerLine wordString ->
+            ( setWordsPerLine wordString model, Cmd.none )
 
         ToggleColor which newColor ->
             ( if (String.length newColor == 0) then
@@ -67,6 +64,9 @@ lexicalUpdate msg model =
                     { model | words = Array.set which modifiedColoredWord model.words }
             , Cmd.none
             )
+
+        ToggleColorEnabled color ->
+            ( { model | hideColors = Misc.toggleSet color model.hideColors }, Cmd.none )
 
 
 currentWordFromIndex : Int -> Model -> ColoredWord
