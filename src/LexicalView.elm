@@ -51,7 +51,7 @@ showTextInput : LexicalModel -> Html Msg
 showTextInput lexicalModel =
     input
         [ value (dumpState lexicalModel)
-        , onInput (\text -> LexicalMessage (SetText text))
+        , onInput (LexicalMessage << SetText)
         , style [ ( "width", "800px" ) ]
         ]
         []
@@ -64,13 +64,11 @@ colorButtons hideColors =
         (let
             enableButton : List String -> Html Msg
             enableButton cs =
-                button [ onClick (LexicalMessage (HideSomeColors cs)) ]
-                    [ text "hide" ]
+                button [ onClick (LexicalMessage (HideSomeColors cs)) ] [ text "hide" ]
 
             disableButton : List String -> Html Msg
             disableButton cs =
-                button [ onClick (LexicalMessage (ResetSomeColors cs)) ]
-                    [ text "reset" ]
+                button [ onClick (LexicalMessage (ResetSomeColors cs)) ] [ text "reset" ]
 
             doCell : String -> Html Msg
             doCell l =
@@ -106,7 +104,7 @@ wordsPerLine : LexicalModel -> Html Msg
 wordsPerLine lexicalModel =
     input
         [ value (toString lexicalModel.wordsPerLine)
-        , onInput (\number -> LexicalMessage (SetWordsPerLine number))
+        , onInput (LexicalMessage << SetWordsPerLine)
         ]
         [ text "WordsPerLine" ]
 
@@ -151,9 +149,15 @@ frequencyStats lexicalModel =
                     List.map renderLine (partitionedList lexicalModel)
                 )
             , td [ style [ ( "width", "800px" ), ( "vertical-align", "top" ) ] ]
-                [ FreqInfoView.renderFrequencies lexicalModel.workingNormalized lexicalModel.frequencies.words ]
+                [ FreqInfoView.renderFrequencies
+                    lexicalModel.workingNormalized
+                    lexicalModel.frequencies.words
+                ]
             , td [ style [ ( "width", "400px" ), ( "vertical-align", "top" ) ] ]
-                [ FreqInfoView.renderFrequencies lexicalModel.workingNormalized lexicalModel.frequencies.n2 ]
+                [ FreqInfoView.renderFrequencies
+                    lexicalModel.workingNormalized
+                    lexicalModel.frequencies.n2
+                ]
             ]
         ]
 
