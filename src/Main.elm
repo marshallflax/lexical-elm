@@ -1,10 +1,8 @@
 module Main exposing (main)
 
-import DragView
 import Html
 import MainController
 import MainView
-import Misc
 import Types
 
 
@@ -14,10 +12,5 @@ main =
         { init = MainController.init
         , update = MainController.update
         , view = MainView.root
-        , subscriptions =
-            Misc.combineSubscriptions
-                [ MainView.viewSubscriptions
-                , MainController.webSubscriptions
-                , DragView.dragSubscriptions
-                ]
+        , subscriptions = MainController.combinedSubscriptions
         }

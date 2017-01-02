@@ -1,14 +1,26 @@
-module MainController exposing (init, update, webSubscriptions)
+module MainController exposing (init, update, combinedSubscriptions)
 
 import BowlingScoreTest
 import BowlingScoreView
 import Char
 import Dict
 import DragController exposing (..)
+import DragView
 import LexicalController
+import MainView
+import Misc
 import Mouse exposing (Position)
 import Types exposing (..)
 import WebSocket
+
+
+combinedSubscriptions : Model -> Sub Msg
+combinedSubscriptions =
+    Misc.combineSubscriptions
+        [ MainView.viewSubscriptions
+        , webSubscriptions
+        , DragView.dragSubscriptions
+        ]
 
 
 init : ( Model, Cmd msg )
