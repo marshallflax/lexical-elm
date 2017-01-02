@@ -12,16 +12,12 @@ forBooleanModifier modifier eventName modifierCriteria message =
         extractModfier =
             Decode.at [ modifier ] Decode.bool
 
-        applyTest : (modifier -> Bool) -> msg -> modifier -> Decode.Decoder msg
-        applyTest modifierTest message modifierValue =
-            if (modifierTest modifierValue) then
+        matches : Bool -> Decode.Decoder msg
+        matches modifierValue =
+            if (modifierCriteria modifierValue) then
                 Decode.succeed message
             else
                 Decode.fail ("Not relevant")
-
-        matches : Bool -> Decode.Decoder msg
-        matches =
-            applyTest modifierCriteria message
     in
         extractModfier |> Decode.andThen matches |> Html.Events.on eventName
 
