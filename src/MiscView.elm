@@ -2,22 +2,28 @@ module MiscView exposing (onShiftedMouseEnter, onUnShiftedMouseEnter)
 
 import Html
 import Html.Events
-import Json.Decode as JD
-
-
-applyTest : (modifier -> Bool) -> msg -> modifier -> JD.Decoder msg
-applyTest modifierTest message modifierValue =
-    if (modifierTest modifierValue) then
-        JD.succeed message
-    else
-        JD.fail ("Not relevant")
+import Json.Decode as Decode
 
 
 forBooleanModifier : String -> String -> (Bool -> Bool) -> msg -> Html.Attribute msg
 forBooleanModifier modifier eventName modifierCriteria message =
-    JD.at [ modifier ] JD.bool
-        |> JD.andThen (applyTest modifierCriteria message)
-        |> Html.Events.on eventName
+    let
+        extractModfier : Decode.Decoder Bool
+        extractModfier =
+            Decode.at [ modifier ] Decode.bool
+
+        applyTest : (modifier -> Bool) -> msg -> modifier -> Decode.Decoder msg
+        applyTest modifierTest message modifierValue =
+            if (modifierTest modifierValue) then
+                Decode.succeed message
+            else
+                Decode.fail ("Not relevant")
+
+        matches : Bool -> Decode.Decoder msg
+        matches =
+            applyTest modifierCriteria message
+    in
+        extractModfier |> Decode.andThen matches |> Html.Events.on eventName
 
 
 onShiftedMouseEnter : msg -> Html.Attribute msg
