@@ -8,9 +8,27 @@ import FreqInfoView exposing (renderFrequencies)
 import Html exposing (Html, button, div, span, text, input, p, table, tr, td)
 import Html.Attributes exposing (style, value, checked, type_, readonly, placeholder, href)
 import Html.Events exposing (onClick, onInput, onMouseEnter)
+import Html.Lazy exposing (lazy)
 import LexicalController exposing (countWords, countWordsMatching, currentWordFromIndex, dumpState, partitionedList, rainbowList)
 import Set exposing (Set)
 import Types exposing (..)
+
+
+viewLexicalModel : LexicalModel -> Html Msg
+viewLexicalModel lexicalModel =
+    div []
+        [ showColorsOfCurrentWord lexicalModel
+        , p [] []
+        , showSaveButton
+        , showTextInput lexicalModel
+        , lazy colorButtons lexicalModel.hideColors
+        , p [] []
+        , resetButtons
+        , wordsPerLine lexicalModel
+        , wordStats lexicalModel
+        , wordsForColor lexicalModel
+        , frequencyStats lexicalModel
+        ]
 
 
 showColorsOfCurrentWord : LexicalModel -> Html Msg
@@ -39,8 +57,8 @@ showTextInput lexicalModel =
         []
 
 
-colorButtons : LexicalModel -> Html Msg
-colorButtons lexicalModel =
+colorButtons : Set String -> Html Msg
+colorButtons hideColors =
     div
         []
         (let
@@ -51,7 +69,8 @@ colorButtons lexicalModel =
 
             disableButton : List String -> Html Msg
             disableButton cs =
-                button [ onClick (LexicalMessage (ResetSomeColors cs)) ] [ text "reset" ]
+                button [ onClick (LexicalMessage (ResetSomeColors cs)) ]
+                    [ text "reset" ]
 
             doCell : String -> Html Msg
             doCell l =
@@ -59,7 +78,7 @@ colorButtons lexicalModel =
                     [ input
                         [ type_ "checkbox"
                         , onClick (LexicalMessage (ToggleColorEnabled l))
-                        , checked (Set.member l lexicalModel.hideColors)
+                        , checked (Set.member l hideColors)
                         ]
                         []
                     , button
@@ -101,7 +120,11 @@ wordStats lexicalModel =
 wordsForColor : LexicalModel -> Html Msg
 wordsForColor lexicalModel =
     input
-        [ value (String.join ", " (matchingWordsForColor lexicalModel.workingColor lexicalModel.words |> Array.toList))
+        [ value
+            (matchingWordsForColor lexicalModel.workingColor lexicalModel.words
+                |> Array.toList
+                |> String.join ", "
+            )
         , style [ ( "width", "800px" ) ]
         , readonly True
         , colorStyle lexicalModel.workingColor
@@ -132,23 +155,6 @@ frequencyStats lexicalModel =
             , td [ style [ ( "width", "400px" ), ( "vertical-align", "top" ) ] ]
                 [ FreqInfoView.renderFrequencies lexicalModel.workingNormalized lexicalModel.frequencies.n2 ]
             ]
-        ]
-
-
-viewLexicalModel : LexicalModel -> Html Msg
-viewLexicalModel lexicalModel =
-    div []
-        [ showColorsOfCurrentWord lexicalModel
-        , p [] []
-        , showSaveButton
-        , showTextInput lexicalModel
-        , colorButtons lexicalModel
-        , p [] []
-        , resetButtons
-        , wordsPerLine lexicalModel
-        , wordStats lexicalModel
-        , wordsForColor lexicalModel
-        , frequencyStats lexicalModel
         ]
 
 
