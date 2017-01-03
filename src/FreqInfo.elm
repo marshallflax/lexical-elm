@@ -1,4 +1,4 @@
-module FreqInfo exposing (..)
+module FreqInfo exposing (FreqInfo, empty, countFreq)
 
 import Array exposing (Array, toList)
 import Dict exposing (Dict)
