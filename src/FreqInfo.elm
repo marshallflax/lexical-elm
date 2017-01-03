@@ -20,20 +20,18 @@ empty =
 countList : List comparable -> Dict Int (List comparable)
 countList list =
     let
-        incMaybe : Maybe Int -> Maybe Int
-        incMaybe maybe =
-            Just (1 + (Maybe.withDefault 0 maybe))
+        addMaybe : Int -> Maybe Int -> Maybe Int
+        addMaybe inc maybe =
+            Just (inc + (Maybe.withDefault 0 maybe))
 
-        foldLengthToWTS : ( comparable, Int ) -> Dict Int (List comparable) -> Dict Int (List comparable)
-        foldLengthToWTS ( val, count ) dict =
-            Dict.insert count
-                (val :: Maybe.withDefault [] (Dict.get count dict))
-                dict
+        consMaybe : comparable -> Maybe (List comparable) -> Maybe (List comparable)
+        consMaybe val maybe =
+            Just (val :: (Maybe.withDefault [] maybe))
     in
-        List.foldl (\val -> Dict.update val incMaybe) Dict.empty list
+        List.foldl (\val -> Dict.update val (addMaybe 1)) Dict.empty list
             |> Dict.toList
             |> List.reverse
-            |> List.foldl foldLengthToWTS Dict.empty
+            |> List.foldl (\( val, count ) -> Dict.update count (consMaybe val)) Dict.empty
 
 
 pairedList : (String -> String -> String) -> List String -> List String
