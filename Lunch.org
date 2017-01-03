@@ -1,5 +1,6 @@
 * Elm Lunch-and-Learn -- [[https://github.com/marshallflax/lexical-elm/][https://github.com/marshallflax/lexical-elm/]]
 ** What is [[http://elm-lang.org/][Elm]]?
+*** Open-source language for developing HTML5 UIs
 *** [[https://en.wikipedia.org/wiki/Functional_reactive_programming][Functional Reactive Programming]]
 **** Pure functions -- no side effects ever.
 **** System reacts to events (UI actions, Websocket messages, etc)
@@ -9,15 +10,15 @@
 **** ClassCastException impossible
 **** NullPointerException impossible
 **** Generics enforced by compiler
-**** Missing "case" statement in "switch" impossible
-**** Actually-strong typing enables "semantic versioning"
+**** Missing "case" statement in "switch" impossible; no "default" case.
+**** Strong typing enables "semantic versioning" of libraries
 ***** Major.minor.patch
 ***** If the API provided by a package is unchanged, bump the "patch"
 ***** If the API is increased, bump the "minor"
 ***** If an existing interface is changed, bump the "major"
 **** Subset of Haskell, but without higher-order types or laziness
 ** What is a functional programming language?
-*** In a functional language all data is *immutable*
+*** In a functional language *all* data is _immutable_
 **** Managing state is always the hard part
 ***** Common bug: thread-safety
 ***** Common bug: display after incremental updates doesn't match refresh
@@ -25,17 +26,20 @@
 **** OO restricts who can modify state, but:
 ***** Thread-safety is hard
 ***** Observing an object is error-prone
-***** No language-level support for immutable objects
 *** Functional languages there are no "variables", only new "final" values.
 *** Avoid many confusions!
-**** No confusion between ":=" and "="
-**** No confusion between "=" and "=="
+**** No confusion between  = and ==
+***** No confusion between := and =
 **** No confusion between final and immutable
 ** What is a reactive framework?
 *** Elm architecture based on three functions
-**** command + current_model => new_model + [new_commands]
-**** model => view
-**** view => [new_commands]
+**** How to update the current state
+***** command + current_model => new_model + [new_commands]
+**** How to render the current state
+***** model => view
+**** How to create commands
+***** Commands triggers can be part of HTML elements (e.g. <button>)
+***** Commands can be defined as part of websocket or http calls
 *** But also, MexicoMarker/MagicMarker/FeedInfo/eBlotter are a reactive framework
 **** Engine receives commands and emits updates.
 *** Rendering ("view") is always downstream, except that it emits messages to the engine
