@@ -1,6 +1,5 @@
 module FreqInfo exposing (FreqInfo, empty, countFreq)
 
-import Array exposing (Array, toList)
 import Dict exposing (Dict)
 
 
@@ -32,38 +31,29 @@ foldLengthToWTS ( val, count ) dict =
         dict
 
 
-wordToCount : List String -> Dict String Int
-wordToCount array =
-    List.foldl foldWordToCount Dict.empty array
-
-
 countList : List String -> Dict Int (List String)
-countList array =
+countList list =
     List.foldl
         foldLengthToWTS
         Dict.empty
-        (List.reverse (Dict.toList (wordToCount array)))
+        (List.foldl foldWordToCount Dict.empty list |> Dict.toList |> List.reverse)
 
 
 pairedList : (String -> String -> String) -> List String -> List String
 pairedList conc wordList =
     List.map2 conc wordList (List.drop 1 wordList)
 
+
 conc : String -> String -> String
 conc a b =
-            a ++ "_" ++ b
+    a ++ "_" ++ b
 
-countFreq : Array String -> FreqInfo
-countFreq array =
-    let
-        wordList : List String
-        wordList =
-            Array.toList array
 
-    in
-        { words =
-            countList wordList
-        , n2 =
-            -- remove singleton 2-grams
-            Dict.remove 1 (countList (pairedList conc wordList))
-        }
+countFreq : List String -> FreqInfo
+countFreq wordList =
+    { words =
+        countList wordList
+    , n2 =
+        -- remove singleton 2-grams
+        Dict.remove 1 (countList (pairedList conc wordList))
+    }

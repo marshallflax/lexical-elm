@@ -157,5 +157,5 @@ updateModelWithNewText newText model =
         { model
             | text = newText
             , words = words
-            , frequencies = countFreq (Array.map .normalized words)
+            , frequencies = countFreq (Array.map .normalized words |> Array.toList)
         }
