@@ -17,26 +17,25 @@ empty =
     { words = Dict.empty, n2 = Dict.empty }
 
 
-foldWordToCount : String -> Dict String Int -> Dict String Int
-foldWordToCount val dict =
-    Dict.insert val
-        (1 + Maybe.withDefault 0 (Dict.get val dict))
-        dict
-
-
-foldLengthToWTS : ( String, Int ) -> Dict Int (List String) -> Dict Int (List String)
-foldLengthToWTS ( val, count ) dict =
-    Dict.insert count
-        (val :: Maybe.withDefault [] (Dict.get count dict))
-        dict
-
-
-countList : List String -> Dict Int (List String)
+countList : List comparable -> Dict Int (List comparable)
 countList list =
-    List.foldl
-        foldLengthToWTS
-        Dict.empty
-        (List.foldl foldWordToCount Dict.empty list |> Dict.toList |> List.reverse)
+    let
+        foldWordToCount : comparable -> Dict comparable Int -> Dict comparable Int
+        foldWordToCount val dict =
+            Dict.insert val
+                (1 + Maybe.withDefault 0 (Dict.get val dict))
+                dict
+
+        foldLengthToWTS : ( comparable, Int ) -> Dict Int (List comparable) -> Dict Int (List comparable)
+        foldLengthToWTS ( val, count ) dict =
+            Dict.insert count
+                (val :: Maybe.withDefault [] (Dict.get count dict))
+                dict
+    in
+        List.foldl foldWordToCount Dict.empty list
+            |> Dict.toList
+            |> List.reverse
+            |> List.foldl foldLengthToWTS Dict.empty
 
 
 pairedList : (String -> String -> String) -> List String -> List String
