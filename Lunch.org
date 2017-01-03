@@ -1,6 +1,7 @@
 * Elm Lunch-and-Learn -- [[https://github.com/marshallflax/lexical-elm/][https://github.com/marshallflax/lexical-elm/]]
 ** What is [[http://elm-lang.org/][Elm]]?
 *** Open-source language for developing HTML5 UIs
+*** Designed to be easy to use, and easy to use correctly
 *** [[https://en.wikipedia.org/wiki/Functional_reactive_programming][Functional Reactive Programming]]
 **** Pure functions -- no side effects ever.
 **** System reacts to events (UI actions, Websocket messages, etc)
@@ -8,6 +9,7 @@
 *** Efficient language-enforced Model/View/Controller framework
 *** Very strongly typed
 **** ClassCastException impossible
+***** No "Object" class; no casting; no type coercion
 **** NullPointerException impossible
 **** Generics enforced by compiler
 **** Missing "case" statement in "switch" impossible; no "default" case.
@@ -83,21 +85,26 @@
 *** Elm does double-buffering against a "Virtual DOM"
 **** Computes the delta and sends exactly that to the actual DOM
 **** The actual DOM is write-only ... any reads are from the Virtual DOM
-** A sample program -- using [[http://localhost:8000/src/Main.elm][elm-reactor]] to dynamically redeploy
-*** Top-level
-**** Main: [[file:src/Main.elm]] : initial_model, updating_model, view, subscriptions
-**** Types: [[file:src/Types.elm]] : Model contains state; Msg is ADT of commands
-**** Controller: [[file:src/MainController.elm]] : How commands create a new model from old model
-**** View: [[file:src/MainView.elm]] : How to construct HTML from the model**
-*** One module
-**** [[file:src/FreqInfo.elm][FreqInfo.elm]] : Business logic for some analytics
-**** [[file:src/FreqInfoView.elm][FreqInfoView.elm]] : How to render above analytics
-*** Another module
-**** [[file:src/ColoredWord.elm][ColoredWord.elm]] : Splitting into words and colors
-**** [[file:src/ColoredWordView.elm][ColoredWordView.elm]] : Rendering the above
-*** TDD example
-**** [[file:src/BowlingScore.elm][Bowling Kata]]
-**** [[file:src/BowlingScoreTest.elm]]
-**** [[file:src/BowlingScoreView.elm][BowlingScoreView.elm]]
+** Modular Structure
+*** Modules declare what they export and what they import
+**** Cyclic dependencies result in a compilation error
+**** Simple module structure: only "private" and "public" functions -- no "package" or "protected"
+**** Modules may be in a flat directory or moved into subdirectories (if the app is large enough)
+*** A sample program -- using [[http://localhost:8000/src/Main.elm][elm-reactor]] to dynamically redeploy [[file+emacs:src/]]
+**** Top-level
+***** Main: [[file:src/Main.elm]] : initial_model, updating_model, view, subscriptions
+***** Types: [[file:src/Types.elm]] : Model contains state; Msg is ADT of commands
+***** Controller: [[file:src/MainController.elm]] : How commands create a new model from old model
+***** View: [[file:src/MainView.elm]] : How to construct HTML from the model**
+**** One module
+***** [[file:src/FreqInfo.elm][FreqInfo.elm]] : Business logic for some analytics
+***** [[file:src/FreqInfoView.elm][FreqInfoView.elm]] : How to render above analytics
+**** Another module
+***** [[file:src/ColoredWord.elm][ColoredWord.elm]] : Splitting into words and colors
+***** [[file:src/ColoredWordView.elm][ColoredWordView.elm]] : Rendering the above
+**** TDD example
+***** [[file:src/BowlingScore.elm][Bowling Kata]]
+***** [[file:src/BowlingScoreTest.elm]]
+***** [[file:src/BowlingScoreView.elm][BowlingScoreView.elm]]
 ** Other notes
 *** Use the git...commit every time it compiles!
