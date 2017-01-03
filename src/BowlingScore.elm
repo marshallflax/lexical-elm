@@ -15,7 +15,8 @@ type alias Score =
 
 
 type Frame
-    = Partial Int
+    = Empty
+    | Partial Int
     | Open Int Int
     | Spare Int
     | Strike
@@ -43,6 +44,8 @@ naivePoints frame =
         Partial t1 ->
             t1
 
+        Empty ->
+            0
 
 firstThrowPoints : Frame -> Score
 firstThrowPoints frame =
@@ -58,6 +61,9 @@ firstThrowPoints frame =
 
         Partial t1 ->
             t1
+
+        Empty ->
+            0
 
 
 computeNormalNextMode : Frame -> Mode
@@ -75,6 +81,8 @@ computeNormalNextMode frame =
         Partial _ ->
             PostOpen
 
+        Empty ->
+            PostOpen
 
 computePostStrikeMode : ( Frame, Int ) -> Mode
 computePostStrikeMode ( frame, whichFrame ) =
@@ -94,6 +102,8 @@ computePostStrikeMode ( frame, whichFrame ) =
         Partial _ ->
             PostOpen
 
+        Empty ->
+            PostOpen
 
 type alias WorkingState =
     ( Mode, Score, Int )
@@ -138,7 +148,7 @@ listToFrame : List Int -> Frame
 listToFrame throws =
     case List.head throws of
         Nothing ->
-            Partial -1
+            Empty
 
         Just throw1 ->
             if (throw1 == 10) then
