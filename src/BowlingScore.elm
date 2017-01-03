@@ -155,9 +155,14 @@ listToFrame throws =
                             Open throw1 throw2
 
 
+sumArray : Array number -> number
+sumArray arr =
+    Array.foldl (+) 0 arr
+
+
 isCompleteFrame : Array Int -> Bool
 isCompleteFrame throws =
-    ((Array.length throws) >= 2) || ((Array.foldl (+) 0 throws) >= 10)
+    (Array.length throws >= 2) || (sumArray throws >= 10)
 
 
 frameify : Array Int -> Array Frame
