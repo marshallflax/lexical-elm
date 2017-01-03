@@ -20,11 +20,9 @@ empty =
 countList : List comparable -> Dict Int (List comparable)
 countList list =
     let
-        foldWordToCount : comparable -> Dict comparable Int -> Dict comparable Int
-        foldWordToCount val dict =
-            Dict.insert val
-                (1 + Maybe.withDefault 0 (Dict.get val dict))
-                dict
+        incMaybe : Maybe Int -> Maybe Int
+        incMaybe maybe =
+            Just (1 + (Maybe.withDefault 0 maybe))
 
         foldLengthToWTS : ( comparable, Int ) -> Dict Int (List comparable) -> Dict Int (List comparable)
         foldLengthToWTS ( val, count ) dict =
@@ -32,7 +30,7 @@ countList list =
                 (val :: Maybe.withDefault [] (Dict.get count dict))
                 dict
     in
-        List.foldl foldWordToCount Dict.empty list
+        List.foldl (\val -> Dict.update val incMaybe) Dict.empty list
             |> Dict.toList
             |> List.reverse
             |> List.foldl foldLengthToWTS Dict.empty
