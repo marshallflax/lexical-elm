@@ -1,4 +1,4 @@
-module BowlingScore exposing (..)
+module BowlingScore exposing (score, frameify, Frame(..))
 
 import Array exposing (Array)
 import List exposing (foldl)
