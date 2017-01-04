@@ -10,6 +10,7 @@ import Html.Attributes exposing (style, value, checked, type_, readonly, placeho
 import Html.Events exposing (onClick, onInput, onMouseEnter)
 import Html.Lazy exposing (lazy)
 import LexicalController exposing (countWords, countWordsMatching, currentWordFromIndex, dumpState, partitionedList, rainbowList)
+import Misc
 import Set exposing (Set)
 import Types exposing (..)
 
@@ -18,7 +19,7 @@ viewLexicalModel : LexicalModel -> Html Msg
 viewLexicalModel lexicalModel =
     div []
         [ showColorsOfCurrentWord lexicalModel
-        , p [] []
+        , p [] [Misc.zipLists rainbowList |> toString |> text]
         , showSaveButton
         , showTextInput lexicalModel
         , lazy colorButtons lexicalModel.hideColors
