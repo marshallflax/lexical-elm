@@ -31,12 +31,16 @@ accumulateMaybe default verb maybe =
 
 countList : List comparable -> Dict Int (List comparable)
 countList list =
-    List.foldl
-        (\val -> Dict.update val (accumulateMaybe 0 ((+) 1)))
-        Dict.empty
-        list
-        |> dictToListL
-        |> List.foldl (\( val, count ) -> Dict.update count (accumulateMaybe [] ((::) val))) Dict.empty
+    list
+        -- count instances of each element into dict of {element -> count}
+        |>
+            List.foldl (flip Dict.update (accumulateMaybe 0 ((+) 1))) Dict.empty
+        -- convert to list of (element, count) pairs
+        |>
+            dictToListL
+        -- convert to dict of {count -> list element}
+        |>
+            List.foldl (\( val, count ) -> Dict.update count (accumulateMaybe [] ((::) val))) Dict.empty
 
 
 pairedList : (String -> String -> String) -> List String -> List String
