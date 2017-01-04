@@ -22,7 +22,7 @@ countList list =
     let
         addMaybe : Int -> Maybe Int -> Maybe Int
         addMaybe inc maybe =
-            Just (inc + (Maybe.withDefault 0 maybe))
+            Maybe.withDefault 0 maybe |> (+) inc |> Just
 
         consMaybe : comparable -> Maybe (List comparable) -> Maybe (List comparable)
         consMaybe val maybe =
