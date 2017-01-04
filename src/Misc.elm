@@ -15,16 +15,13 @@ combineSubscriptions : List (m -> Sub msg) -> (m -> Sub msg)
 combineSubscriptions list model =
     Sub.batch (List.map ((|>) model) list)
 
+
 zipLists : List (List a) -> List (List a)
 zipLists list =
     let
         zipListHelper : ( List (List a), List (List a) ) -> ( List (List a), List (List a) )
         zipListHelper ( input, output ) =
             let
-                heads : List (List a) -> List (Maybe a)
-                heads =
-                    List.map List.head
-
                 folder : Maybe a -> Maybe (List a) -> Maybe (List a)
                 folder headElement maybeList =
                     case headElement of
@@ -41,7 +38,7 @@ zipLists list =
 
                 headList : List (List a) -> Maybe (List a)
                 headList input =
-                    List.foldl folder (Just []) (heads input)
+                    List.foldl folder (Just []) (List.map List.head input)
             in
                 case (headList input) of
                     Just heads ->
