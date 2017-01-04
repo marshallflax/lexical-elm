@@ -32,12 +32,7 @@ zipLists list =
                             Nothing
 
                         Just elt ->
-                            case maybeList of
-                                Nothing ->
-                                    Nothing
-
-                                Just l ->
-                                    elt :: l |> Just
+                            Maybe.map ((::) elt) maybeList
             in
                 case
                     List.foldr folder (Just []) (List.map List.head input)
