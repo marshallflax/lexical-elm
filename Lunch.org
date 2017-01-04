@@ -106,5 +106,15 @@
 ***** [[file:src/BowlingScore.elm][Bowling Kata]]
 ***** [[file:src/BowlingScoreTest.elm]]
 ***** [[file:src/BowlingScoreView.elm][BowlingScoreView.elm]]
-** Other notes
-*** Use the git...commit every time it compiles!
+** Caveats
+*** Package manager doesn't understand NTLM-based proxies,  so we'll have to setup some sort of reverse proxy
+*** Learning curve exists for the language will take a week or two -- but:
+**** Learning curve for new developers to the resulting application will be easier
+**** Helps improve our coding approaches in general
+*** HTML tags are simply Elm functions.
+**** For tabular data, this is actually quite nice
+**** For complex entry screens, not so nice
+***** Unless we can actually define the layout though *data* and stylesheets, in which case it becomes nice again
+*** Language is only five years old
+**** But runtime is just vanilla JavaScript, and the browser is mature
+** Time travel! [[http://localhost:8000/src/Main.elm]]
