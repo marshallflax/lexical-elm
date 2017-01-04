@@ -2,20 +2,13 @@ module BowlingScoreTest exposing (testResults)
 
 import Array
 import BowlingScore exposing (..)
+import List
 import Testing exposing (TestResult)
 
 
 numberList : List a -> List ( Int, a )
 numberList list =
-    case list of
-        x :: xs ->
-            List.scanl
-                (\val ( counter, _ ) -> ( 1 + counter, val ))
-                ( 1, x )
-                xs
-
-        [] ->
-            []
+    List.map2 (,) (List.range 1 (List.length list)) list
 
 
 testResults : List ( Int, TestResult )
