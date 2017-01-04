@@ -24,20 +24,19 @@ dictToListL dict =
     Dict.foldl (\key value list -> ( key, value ) :: list) [] dict
 
 
+accumulateMaybe : b -> (b -> a) -> Maybe b -> Maybe a
+accumulateMaybe default verb maybe =
+    Maybe.withDefault default maybe |> verb |> Just
+
+
 countList : List comparable -> Dict Int (List comparable)
 countList list =
-    let
-        addMaybe : Int -> Maybe Int -> Maybe Int
-        addMaybe inc maybe =
-            Maybe.withDefault 0 maybe |> (+) inc |> Just
-
-        consMaybe : comparable -> Maybe (List comparable) -> Maybe (List comparable)
-        consMaybe val maybe =
-            Maybe.withDefault [] maybe |> (::) val |> Just
-    in
-        List.foldl (\val -> Dict.update val (addMaybe 1)) Dict.empty list
-            |> dictToListL
-            |> List.foldl (\( val, count ) -> Dict.update count (consMaybe val)) Dict.empty
+    List.foldl
+        (\val -> Dict.update val (accumulateMaybe 0 ((+) 1)))
+        Dict.empty
+        list
+        |> dictToListL
+        |> List.foldl (\( val, count ) -> Dict.update count (accumulateMaybe [] ((::) val))) Dict.empty
 
 
 pairedList : (String -> String -> String) -> List String -> List String
