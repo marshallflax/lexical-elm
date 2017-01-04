@@ -26,7 +26,7 @@ countList list =
 
         consMaybe : comparable -> Maybe (List comparable) -> Maybe (List comparable)
         consMaybe val maybe =
-            Just (val :: (Maybe.withDefault [] maybe))
+            Maybe.withDefault [] maybe |> (::) val |> Just
     in
         List.foldl (\val -> Dict.update val (addMaybe 1)) Dict.empty list
             |> Dict.toList
