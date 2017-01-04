@@ -127,7 +127,7 @@ countWordsMatching model =
 
 rainbowList : List (List String)
 rainbowList =
-    [ [ "Aqua", "Blue", "Green", "DarkTurquoise", "Fuchsia", "Lime", "Plum", "Yellow" ], [ "Beige", "Indigo", "Purple", "Crimson", "Violet", "Coral", "Pink", "Gold" ] ]
+    [ [ "Aqua", "Blue", "Green", "DarkTurquoise", "Fuchsia", "Lime", "Plum", "Yellow" ], [ "Beige", "Indigo", "Purple", "Crimson", "Violet", "Coral", "Pink", "Gold", "Cyan" ] ]
 
 
 setWordsPerLine : String -> LexicalModel -> LexicalModel

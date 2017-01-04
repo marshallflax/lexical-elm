@@ -22,6 +22,9 @@ zipLists list =
         zipListHelper : ( List (List a), List (List a) ) -> ( List (List a), List (List a) )
         zipListHelper ( input, output ) =
             let
+                --newFolder : Maybe a -> Maybe (List a) -> Maybe (List a)
+                --newFolder =
+                --  Maybe.map (Maybe.andThen((::)))
                 folder : Maybe a -> Maybe (List a) -> Maybe (List a)
                 folder headElement maybeList =
                     case headElement of
@@ -35,16 +38,14 @@ zipLists list =
 
                                 Just l ->
                                     elt :: l |> Just
-
-                headList : List (List a) -> Maybe (List a)
-                headList input =
-                    List.foldl folder (Just []) (List.map List.head input)
             in
-                case (headList input) of
+                case
+                    List.foldr folder (Just []) (List.map List.head input)
+                of
                     Just heads ->
                         zipListHelper ( List.map (List.drop 1) input, heads :: output )
 
                     Nothing ->
                         ( [], output )
     in
-        zipListHelper ( list, [] ) |> Tuple.second
+        zipListHelper ( list, [] ) |> Tuple.second |> List.reverse
