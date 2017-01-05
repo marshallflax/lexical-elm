@@ -45,7 +45,7 @@ echoServer =
 
 webSubscriptions : Model -> Sub Msg
 webSubscriptions model =
-    WebSocket.listen echoServer (\msg -> LexicalMessage (WebsocketMessage msg))
+    WebSocket.listen echoServer (LexicalMessage << WebsocketMessage)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )

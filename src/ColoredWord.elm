@@ -85,7 +85,7 @@ normalize text =
     Regex.replace Regex.All
         (Regex.regex "[^_a-z0-9'’]")
         -- both apostrophe and single-quote!
-        (\_ -> "")
+        (always "")
         (String.toLower text)
 
 
