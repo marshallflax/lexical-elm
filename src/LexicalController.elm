@@ -8,7 +8,7 @@ import List.Split
 import Misc
 import Regex
 import Set exposing (Set)
-import Types exposing (..)
+import Types exposing (LexicalModel, Msg, LexicalCmd(..))
 
 
 init : LexicalModel
@@ -100,7 +100,7 @@ lexicalUpdate msg model =
 
 
 currentWordFromIndex : Int -> Array ColoredWord -> ColoredWord
-currentWordFromIndex index words  =
+currentWordFromIndex index words =
     Array.get index words
         |> Maybe.withDefault ColoredWord.empty
 
