@@ -38,7 +38,9 @@ countList list =
 
 pairedList : List String -> List String
 pairedList wordList =
-    List.map2 conc wordList (List.drop 1 wordList)
+    [ wordList, List.drop 1 wordList ]
+        |> Misc.zipLists
+        |> List.map newConc
 
 
 newConc : List String -> String
