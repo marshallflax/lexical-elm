@@ -5,11 +5,8 @@ import Misc exposing (dictToListL)
 
 
 type alias FreqInfo =
-    { words :
-        Dict Int (List String)
-    , n2 :
-        Dict Int (List String)
-        -- n-grams stored as underscore-delimited strings, so i can index by 'em
+    { words : Dict Int (List String)
+    , n2 : Dict Int (List String)
     }
 
 
@@ -37,21 +34,16 @@ countList list =
 
 
 pairedList : Int -> List String -> List String
-pairedList width wordList =
-    List.map (\drop -> List.drop drop wordList) (List.range 0 (width - 1))
+pairedList widths wordList =
+    List.map (wordList |> flip List.drop) (List.range 0 (widths - 1))
         |> Misc.zipLists
-        |> List.map newConc
-
-
-newConc : List String -> String
-newConc =
-    List.intersperse "_" >> List.foldl (++) ""
+        |> List.map (List.intersperse "_" >> List.foldl (++) "")
 
 
 countFreq : List String -> FreqInfo
 countFreq wordList =
     { words =
-        countList wordList
+        countList (pairedList 1 wordList)
     , n2 =
-        Dict.remove 1 (countList (pairedList 2 wordList))
+        countList (pairedList 2 wordList) |> Dict.remove 1
     }
