@@ -36,17 +36,21 @@ countList list =
             |> List.foldl (\( val, count ) -> Dict.update count (accumulateMaybe [] ((::) val))) Dict.empty
 
 
-pairedList : List String -> List String
-pairedList wordList =
-    [ wordList, List.drop 1 wordList ]
-        |> Misc.zipLists
-        |> List.map newConc
+pairedList : Int -> List String -> List String
+pairedList width wordList =
+    let
+        lists : Int -> List a -> List (List a)
+        lists width wordList =
+            List.map (\drop -> List.drop drop wordList) (List.range 0 (width - 1))
+    in
+        lists width wordList
+            |> Misc.zipLists
+            |> List.map newConc
 
 
 newConc : List String -> String
 newConc =
-    List.intersperse "_"
-        >> List.foldl (++) ""
+    List.intersperse "_" >> List.foldl (++) ""
 
 
 countFreq : List String -> FreqInfo
@@ -54,5 +58,5 @@ countFreq wordList =
     { words =
         countList wordList
     , n2 =
-        Dict.remove 1 (countList (pairedList wordList))
+        Dict.remove 1 (countList (pairedList 2 wordList))
     }
