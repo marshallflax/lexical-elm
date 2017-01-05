@@ -36,9 +36,15 @@ countList list =
         |> List.foldl (\( val, count ) -> Dict.update count (accumulateMaybe [] ((::) val))) Dict.empty
 
 
-pairedList : (String -> String -> String) -> List String -> List String
-pairedList conc wordList =
+pairedList : List String -> List String
+pairedList wordList =
     List.map2 conc wordList (List.drop 1 wordList)
+
+
+newConc : List String -> String
+newConc list =
+    List.intersperse "_" list
+        |> List.foldl (++) ""
 
 
 conc : String -> String -> String
@@ -52,5 +58,5 @@ countFreq wordList =
         countList wordList
     , n2 =
         -- remove singleton 2-grams
-        Dict.remove 1 (countList (pairedList conc wordList))
+        Dict.remove 1 (countList (pairedList wordList))
     }
