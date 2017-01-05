@@ -23,18 +23,17 @@ accumulateMaybe default verb maybe =
     Maybe.withDefault default maybe |> verb |> Just
 
 
+{-|
+        -- first: count instances of each element into dict of {element -> count}
+        -- then: convert to list of (element, count) pairs
+        -- then: convert to dict of {count -> list element}
+-}
 countList : List comparable -> Dict Int (List comparable)
 countList list =
     list
-        -- count instances of each element into dict of {element -> count}
-        |>
-            List.foldl (flip Dict.update (accumulateMaybe 0 ((+) 1))) Dict.empty
-        -- convert to list of (element, count) pairs
-        |>
-            dictToListL
-        -- convert to dict of {count -> list element}
-        |>
-            List.foldl (\( val, count ) -> Dict.update count (accumulateMaybe [] ((::) val))) Dict.empty
+        |> List.foldl (flip Dict.update (accumulateMaybe 0 ((+) 1))) Dict.empty
+        |> dictToListL
+        |> List.foldl (\( val, count ) -> Dict.update count (accumulateMaybe [] ((::) val))) Dict.empty
 
 
 pairedList : (String -> String -> String) -> List String -> List String
