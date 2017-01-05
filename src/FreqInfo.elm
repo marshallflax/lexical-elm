@@ -18,11 +18,6 @@ empty =
     { words = Dict.empty, n2 = Dict.empty }
 
 
-accumulateMaybe : b -> (b -> a) -> Maybe b -> Maybe a
-accumulateMaybe default verb maybe =
-    Maybe.withDefault default maybe |> verb |> Just
-
-
 {-|
         -- first: count instances of each element into dict of {element -> count}
         -- then: convert to list of (element, count) pairs
@@ -30,10 +25,15 @@ accumulateMaybe default verb maybe =
 -}
 countList : List comparable -> Dict Int (List comparable)
 countList list =
-    list
-        |> List.foldl (flip Dict.update (accumulateMaybe 0 ((+) 1))) Dict.empty
-        |> dictToListL
-        |> List.foldl (\( val, count ) -> Dict.update count (accumulateMaybe [] ((::) val))) Dict.empty
+    let
+        accumulateMaybe : b -> (b -> a) -> Maybe b -> Maybe a
+        accumulateMaybe default verb maybe =
+            Maybe.withDefault default maybe |> verb |> Just
+    in
+        list
+            |> List.foldl (flip Dict.update (accumulateMaybe 0 ((+) 1))) Dict.empty
+            |> dictToListL
+            |> List.foldl (\( val, count ) -> Dict.update count (accumulateMaybe [] ((::) val))) Dict.empty
 
 
 pairedList : List String -> List String
@@ -49,16 +49,10 @@ newConc =
         >> List.foldl (++) ""
 
 
-conc : String -> String -> String
-conc a b =
-    a ++ "_" ++ b
-
-
 countFreq : List String -> FreqInfo
 countFreq wordList =
     { words =
         countList wordList
     , n2 =
-        -- remove singleton 2-grams
         Dict.remove 1 (countList (pairedList wordList))
     }
