@@ -1,6 +1,7 @@
 module FreqInfo exposing (FreqInfo, empty, countFreq)
 
 import Dict exposing (Dict)
+import Misc exposing (dictToListL)
 
 
 type alias FreqInfo =
@@ -15,13 +16,6 @@ type alias FreqInfo =
 empty : FreqInfo
 empty =
     { words = Dict.empty, n2 = Dict.empty }
-
-
-{-| Same as Dict.toList except uses foldl rather than foldr to get list from end, which is useful if piped into a List.foldl
--}
-dictToListL : Dict comparable v -> List ( comparable, v )
-dictToListL dict =
-    Dict.foldl (\key value list -> ( key, value ) :: list) [] dict
 
 
 accumulateMaybe : b -> (b -> a) -> Maybe b -> Maybe a
