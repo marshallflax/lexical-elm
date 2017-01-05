@@ -52,7 +52,7 @@ lexicalUpdate msg model =
         SetCurrentWord index ->
             ( { model
                 | workingWord = index
-                , workingNormalized = Set.insert (currentWordFromIndex index model).normalized Set.empty
+                , workingNormalized = Set.insert (currentWordFromIndex index model.words).normalized Set.empty
               }
             , Cmd.none
             )
@@ -99,9 +99,9 @@ lexicalUpdate msg model =
                     )
 
 
-currentWordFromIndex : Int -> LexicalModel -> ColoredWord
-currentWordFromIndex index model =
-    Array.get index model.words
+currentWordFromIndex : Int -> Array ColoredWord -> ColoredWord
+currentWordFromIndex index words  =
+    Array.get index words
         |> Maybe.withDefault ColoredWord.empty
 
 

@@ -19,7 +19,7 @@ viewLexicalModel : LexicalModel -> Html Msg
 viewLexicalModel lexicalModel =
     div []
         [ showColorsOfCurrentWord lexicalModel
-        , p [] [Misc.zipLists rainbowList |> toString |> text]
+        , p [] [ Misc.zipLists rainbowList |> toString |> text ]
         , showSaveButton
         , showTextInput lexicalModel
         , lazy colorButtons lexicalModel.hideColors
@@ -34,13 +34,12 @@ viewLexicalModel lexicalModel =
 
 showColorsOfCurrentWord : LexicalModel -> Html Msg
 showColorsOfCurrentWord lexicalModel =
-    span []
-        [ currentWordFromIndex lexicalModel.workingWord lexicalModel
-            |> .colors
-            |> Set.toList
-            |> toString
-            |> text
-        ]
+    let
+        currentWord =
+            currentWordFromIndex lexicalModel.workingWord lexicalModel.words
+    in
+        span []
+            [ currentWord.colors |> Set.toList |> toString |> text ]
 
 
 showSaveButton : Html Msg
