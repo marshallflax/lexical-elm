@@ -24,26 +24,26 @@ combineSubscriptions list model =
     Sub.batch (List.map ((|>) model) list)
 
 
-zipListHelper : ( List (List a), List (List a) ) -> ( List (List a), List (List a) )
-zipListHelper ( inputs, output ) =
-    case
-        List.foldr
-            (Maybe.map2 ((::)))
-            (Just [])
-            (List.map List.head inputs)
-    of
-        Nothing ->
-            ( inputs, output )
-
-        Just heads ->
-            zipListHelper
-                ( List.map (List.drop 1) inputs
-                , heads :: output
-                )
-
-
 zipLists : List (List a) -> List (List a)
 zipLists lists =
-    zipListHelper ( lists, [] )
-        |> Tuple.second
-        |> List.reverse
+    let
+        zipListHelper : ( List (List a), List (List a) ) -> ( List (List a), List (List a) )
+        zipListHelper ( inputs, output ) =
+            case
+                List.foldr
+                    (Maybe.map2 ((::)))
+                    (Just [])
+                    (List.map List.head inputs)
+            of
+                Nothing ->
+                    ( inputs, output )
+
+                Just heads ->
+                    zipListHelper
+                        ( List.map (List.drop 1) inputs
+                        , heads :: output
+                        )
+    in
+        zipListHelper ( lists, [] )
+            |> Tuple.second
+            |> List.reverse
