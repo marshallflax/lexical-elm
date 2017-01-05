@@ -1,4 +1,4 @@
-module Misc exposing (..)
+module Misc exposing (toggleSet, combineSubscriptions, zipLists)
 
 import Set exposing (Set)
 
@@ -25,12 +25,17 @@ zipListHelper ( inputs, output ) =
             (List.map List.head inputs)
     of
         Nothing ->
-            ( [], output )
+            ( inputs, output )
 
         Just heads ->
-            zipListHelper ( List.map (List.drop 1) inputs, heads :: output )
+            zipListHelper
+                ( List.map (List.drop 1) inputs
+                , heads :: output
+                )
 
 
 zipLists : List (List a) -> List (List a)
 zipLists lists =
-    zipListHelper ( lists, [] ) |> Tuple.second |> List.reverse
+    zipListHelper ( lists, [] )
+        |> Tuple.second
+        |> List.reverse
