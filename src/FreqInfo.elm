@@ -44,9 +44,9 @@ pairedList wordList =
 
 
 newConc : List String -> String
-newConc list =
-    List.intersperse "_" list
-        |> List.foldl (++) ""
+newConc =
+    List.intersperse "_"
+        >> List.foldl (++) ""
 
 
 conc : String -> String -> String
