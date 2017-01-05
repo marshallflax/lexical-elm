@@ -38,14 +38,9 @@ countList list =
 
 pairedList : Int -> List String -> List String
 pairedList width wordList =
-    let
-        lists : Int -> List a -> List (List a)
-        lists width wordList =
-            List.map (\drop -> List.drop drop wordList) (List.range 0 (width - 1))
-    in
-        lists width wordList
-            |> Misc.zipLists
-            |> List.map newConc
+    List.map (\drop -> List.drop drop wordList) (List.range 0 (width - 1))
+        |> Misc.zipLists
+        |> List.map newConc
 
 
 newConc : List String -> String
