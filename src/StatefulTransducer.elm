@@ -7,28 +7,21 @@ import Transducer exposing (Reducer, Transducer, transduce)
 statefulPartitionBy : (Array a -> Bool) -> Transducer a (Array a) r (Array a)
 statefulPartitionBy predicate =
     let
-        updateState : a -> Array a -> Array a
-        updateState =
-            Array.push
-
-        -- init : Reducer b r -> r -> ( state, r )
         init : Reducer b r -> r -> ( Array a, r )
         init reduce r =
             ( Array.empty, r )
 
-        -- step : Reducer b r -> Reducer a ( state, r )
         step : Reducer (Array a) r -> Reducer a ( Array a, r )
         step reduce input ( state, currentReduction ) =
             let
                 merged =
-                    updateState input state
+                    Array.push input state
             in
                 if (predicate merged) then
                     ( Array.empty, reduce merged currentReduction )
                 else
                     ( merged, currentReduction )
 
-        -- complete : Reducer b r -> ( state, r ) -> r
         complete : Reducer (Array a) r -> ( Array a, r ) -> r
         complete reduce ( state, currentReduction ) =
             if (Array.isEmpty state) then
@@ -40,8 +33,9 @@ statefulPartitionBy predicate =
 
 
 {-|
-   we do not do "transduce List.foldr (::) [] xform list" since we want to statefully partition from the left
+   we do not do "transduce List.foldr (::) [] xform" when we want to statefully partition from the left
+   (not currently in use since now we're transducing arrays which naturally do foldl's)
 -}
-transduceListL : Transducer a b (List b) s -> List a -> List b
-transduceListL xform list =
-    (transduce List.foldl (::) []) xform list |> List.reverse
+transduceListStateful : Transducer a b (List b) s -> List a -> List b
+transduceListStateful xform =
+    (transduce List.foldl (::) []) xform >> List.reverse
