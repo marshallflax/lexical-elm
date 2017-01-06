@@ -44,21 +44,4 @@ statefulPartitionBy predicate =
 -}
 transduceListL : Transducer a b (List b) s -> List a -> List b
 transduceListL xform list =
-    let
-        fold : (a -> x -> x) -> x -> List a -> x
-        fold =
-            List.foldl
-
-        aggregator : b -> List b -> List b
-        aggregator =
-            (::)
-
-        initialAggregationState : List b
-        initialAggregationState =
-            []
-
-        transducer : Transducer a b (List b) s -> List a -> List b
-        transducer =
-            transduce fold aggregator initialAggregationState
-    in
-        transducer xform list |> List.reverse
+    (transduce List.foldl (::) []) xform list |> List.reverse
