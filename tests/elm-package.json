@@ -1,16 +1,14 @@
 {
     "version": "1.0.0",
-    "summary": "My first elm project",
-    "repository": "https://github.com/marshallflax/lexical-elm.git",
-    "license": "GPL3",
+    "summary": "Sample Elm Test",
+    "repository": "https://github.com/user/project.git",
+    "license": "BSD-3-Clause",
     "source-directories": [
         ".",
-        "src"
+        "../src"
     ],
-    "exposed-modules": [
-        "App"
-    ],
-    "dependencies": {
+    "exposed-modules": [],
+    "dependencies": { 
         "NoRedInk/elm-decode-pipeline": "3.0.0 <= v < 4.0.0",
         "avh4/elm-transducers": "3.0.1 <= v < 4.0.0",
         "elm-community/elm-test": "3.1.0 <= v < 4.0.0",
@@ -23,7 +21,9 @@
         "elm-lang/websocket": "1.0.2 <= v < 2.0.0",
         "evancz/elm-sortable-table": "1.0.1 <= v < 2.0.0",
         "jinjor/elm-html-parser": "1.1.3 <= v < 2.0.0",
-        "massung/elm-css": "1.1.1 <= v < 2.0.0"
+        "massung/elm-css": "1.1.1 <= v < 2.0.0",
+        "mgold/elm-random-pcg": "4.0.2 <= v < 5.0.0",
+        "rtfeldman/node-test-runner": "3.0.0 <= v < 4.0.0"
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
 }
