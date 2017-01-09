@@ -1,7 +1,7 @@
 module BowlingScoreTest exposing (testResults)
 
 import Array
-import BowlingScore exposing (..)
+import BowlingScore exposing (Frame(..), frameify, score)
 import List
 import Testing exposing (TestResult)
 

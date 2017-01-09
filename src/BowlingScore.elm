@@ -1,4 +1,4 @@
-module BowlingScore exposing (score, frameify, Frame(..))
+module BowlingScore exposing (score, scoreList, frameify, Frame(..))
 
 import Array exposing (Array)
 import List exposing (foldl)
@@ -134,6 +134,9 @@ scoreFold frame ( currentMode, currentScore, whichFrame ) =
             PostDoubleStrike ->
                 ( computePostStrikeMode ( frame, whichFrame ), basePoints + 2 * (naivePoints frame), nextFrame )
 
+scoreList : List Int -> Score
+scoreList =
+    Array.fromList >> score
 
 score : Throws -> Score
 score throws =
