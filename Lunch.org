@@ -1,7 +1,7 @@
 * Elm Lunch-and-Learn -- [[https://github.com/marshallflax/lexical-elm/][https://github.com/marshallflax/lexical-elm/]]
 ** What is [[http://elm-lang.org/][Elm]]?
 *** Open-source language for developing HTML5 UIs
-*** Designed to be easy to use, and easy to use correctly
+*** Designed to be easy to use, and (most importantly) easy to use correctly
 *** [[https://en.wikipedia.org/wiki/Functional_reactive_programming][Functional Reactive Programming]]
 **** Pure functions -- no side effects ever.
 **** System reacts to events (UI actions, Websocket messages, etc)
@@ -18,7 +18,7 @@
 ***** If the API provided by a package is unchanged, bump the "patch"
 ***** If the API is increased, bump the "minor"
 ***** If an existing interface is changed, bump the "major"
-**** Subset of Haskell, but without higher-order types or laziness
+**** Contains a subset of Haskell, but without higher-order types or laziness
 ** What is a functional programming language?
 *** In a functional language *all* data is _immutable_
 **** Managing state is always the hard part
@@ -40,7 +40,7 @@
 **** How to render the current state
 ***** model => view
 **** How to create commands
-***** Commands triggers can be part of HTML elements (e.g. <button>)
+***** Commands triggers can be part of view elements (e.g. <button>)
 ***** Commands can be defined as part of websocket or http calls
 *** But also, MexicoMarker/MagicMarker/FeedInfo/eBlotter are a reactive framework
 **** Engine receives commands and emits updates.
@@ -60,31 +60,34 @@
 ***** Standard approach is a [[https://en.wikipedia.org/wiki/Zipper_(data_structure)][zipper]] that keeps track of location within the data structure
 **** Map/Reduce approach to processing data yields hotspot-friendly code
 ***** "Fold" is the standard "Reduce" operation.
-** Q: But how can this work? A: *Union Types* (also known as _Algebraic Data Structures_)
+** Q: But how can this work? A: Union Types
 *** Classic example: Maybe d = Nothing | Just d
 **** (Maybe String) is *either*
 ***** _Just String_ -- i.e. (Just "Hello World!"), _or_
 ***** _Nothing_ -- i.e. we have no data
 **** Every code that processes a "Maybe" *must* handle both cases
-**** NullPointerExceptions impossible
+**** NullPointerExceptions caught at compile time
 *** Other examples
 **** SessionCommand = LoginCommand String String | LogoutCommand
 **** Result = Err reason | Ok value
+*** (also known as _Algebraic Data Structures_)
 ** Q: But how can this work? A: Records
 *** info1 = {a: 2, b: 23, c: "Hello"}; info2 = {info1 | b = 4}
 *** Type system is smart..deduces {a: Int, b: Int, c: String}
 **** But explicit declarations will help you when you're confused
 **** Sometimes hard to get code to compile, since type system has no humor
 ***** But hard to write bugs that pass the compiler...a fair trade!!!
-** Q: But how can this work? A: Explicit contexts [[https://en.wikipedia.org/wiki/Monad_(functional_programming)][(Monads)]]
+** Q: But how can this work? A: Explicit contexts
 *** Computations are "carried along" (essentially on the call stack) until they become effective
 *** Syntactic sugar
-** Q: But how can this work? A: Virtual DOM
+*** Also known as [[https://en.wikipedia.org/wiki/Monad_(functional_programming)][Monads]]
+** Q: But how can this work? A: Virtual DOM, so the real DOM is write-only
 *** Javascript engines are awfully fast -- especially with "clean" javascript
 *** DOM interaction is still slow -- the rendering engine keeps being asked to do more and more
 *** Elm does double-buffering against a "Virtual DOM"
 **** Computes the delta and sends exactly that to the actual DOM
 **** The actual DOM is write-only ... any reads are from the Virtual DOM
+***** Events do contain info from the actual DOM of course
 ** Modular Structure
 *** Modules declare what they export and what they import
 **** Cyclic dependencies result in a compilation error
@@ -108,7 +111,7 @@
 ***** [[file:src/BowlingScoreView.elm][BowlingScoreView.elm]]
 ** Caveats
 *** Package manager doesn't understand NTLM-based proxies,  so we'll have to setup some sort of reverse proxy
-*** Learning curve exists for the language will take a week or two -- but:
+*** Learning curve exists for the language -- will take a week or two -- but:
 **** Learning curve for new developers to the resulting application will be easier
 **** Helps improve our coding approaches in general
 *** HTML tags are simply Elm functions.
