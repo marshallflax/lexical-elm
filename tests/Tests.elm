@@ -39,52 +39,40 @@ all =
             , fuzz3 (array int) (int) (bool) "toggleSet" <|
                 \array toBeIndex novel ->
                     let
-                        len =
-                            Array.length array
+                        ( set, perhapsMember ) =
+                            randomSetAndPerhapsMember array toBeIndex novel
 
-                        maybeMember =
-                            if (novel || len == 0) then
-                                Just toBeIndex
-                            else
-                                Array.get (toBeIndex % len) array
-
-                        set =
-                            Array.toList array |> Set.fromList
+                        toggledSet =
+                            Misc.toggleSet perhapsMember set
                     in
-                        case maybeMember of
-                            Just member ->
-                                let
-                                    toggledSet =
-                                        Misc.toggleSet member set
-                                in
-                                    Set.member member toggledSet |> Expect.notEqual (Set.member member set)
-
-                            Nothing ->
-                                Expect.fail "Not member of list"
+                        Set.member perhapsMember toggledSet |> Expect.notEqual (Set.member perhapsMember set)
             , fuzz3 (array int) (int) (bool) "doubleToggleSet" <|
                 \array toBeIndex novel ->
                     let
-                        len =
-                            Array.length array
+                        ( set, perhapsMember ) =
+                            randomSetAndPerhapsMember array toBeIndex novel
 
-                        maybeMember =
-                            if (novel || len == 0) then
-                                Just toBeIndex
-                            else
-                                Array.get (toBeIndex % len) array
-
-                        set =
-                            Array.toList array |> Set.fromList
+                        doubleToggledSet =
+                            Misc.toggleSet perhapsMember (Misc.toggleSet perhapsMember set)
                     in
-                        case maybeMember of
-                            Just member ->
-                                let
-                                    doubleToggledSet =
-                                        Misc.toggleSet member (Misc.toggleSet member set)
-                                in
-                                    Set.member member doubleToggledSet |> Expect.equal (Set.member member set)
-
-                            Nothing ->
-                                Expect.fail "Not member of list"
+                        Set.member perhapsMember doubleToggledSet |> Expect.equal (Set.member perhapsMember set)
             ]
         ]
+
+
+randomSetAndPerhapsMember : Array.Array Int -> Int -> Bool -> ( Set.Set Int, Int )
+randomSetAndPerhapsMember array toBeIndex novel =
+    let
+        len =
+            Array.length array
+
+        maybeMember =
+            if (novel || len == 0) then
+                toBeIndex
+            else
+                Maybe.withDefault 0 (Array.get (toBeIndex % len) array)
+
+        set =
+            Array.toList array |> Set.fromList
+    in
+        ( set, maybeMember )
