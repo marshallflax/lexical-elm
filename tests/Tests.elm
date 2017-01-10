@@ -36,49 +36,55 @@ all =
             , fuzz2 (intRange 1 9) (intRange 1 10) "Repeated open frames" <|
                 \throw frames ->
                     List.repeat frames [ 0, throw ] |> List.concat |> scoreList |> Expect.equal (throw * frames)
-            , fuzz2 (array int) (int) "toggleSet" <|
-                \array toBeIndex ->
-                    if (Array.length array == 0) then
-                        Expect.pass
-                    else
-                        let
-                            maybeMember =
-                                Array.get (toBeIndex % (Array.length array)) array
+            , fuzz3 (array int) (int) (bool) "toggleSet" <|
+                \array toBeIndex novel ->
+                    let
+                        len =
+                            Array.length array
 
-                            set =
-                                Array.toList array |> Set.fromList
-                        in
-                            case maybeMember of
-                                Just member ->
-                                    let
-                                        toggledSet =
-                                            Misc.toggleSet member set
-                                    in
-                                        Set.member member toggledSet |> Expect.notEqual (Set.member member set)
+                        maybeMember =
+                            if (novel || len == 0) then
+                                Just toBeIndex
+                            else
+                                Array.get (toBeIndex % len) array
 
-                                Nothing ->
-                                    Expect.fail "Not member of list"
-            , fuzz2 (array int) (int) "doubloToggleSet" <|
-                \array toBeIndex ->
-                    if (Array.length array == 0) then
-                        Expect.pass
-                    else
-                        let
-                            maybeMember =
-                                Array.get (toBeIndex % (Array.length array)) array
+                        set =
+                            Array.toList array |> Set.fromList
+                    in
+                        case maybeMember of
+                            Just member ->
+                                let
+                                    toggledSet =
+                                        Misc.toggleSet member set
+                                in
+                                    Set.member member toggledSet |> Expect.notEqual (Set.member member set)
 
-                            set =
-                                Array.toList array |> Set.fromList
-                        in
-                            case maybeMember of
-                                Just member ->
-                                    let
-                                        doubleToggledSet =
-                                            Misc.toggleSet member (Misc.toggleSet member set)
-                                    in
-                                        Set.member member doubleToggledSet |> Expect.equal (Set.member member set)
+                            Nothing ->
+                                Expect.fail "Not member of list"
+            , fuzz3 (array int) (int) (bool) "doubleToggleSet" <|
+                \array toBeIndex novel ->
+                    let
+                        len =
+                            Array.length array
 
-                                Nothing ->
-                                    Expect.fail "Not member of list"
+                        maybeMember =
+                            if (novel || len == 0) then
+                                Just toBeIndex
+                            else
+                                Array.get (toBeIndex % len) array
+
+                        set =
+                            Array.toList array |> Set.fromList
+                    in
+                        case maybeMember of
+                            Just member ->
+                                let
+                                    doubleToggledSet =
+                                        Misc.toggleSet member (Misc.toggleSet member set)
+                                in
+                                    Set.member member doubleToggledSet |> Expect.equal (Set.member member set)
+
+                            Nothing ->
+                                Expect.fail "Not member of list"
             ]
         ]
