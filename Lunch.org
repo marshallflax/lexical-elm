@@ -14,7 +14,7 @@
 **** If the API provided by a package is unchanged, bump the "patch"
 **** If the API is increased, bump the "minor"
 **** If an existing interface is changed, bump the "major"
-*** Contains a subset of Haskell, but without higher-order types or laziness
+**** Contains a subset of Haskell, but without higher-order types or laziness
 ** [[https://en.wikipedia.org/wiki/Functional_reactive_programming][Functional Reactive Programming]]
 * What is "Functional Reactive Programming"?
 ** In a functional language *all* data is _immutable_
@@ -23,10 +23,11 @@
 *** Managing state is always the hard part
 **** Common bug: thread-safety
 **** Common bug: display after incremental updates doesn't match refresh
-**** Common bug: object A references object B, which changes unexpectedly (from A's POV)
+**** Common bug: object A references object B, which then changes
 *** OO restricts who can modify state, but:
 **** Thread-safety is hard
 **** Observing an object is error-prone
+**** Compiler doesn't *know* side-effects
 ** Functional languages there are no "variables", only new "final" values.
 ** Avoid many confusions!
 *** No confusion between  = and ==
@@ -42,8 +43,8 @@
 **** Commands triggers can be part of view elements (e.g. <button>)
 **** Commands can be defined as part of websocket or http calls
 ** But also, MexicoMarker/MagicMarker/eBlotter are a reactive framework
-*** Engine receives commands and emits updates.
-** Rendering ("view") is always downstream, except that it emits messages to the engine
+*** View is always downstream, except that it emits messages up
+*** Controller receives commands and emits updates to the Model
 * But how can this work? _Persistent Data Structures_
 ** Classic example is the singly-linked list
 *** The empty list [] is immutable
@@ -82,7 +83,8 @@
   : info1 = {a: 2, b: 23, c: "Hello"}
 ** Create a new record based on the old one, but with a new value
   : info2 = {info1 | b = 4}
-** Type system is smart..deduces {a: Int, b: Int, c: String}
+** Type system is smart..deduces
+  : {a: Int, b: Int, c: String}
 *** But explicit declarations will help you when you're confused
 *** Sometimes hard to get code to compile, since type system has no humor
 **** But hard to write bugs that pass the compiler...a fair trade!!!
@@ -102,7 +104,7 @@
 *** Cyclic dependencies result in a compilation error
 *** Simple module structure: only "private" and "public" functions -- no "package" or "protected"
 *** Modules may be in a flat directory or moved into subdirectories (if the app is large enough)
-** A sample program -- using [[http://localhost:8000/src/Main.elm][elm-reactor]] to dynamically redeploy [[file+emacs:src/]]
+** Sample program -- using [[http://localhost:8000/src/Main.elm][elm-reactor]] to dynamically redeploy [[file+emacs:src/]]
 *** Top-level
 **** Main: [[file:src/Main.elm]] : initial_model, updating_model, view, subscriptions
 **** Types: [[file:src/Types.elm]] : Model contains state; Msg is ADT of commands
