@@ -69,8 +69,11 @@
 **** Every code that processes a "Maybe" *must* handle both cases
 **** NullPointerExceptions caught at compile time
 *** Other examples
-**** SessionCommand = LoginCommand String String | LogoutCommand
-**** Result = Err reason | Ok value
+**** Hold either two strings (for login) or zero strings (for logout)
+     : SessionCommand = LoginCommand String String | LogoutCommand
+**** Either an Error (with reason) or Success (with value)
+     : Result = Err reason | Ok value
+**** The events that a UI processes [[file:src/Types.elm::EnableAllColors]]
 *** (also known as _Algebraic Data Structures_)
 ** Q: But how can this work? A: Records
 *** info1 = {a: 2, b: 23, c: "Hello"}; info2 = {info1 | b = 4}
