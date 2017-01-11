@@ -69,13 +69,6 @@ encodeSavedModel model =
         )
 
 
-decodeSavedModel : String -> SavedModel
-decodeSavedModel json =
-    { text = "Decoded Text"
-    , wordsPerLine = 9
-    }
-
-
 savedModelDecoder : Json.Decode.Decoder SavedModel
 savedModelDecoder =
     decode SavedModel
