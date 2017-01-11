@@ -1,7 +1,7 @@
 * Elm Lunch-and-Learn -- [[https://github.com/marshallflax/lexical-elm/][https://github.com/marshallflax/lexical-elm/]]
 ** What is [[http://elm-lang.org/][Elm]]?
 *** Open-source language for developing HTML5 UIs
-*** Designed to be easy to use, and (most importantly) easy to use correctly
+*** Designed to be easy to use, and (more importantly) easy to use _correctly_
 *** [[https://en.wikipedia.org/wiki/Functional_reactive_programming][Functional Reactive Programming]]
 **** Pure functions -- no side effects ever.
 **** System reacts to events (UI actions, Websocket messages, etc)
@@ -42,7 +42,7 @@
 **** How to create commands
 ***** Commands triggers can be part of view elements (e.g. <button>)
 ***** Commands can be defined as part of websocket or http calls
-*** But also, MexicoMarker/MagicMarker/FeedInfo/eBlotter are a reactive framework
+*** But also, MexicoMarker/MagicMarker/eBlotter are a reactive framework
 **** Engine receives commands and emits updates.
 *** Rendering ("view") is always downstream, except that it emits messages to the engine
 ** Q: But how can this work? A: _Persistent Data Structures_
@@ -61,7 +61,8 @@
 **** Map/Reduce approach to processing data yields hotspot-friendly code
 ***** "Fold" is the standard "Reduce" operation.
 ** Q: But how can this work? A: Union Types
-*** Classic example: Maybe d = Nothing | Just d
+*** Classic example:
+    : Maybe d = Nothing | Just d
 **** (Maybe String) is *either*
 ***** _Just String_ -- i.e. (Just "Hello World!"), _or_
 ***** _Nothing_ -- i.e. we have no data
@@ -120,4 +121,9 @@
 ***** Unless we can actually define the layout though *data* and stylesheets, in which case it becomes nice again
 *** Language is only five years old
 **** But runtime is just vanilla JavaScript, and the browser is mature
+**** Compiler is written in Haskell, which is very mature and robust
+*** Widget library is still developing
+**** New widgets can be written using pure Elm
+*** View is simply native HTML layout -- lack of tools to graphically edit them
 ** Time travel! [[http://localhost:8000/src/Main.elm]]
+#+OPTIONS: toc:nil
