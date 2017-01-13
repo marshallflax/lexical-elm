@@ -14,12 +14,17 @@ pushState input ( state, remainder ) =
     ( Array.push input state, remainder )
 
 
+emptyState : StateHolder a
+emptyState =
+    ( Array.empty, Array.empty )
+
+
 statefulPartitionBy : (Array a -> Bool) -> Transducer a (StateHolder a) r (StateHolder a)
-statefulPartitionBy predicate =
+statefulPartitionBy timeForNextChunk =
     let
         init : Reducer b r -> r -> ( StateHolder a, r )
         init reduce r =
-            ( ( Array.empty, Array.empty ), r )
+            ( emptyState, r )
 
         step : Reducer (StateHolder a) r -> Reducer a ( StateHolder a, r )
         step reduce input ( state, currentReduction ) =
@@ -27,8 +32,8 @@ statefulPartitionBy predicate =
                 merged =
                     pushState input state
             in
-                if (predicate (Tuple.first merged)) then
-                    ( ( Array.empty, Array.empty ), reduce merged currentReduction )
+                if (timeForNextChunk (Tuple.first merged)) then
+                    ( emptyState, reduce merged currentReduction )
                 else
                     ( merged, currentReduction )
 
