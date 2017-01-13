@@ -1,30 +1,40 @@
-module StatefulTransducer exposing (..)
+module StatefulTransducer exposing (statefulPartitionBy)
 
 import Array exposing (Array, push)
 import Transducer exposing (Reducer, Transducer, transduce)
+import Tuple
 
 
-statefulPartitionBy : (Array a -> Bool) -> Transducer a (Array a) r (Array a)
+type alias StateHolder a =
+    ( Array a, Array a )
+
+
+pushState : a -> StateHolder a -> StateHolder a
+pushState input ( state, remainder ) =
+    ( Array.push input state, remainder )
+
+
+statefulPartitionBy : (Array a -> Bool) -> Transducer a (StateHolder a) r (StateHolder a)
 statefulPartitionBy predicate =
     let
-        init : Reducer b r -> r -> ( Array a, r )
+        init : Reducer b r -> r -> ( StateHolder a, r )
         init reduce r =
-            ( Array.empty, r )
+            ( ( Array.empty, Array.empty ), r )
 
-        step : Reducer (Array a) r -> Reducer a ( Array a, r )
+        step : Reducer (StateHolder a) r -> Reducer a ( StateHolder a, r )
         step reduce input ( state, currentReduction ) =
             let
                 merged =
-                    Array.push input state
+                    pushState input state
             in
-                if (predicate merged) then
-                    ( Array.empty, reduce merged currentReduction )
+                if (predicate (Tuple.first merged)) then
+                    ( ( Array.empty, Array.empty ), reduce merged currentReduction )
                 else
                     ( merged, currentReduction )
 
-        complete : Reducer (Array a) r -> ( Array a, r ) -> r
+        complete : Reducer (StateHolder a) r -> ( StateHolder a, r ) -> r
         complete reduce ( state, currentReduction ) =
-            if (Array.isEmpty state) then
+            if (Array.isEmpty (Tuple.first state)) then
                 currentReduction
             else
                 reduce state currentReduction

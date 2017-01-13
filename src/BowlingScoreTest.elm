@@ -41,6 +41,7 @@ testGameScore =
             , { throws = [ 10, 1, 3 ], expected = 18 }
             , { throws = [ 3, 7, 1, 3 ], expected = 15 }
             , { throws = List.repeat 12 10, expected = 300 }
+            , { throws = List.repeat 13 10, expected = 300 }
             ]
 
 

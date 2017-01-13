@@ -183,8 +183,8 @@ listToFrame throws =
 
 
 sumArray : Array number -> number
-sumArray arr =
-    Array.foldl (+) 0 arr
+sumArray =
+    Array.foldl (+) 0
 
 
 isCompleteFrame : Array Int -> Bool
@@ -196,6 +196,7 @@ frameify : Array Int -> Array Frame
 frameify =
     Transducer.transduceArray
         (StatefulTransducer.statefulPartitionBy isCompleteFrame
+            >>> Transducer.map Tuple.first
             >>> Transducer.map Array.toList
             >>> Transducer.map listToFrame
         )
