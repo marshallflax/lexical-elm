@@ -8,7 +8,7 @@ import Html.Attributes exposing (style, value, checked, type_, readonly, placeho
 import Html.Lazy exposing (lazy, lazy2)
 import Keyboard
 import LexicalView
-import Types exposing (..)
+import Types exposing (Model, Msg(KeyMsg))
 
 
 root : Model -> Html Msg

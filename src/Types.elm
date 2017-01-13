@@ -5,7 +5,7 @@ import ColoredWord exposing (ColoredWord)
 import Dict exposing (Dict)
 import FreqInfo exposing (FreqInfo)
 import Json.Decode exposing (Decoder)
-import Json.Decode.Pipeline exposing (required, decode)
+import Json.Decode.Pipeline as JDP
 import Json.Encode exposing (encode)
 import Keyboard exposing (KeyCode)
 import Mouse exposing (Position)
@@ -71,9 +71,9 @@ encodeSavedModel model =
 
 savedModelDecoder : Json.Decode.Decoder SavedModel
 savedModelDecoder =
-    decode SavedModel
-        |> required "text" Json.Decode.string
-        |> required "wordsPerLine" Json.Decode.int
+    JDP.decode SavedModel
+        |> JDP.required "text" Json.Decode.string
+        |> JDP.required "wordsPerLine" Json.Decode.int
 
 
 type DragCmd
