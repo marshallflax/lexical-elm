@@ -1,9 +1,8 @@
 module BowlingScore exposing (score, scoreList, frameify, Frame(..))
 
 import Array exposing (Array)
-import List exposing (foldl)
-import Transducer exposing (map, (>>>))
 import StatefulTransducer
+import Transducer exposing (map, (>>>))
 
 
 type alias Throws =
@@ -126,16 +125,28 @@ scoreFold frame ( currentMode, currentScore, whichFrame ) =
     in
         case currentMode of
             PostOpen ->
-                ( computeNormalNextMode frame, basePoints, nextFrame )
+                ( computeNormalNextMode frame
+                , basePoints
+                , nextFrame
+                )
 
             PostSpare ->
-                ( computeNormalNextMode frame, basePoints + firstThrowPoints frame, nextFrame )
+                ( computeNormalNextMode frame
+                , basePoints + firstThrowPoints frame
+                , nextFrame
+                )
 
             PostStrike ->
-                ( computePostStrikeMode ( frame, whichFrame ), basePoints + naivePoints frame, nextFrame )
+                ( computePostStrikeMode ( frame, whichFrame )
+                , basePoints + naivePoints frame
+                , nextFrame
+                )
 
             PostDoubleStrike ->
-                ( computePostStrikeMode ( frame, whichFrame ), basePoints + 2 * (naivePoints frame), nextFrame )
+                ( computePostStrikeMode ( frame, whichFrame )
+                , basePoints + 2 * (naivePoints frame)
+                , nextFrame
+                )
 
 
 scoreList : List Int -> Score
@@ -154,23 +165,21 @@ score throws =
 
 listToFrame : List Int -> Frame
 listToFrame throws =
-    case List.head throws of
-        Nothing ->
+    case throws of
+        [] ->
             Empty
 
-        Just throw1 ->
+        throw1 :: [] ->
             if (throw1 == 10) then
                 Strike
             else
-                case List.head (List.drop 1 throws) of
-                    Nothing ->
-                        Partial throw1
+                Partial throw1
 
-                    Just throw2 ->
-                        if (throw1 + throw2 == 10) then
-                            Spare throw1
-                        else
-                            Open throw1 throw2
+        throw1 :: throw2 :: _ ->
+            if (throw1 + throw2 == 10) then
+                Spare throw1
+            else
+                Open throw1 throw2
 
 
 sumArray : Array number -> number
