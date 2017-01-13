@@ -45,14 +45,14 @@
 ** But also, MexicoMarker/MagicMarker/eBlotter are a reactive framework
 *** View is always downstream, except that it emits messages up
 *** Controller receives commands and emits updates to the Model
-* But how can this work? _Persistent Data Structures_
+* But how can this work? Persistent Data Structures
 ** Classic example is the singly-linked list
 *** The empty list [] is immutable
 *** Prepending -- "a" :: [] -- creates a new immutable list of length 1
 *** Prepending again -- "b" :: ("a" :: []) creates a new list of len 2
 *** I can prepend "c" to ["b" "a"] and you can prepend "d" to ["b" "a"]
 **** The tail of my ["c" "b" "a"] and the tail of your ["d" "b" "a"] are the same
-*** Utterly thread-safe ... only the Javascript-level GC has to be correct
+*** Thread-safe ... only the Javascript-level GC has to be correct
 ** Also: Sets, Maps, Arrays
 *** Smart algorithms behind the scenes
 **** Inserting into a heap involves moving around mostly-unchanged subtrees
@@ -121,19 +121,22 @@
 **** [[file:src/BowlingScoreTest.elm]]
 **** [[file:src/BowlingScoreView.elm][BowlingScoreView.elm]]
 * Caveats
-** Package manager doesn't understand NTLM-based proxies,  so we'll have to setup some sort of reverse proxy
-** Learning curve exists for the language -- will take a week or two -- but:
-*** Learning curve for new developers to the resulting application will be easier
-*** Helps improve our coding approaches in general
-** HTML tags are simply Elm functions.
+** Package manager doesn't understand NTLM-based proxies
+*** We'll have to setup some sort of reverse proxy
+** Functional programming does take some time to get used to
+*** Learning curve for new developers for *application* will be easier
+*** Helps improve our coding techniques in general
+** HTML tags are simply Elm functions and Elm data
 *** For tabular data, this is actually quite nice
 *** For complex entry screens, not so nice
-**** Unless we can actually define the layout though *data* and stylesheets, in which case it becomes nice again
+**** Except if we define layout through data and stylesheets
 ** Language is only five years old
 *** But runtime is just vanilla JavaScript, and the browser is mature
 *** Compiler is written in Haskell, which is very mature and robust
+*** Most JS libraries are much younger still!
 ** Widget library is still developing
 *** New widgets can be written using pure Elm
+***
 ** View is simply native HTML layout -- lack of tools to graphically edit them
 * Time travel! [[http://localhost:8000/src/Main.elm]]
 #+OPTIONS: toc:nil
