@@ -192,10 +192,15 @@ isCompleteFrame throws =
     (Array.length throws >= 2) || (sumArray throws >= 10)
 
 
+noMoreFrames : ( Array a, Int ) -> Bool
+noMoreFrames ( state, count ) =
+    count > 11
+
+
 frameify : Array Int -> Array Frame
 frameify =
     Transducer.transduceArray
-        (StatefulTransducer.statefulPartitionBy isCompleteFrame
+        (StatefulTransducer.statefulPartitionBy isCompleteFrame noMoreFrames
             >>> Transducer.map Tuple.first
             >>> Transducer.map Array.toList
             >>> Transducer.map listToFrame

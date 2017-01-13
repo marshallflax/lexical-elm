@@ -36,12 +36,13 @@ testGameScore =
         List.map testGame
             [ { throws = [ 1 ], expected = 1 }
             , { throws = [ 1, 1 ], expected = 2 }
-            , { throws = [ 1, 1, 1 ], expected = 2 }
             , { throws = [ 10, 1 ], expected = 12 }
             , { throws = [ 10, 1, 3 ], expected = 18 }
             , { throws = [ 3, 7, 1, 3 ], expected = 15 }
             , { throws = List.repeat 12 10, expected = 300 }
             , { throws = List.repeat 13 10, expected = 300 }
+            , { throws = List.repeat 20 3, expected = 60 }
+            , { throws = List.repeat 25 3, expected = 60 }
             ]
 
 

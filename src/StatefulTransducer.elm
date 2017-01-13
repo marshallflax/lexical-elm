@@ -6,36 +6,47 @@ import Tuple
 
 
 type alias StateHolder a =
-    ( Array a, Array a )
+    ( Array a, ( Array a, Int ) )
 
 
 pushState : a -> StateHolder a -> StateHolder a
-pushState input ( state, remainder ) =
-    ( Array.push input state, remainder )
+pushState input ( state, ( remainder, count ) ) =
+    ( Array.push input state, ( remainder, count ) )
 
 
-emptyState : StateHolder a
-emptyState =
-    ( Array.empty, Array.empty )
+emptyState : Int -> StateHolder a
+emptyState count =
+    ( Array.empty, ( Array.empty, count ) )
 
 
-statefulPartitionBy : (Array a -> Bool) -> Transducer a (StateHolder a) r (StateHolder a)
-statefulPartitionBy timeForNextChunk =
+nextEmptyState : StateHolder a -> StateHolder a
+nextEmptyState ( state, ( remainder, count ) ) =
+    ( Array.empty, ( remainder, count + 1 ) )
+
+
+statefulPartitionBy :
+    (Array a -> Bool)
+    -> (( Array a, Int ) -> Bool)
+    -> Transducer a (StateHolder a) r (StateHolder a)
+statefulPartitionBy timeForNextChunk noMoreChunks =
     let
         init : Reducer b r -> r -> ( StateHolder a, r )
         init reduce r =
-            ( emptyState, r )
+            ( emptyState 0, r )
 
         step : Reducer (StateHolder a) r -> Reducer a ( StateHolder a, r )
         step reduce input ( state, currentReduction ) =
-            let
-                merged =
-                    pushState input state
-            in
-                if (timeForNextChunk (Tuple.first merged)) then
-                    ( emptyState, reduce merged currentReduction )
-                else
-                    ( merged, currentReduction )
+            if (noMoreChunks (Tuple.second state)) then
+                ( state, currentReduction )
+            else
+                let
+                    merged =
+                        pushState input state
+                in
+                    if (timeForNextChunk (Tuple.first merged)) then
+                        ( nextEmptyState state, reduce merged currentReduction )
+                    else
+                        ( merged, currentReduction )
 
         complete : Reducer (StateHolder a) r -> ( StateHolder a, r ) -> r
         complete reduce ( state, currentReduction ) =
