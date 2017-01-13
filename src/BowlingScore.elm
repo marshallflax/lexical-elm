@@ -47,6 +47,7 @@ naivePoints frame =
         Empty ->
             0
 
+
 firstThrowPoints : Frame -> Score
 firstThrowPoints frame =
     case frame of
@@ -84,6 +85,7 @@ computeNormalNextMode frame =
         Empty ->
             PostOpen
 
+
 computePostStrikeMode : ( Frame, Int ) -> Mode
 computePostStrikeMode ( frame, whichFrame ) =
     case frame of
@@ -104,6 +106,7 @@ computePostStrikeMode ( frame, whichFrame ) =
 
         Empty ->
             PostOpen
+
 
 type alias WorkingState =
     ( Mode, Score, Int )
@@ -134,9 +137,11 @@ scoreFold frame ( currentMode, currentScore, whichFrame ) =
             PostDoubleStrike ->
                 ( computePostStrikeMode ( frame, whichFrame ), basePoints + 2 * (naivePoints frame), nextFrame )
 
+
 scoreList : List Int -> Score
 scoreList =
     Array.fromList >> score
+
 
 score : Throws -> Score
 score throws =
