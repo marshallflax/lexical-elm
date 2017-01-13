@@ -16,7 +16,7 @@
 **** If an existing interface is changed, bump the "major"
 **** Contains a subset of Haskell, but without higher-order types or laziness
 ** [[https://en.wikipedia.org/wiki/Functional_reactive_programming][Functional Reactive Programming]]
-* What is "Functional Reactive Programming"?
+* What is "Functional"
 ** In a functional language *all* data is _immutable_
 *** Pure functions -- no side effects ever.
 *** System reacts to events (UI actions, Websocket messages, etc)
@@ -24,16 +24,16 @@
 **** Common bug: thread-safety
 **** Common bug: display after incremental updates doesn't match refresh
 **** Common bug: object A references object B, which then changes
-*** OO restricts who can modify state, but:
-**** Thread-safety is hard
-**** Observing an object is error-prone
-**** Compiler doesn't *know* side-effects
+**** OO restricts who can modify state, but:
+***** Thread-safety is hard
+***** Observing an object is error-prone
+***** Compiler doesn't *know* side-effects
 ** Functional languages there are no "variables", only new "final" values.
 ** Avoid many confusions!
 *** No confusion between  = and ==
 **** No confusion between := and =
 *** No confusion between final and immutable
-* What is a reactive framework?
+* What is a "reactive framework"?
 ** Elm architecture based on three functions
 *** How to update the current state
    : (new_model, new_commands) = f(command, current_model)
@@ -102,7 +102,8 @@
 * Modular Structure
 ** Modules declare what they export and what they import
 *** Cyclic dependencies result in a compilation error
-*** Simple module structure: only "private" and "public" functions -- no "package" or "protected"
+*** Simple module structure: only "private" and "public" functions within a package
+**** But published packages decide which modules are visible
 *** Modules may be in a flat directory or moved into subdirectories (if the app is large enough)
 ** Sample program -- using [[http://localhost:8000/src/Main.elm][elm-reactor]] to dynamically redeploy [[file+emacs:src/]]
 *** Top-level
@@ -123,6 +124,7 @@
 * Caveats
 ** Package manager doesn't understand NTLM-based proxies
 *** We'll have to setup some sort of reverse proxy
+** Will eventually need notion of "local nexus repo" for TPICAP packages
 ** Functional programming does take some time to get used to
 *** Learning curve for new developers for *application* will be easier
 *** Helps improve our coding techniques in general
@@ -136,7 +138,6 @@
 *** Most JS libraries are much younger still!
 ** Widget library is still developing
 *** New widgets can be written using pure Elm
-***
 ** View is simply native HTML layout -- lack of tools to graphically edit them
 * Time travel! [[http://localhost:8000/src/Main.elm]]
 #+OPTIONS: toc:nil
