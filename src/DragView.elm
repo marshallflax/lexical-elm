@@ -22,6 +22,10 @@ px number =
 viewDraggable : ( String, DraggableWidget ) -> Html Msg
 viewDraggable ( key, draggable ) =
     let
+        dcm : DragCmd -> Msg
+        dcm =
+            DragMessage key
+
         html : Html Msg
         html =
             div
@@ -39,10 +43,11 @@ viewDraggable ( key, draggable ) =
                 ]
                 [ text key ]
     in
-        viewDraggableHtml html (key, draggable)
+        viewDraggableHtml html dcm ( key, draggable )
 
-viewDraggableHtml : Html Msg -> ( String, DraggableWidget ) -> Html Msg
-viewDraggableHtml html ( key, draggable ) =
+
+viewDraggableHtml : Html Msg -> (DragCmd -> Msg) -> ( String, DraggableWidget ) -> Html Msg
+viewDraggableHtml html dcm ( key, draggable ) =
     let
         getPosition : DraggableWidget -> Position
         getPosition { position, drag } =
@@ -56,7 +61,7 @@ viewDraggableHtml html ( key, draggable ) =
         onMouseDown : String -> Attribute Msg
         onMouseDown key =
             Html.Events.on "mousedown"
-                (Decode.map (DragMessage key << DragStart) Mouse.position)
+                (Decode.map (dcm << DragStart) Mouse.position)
     in
         div
             [ onMouseDown key
