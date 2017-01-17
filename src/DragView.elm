@@ -38,7 +38,12 @@ viewDraggable ( key, draggable ) =
                     ]
                 ]
                 [ text key ]
+    in
+        viewDraggableHtml html (key, draggable)
 
+viewDraggableHtml : Html Msg -> ( String, DraggableWidget ) -> Html Msg
+viewDraggableHtml html ( key, draggable ) =
+    let
         getPosition : DraggableWidget -> Position
         getPosition { position, drag } =
             case drag of
