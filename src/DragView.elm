@@ -44,13 +44,13 @@ viewDraggable ( key, draggable ) =
                 , "width" => "100px"
                 , "height" => "100px"
                 , "border-radius" => "4px"
+                , "color" => "white"
+                , "align-items" => "center"
+                , "justify-content" => "center"
                 , "position" => "absolute"
                 , "left" => px (.x (getPosition draggable))
                 , "top" => px (.y (getPosition draggable))
-                , "color" => "white"
                 , "display" => "flex"
-                , "align-items" => "center"
-                , "justify-content" => "center"
                 ]
             ]
             [ text key ]
