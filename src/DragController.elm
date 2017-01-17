@@ -1,11 +1,11 @@
-module DragController exposing (..)
+module DragController exposing (doCmd)
 
 import Mouse exposing (Position)
-import Types exposing (..)
+import Types exposing (Draggable, DragState, DragCmd(..))
 
 
-do : DragCmd -> Draggable -> Draggable
-do cmd ({ position, drag } as model) =
+doCmd : DragCmd -> Draggable -> Draggable
+doCmd cmd ({ position, drag } as model) =
     case cmd of
         DragStart xy ->
             { model
