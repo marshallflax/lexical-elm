@@ -5,28 +5,28 @@ import Types exposing (DraggableWidget, DragState, DragCmd(..))
 
 
 doCmd : DragCmd -> DraggableWidget -> DraggableWidget
-doCmd cmd ({ position, drag } as model) =
+doCmd cmd widget =
     case cmd of
         DragStart xy ->
-            { model
-                | position = position
-                , drag = Just (DragState xy xy)
+            { widget
+                | drag = Just (DragState xy xy)
             }
 
         DragAt xy ->
-            { model
-                | position = position
-                , drag = (Maybe.map (\{ start } -> DragState start xy) drag)
+            { widget
+                | drag = (Maybe.map (\{ start } -> DragState start xy) widget.drag)
             }
 
         DragEnd xy ->
-            { model
+            { widget
                 | position =
-                    case drag of
+                    case widget.drag of
                         Nothing ->
-                            position
+                            widget.position
 
                         Just { start, current } ->
-                            Position (position.x + current.x - start.x) (position.y + current.y - start.y)
+                            Position
+                                (widget.position.x + current.x - start.x)
+                                (widget.position.y + current.y - start.y)
                 , drag = Nothing
             }
