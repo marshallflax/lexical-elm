@@ -22,6 +22,23 @@ px number =
 viewDraggable : ( String, DraggableWidget ) -> Html Msg
 viewDraggable ( key, draggable ) =
     let
+        html : Html Msg
+        html =
+            div
+                [ style
+                    [ "background-color" => "#3C8D2F"
+                    , "cursor" => "move"
+                    , "width" => "100px"
+                    , "height" => "100px"
+                    , "border-radius" => "4px"
+                    , "color" => "white"
+                    , "align-items" => "center"
+                    , "justify-content" => "center"
+                    , "display" => "flex"
+                    ]
+                ]
+                [ text key ]
+
         getPosition : DraggableWidget -> Position
         getPosition { position, drag } =
             case drag of
@@ -44,21 +61,7 @@ viewDraggable ( key, draggable ) =
                 , "top" => px (.y (getPosition draggable))
                 ]
             ]
-            [ div
-                [ style
-                    [ "background-color" => "#3C8D2F"
-                    , "cursor" => "move"
-                    , "width" => "100px"
-                    , "height" => "100px"
-                    , "border-radius" => "4px"
-                    , "color" => "white"
-                    , "align-items" => "center"
-                    , "justify-content" => "center"
-                    , "display" => "flex"
-                    ]
-                ]
-                [ text key ]
-            ]
+            [ html ]
 
 
 viewDraggables : Dict String DraggableWidget -> Html Msg
