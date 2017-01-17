@@ -14,8 +14,8 @@ import Types exposing (Model, DraggableWidget, Msg(DragMessage), DragCmd(DragSta
     (,)
 
 
-viewDraggables : Dict String DraggableWidget -> Html Msg
-viewDraggables draggables =
+viewDraggable : ( String, DraggableWidget ) -> Html Msg
+viewDraggable ( key, draggable ) =
     let
         px : Int -> String
         px number =
@@ -34,30 +34,30 @@ viewDraggables draggables =
         onMouseDown key =
             Html.Events.on "mousedown"
                 (Decode.map (DragMessage key << DragStart) Mouse.position)
-
-        viewDraggable : ( String, DraggableWidget ) -> Html Msg
-        viewDraggable ( key, draggable ) =
-            div
-                [ onMouseDown key
-                , style
-                    [ "background-color" => "#3C8D2F"
-                    , "cursor" => "move"
-                    , "width" => "100px"
-                    , "height" => "100px"
-                    , "border-radius" => "4px"
-                    , "position" => "absolute"
-                    , "left" => px (.x (getPosition draggable))
-                    , "top" => px (.y (getPosition draggable))
-                    , "color" => "white"
-                    , "display" => "flex"
-                    , "align-items" => "center"
-                    , "justify-content" => "center"
-                    ]
-                ]
-                [ text key ]
     in
-        div []
-            (List.map viewDraggable (Dict.toList draggables))
+        div
+            [ onMouseDown key
+            , style
+                [ "background-color" => "#3C8D2F"
+                , "cursor" => "move"
+                , "width" => "100px"
+                , "height" => "100px"
+                , "border-radius" => "4px"
+                , "position" => "absolute"
+                , "left" => px (.x (getPosition draggable))
+                , "top" => px (.y (getPosition draggable))
+                , "color" => "white"
+                , "display" => "flex"
+                , "align-items" => "center"
+                , "justify-content" => "center"
+                ]
+            ]
+            [ text key ]
+
+
+viewDraggables : Dict String DraggableWidget -> Html Msg
+viewDraggables draggables =
+    div [] (List.map viewDraggable (Dict.toList draggables))
 
 
 dragSubscriptions : Model -> Sub Msg
