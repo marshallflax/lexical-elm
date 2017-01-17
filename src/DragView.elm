@@ -14,13 +14,14 @@ import Types exposing (Model, DraggableWidget, Msg(DragMessage), DragCmd(DragSta
     (,)
 
 
+px : Int -> String
+px number =
+    toString number ++ "px"
+
+
 viewDraggable : ( String, DraggableWidget ) -> Html Msg
 viewDraggable ( key, draggable ) =
     let
-        px : Int -> String
-        px number =
-            toString number ++ "px"
-
         getPosition : DraggableWidget -> Position
         getPosition { position, drag } =
             case drag of
