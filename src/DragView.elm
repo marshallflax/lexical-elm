@@ -39,21 +39,26 @@ viewDraggable ( key, draggable ) =
         div
             [ onMouseDown key
             , style
-                [ "background-color" => "#3C8D2F"
-                , "cursor" => "move"
-                , "width" => "100px"
-                , "height" => "100px"
-                , "border-radius" => "4px"
-                , "color" => "white"
-                , "align-items" => "center"
-                , "justify-content" => "center"
-                , "position" => "absolute"
+                [ "position" => "absolute"
                 , "left" => px (.x (getPosition draggable))
                 , "top" => px (.y (getPosition draggable))
-                , "display" => "flex"
                 ]
             ]
-            [ text key ]
+            [ div
+                [ style
+                    [ "background-color" => "#3C8D2F"
+                    , "cursor" => "move"
+                    , "width" => "100px"
+                    , "height" => "100px"
+                    , "border-radius" => "4px"
+                    , "color" => "white"
+                    , "align-items" => "center"
+                    , "justify-content" => "center"
+                    , "display" => "flex"
+                    ]
+                ]
+                [ text key ]
+            ]
 
 
 viewDraggables : Dict String DraggableWidget -> Html Msg
