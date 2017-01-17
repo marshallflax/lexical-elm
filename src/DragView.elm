@@ -58,13 +58,13 @@ viewDraggableHtml html dcm ( key, draggable ) =
                 Just { start, current } ->
                     Position (position.x + current.x - start.x) (position.y + current.y - start.y)
 
-        onMouseDown : String -> Attribute Msg
-        onMouseDown key =
+        onMouseDown : Attribute Msg
+        onMouseDown =
             Html.Events.on "mousedown"
                 (Decode.map (dcm << DragStart) Mouse.position)
     in
         div
-            [ onMouseDown key
+            [ onMouseDown
             , style
                 [ "position" => "absolute"
                 , "left" => px (.x (getPosition draggable))
