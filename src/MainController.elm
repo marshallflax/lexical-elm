@@ -4,13 +4,13 @@ import BowlingScoreTest
 import BowlingScoreView
 import Char
 import Dict
-import DragController exposing (..)
+import DragController
 import DragView
 import LexicalController
 import MainView
 import Misc
 import Mouse exposing (Position)
-import Types exposing (..)
+import Types exposing (Model, Msg(..), DraggableWidget, LexicalCmd(..), encodeSavedModel)
 import WebSocket
 
 
@@ -56,7 +56,7 @@ update msg model =
                 ( newLexical, cmds ) =
                     LexicalController.lexicalUpdate cmd model.lexical
             in
-                ( { model | lexical = newLexical }, Cmd.none )
+                ( { model | lexical = newLexical }, cmds )
 
         KeyMsg code ->
             ( { model | lastKeyCode = code }, Cmd.none )
