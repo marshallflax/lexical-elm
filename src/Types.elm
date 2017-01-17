@@ -16,7 +16,7 @@ import Testing exposing (TestResult)
 
 type alias Model =
     { lexical : LexicalModel
-    , draggables : Dict String Draggable
+    , draggables : Dict String DraggableWidget
     , lastKeyCode : Keyboard.KeyCode
     , bowlingResults : List ( Int, Testing.TestResult )
     , tableState : Table.State
@@ -38,7 +38,7 @@ type alias ComputedModel a =
     }
 
 
-type alias Draggable =
+type alias DraggableWidget =
     { position : Position
     , drag : Maybe DragState
     , text : String

@@ -28,8 +28,8 @@ init =
     ( { lexical = LexicalController.init
       , draggables =
             Dict.empty
-                |> Dict.insert "text1" (Draggable (Position 200 200) Nothing "Text1" "100" "100")
-                |> Dict.insert "text2" (Draggable (Position 300 300) Nothing "Text2" "100" "100")
+                |> Dict.insert "text1" (DraggableWidget (Position 200 200) Nothing "Text1" "100" "100")
+                |> Dict.insert "text2" (DraggableWidget (Position 300 300) Nothing "Text2" "100" "100")
       , tableState = BowlingScoreView.initialTableState
       , lastKeyCode = Char.toCode '!'
       , bowlingResults = BowlingScoreTest.testResults

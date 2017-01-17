@@ -6,7 +6,7 @@ import Html.Attributes exposing (..)
 import Html.Events
 import Json.Decode as Decode
 import Mouse exposing (Position)
-import Types exposing (Model, Draggable, Msg(DragMessage), DragCmd(DragStart, DragAt, DragEnd))
+import Types exposing (Model, DraggableWidget, Msg(DragMessage), DragCmd(DragStart, DragAt, DragEnd))
 
 
 (=>) : a -> b -> ( a, b )
@@ -14,14 +14,14 @@ import Types exposing (Model, Draggable, Msg(DragMessage), DragCmd(DragStart, Dr
     (,)
 
 
-viewDraggables : Dict String Draggable -> Html Msg
+viewDraggables : Dict String DraggableWidget -> Html Msg
 viewDraggables draggables =
     let
         px : Int -> String
         px number =
             toString number ++ "px"
 
-        getPosition : Draggable -> Position
+        getPosition : DraggableWidget -> Position
         getPosition { position, drag } =
             case drag of
                 Nothing ->
@@ -35,7 +35,7 @@ viewDraggables draggables =
             Html.Events.on "mousedown"
                 (Decode.map (DragMessage key << DragStart) Mouse.position)
 
-        viewDraggable : ( String, Draggable ) -> Html Msg
+        viewDraggable : ( String, DraggableWidget ) -> Html Msg
         viewDraggable ( key, draggable ) =
             div
                 [ onMouseDown key
@@ -63,7 +63,7 @@ viewDraggables draggables =
 dragSubscriptions : Model -> Sub Msg
 dragSubscriptions model =
     let
-        computeSub : ( String, Draggable ) -> Sub Msg
+        computeSub : ( String, DraggableWidget ) -> Sub Msg
         computeSub ( key, draggable ) =
             case draggable.drag of
                 Nothing ->
