@@ -4,6 +4,8 @@ import Array
 import ColoredWord exposing (ColoredWord, matchingWordsForColor)
 import ColoredWordView exposing (colorStyle, renderWord)
 import Css
+import Dict exposing (Dict)
+import DragView exposing (viewMaybeDraggable)
 import FreqInfoView exposing (renderFrequencies)
 import Html exposing (Html, button, div, span, text, input, p, table, tr, td)
 import Html.Attributes exposing (style, value, checked, type_, readonly, placeholder, href)
@@ -15,21 +17,31 @@ import Set exposing (Set)
 import Types exposing (..)
 
 
-viewLexicalModel : LexicalModel -> Html Msg
-viewLexicalModel lexicalModel =
-    div []
-        [ showColorsOfCurrentWord lexicalModel
-        , p [] [ Misc.zipLists rainbowList |> toString |> text ]
-        , showSaveButton
-        , showTextInput lexicalModel
-        , lazy colorButtons lexicalModel.hideColors
-        , p [] []
-        , resetButtons
-        , wordsPerLine lexicalModel
-        , wordStats lexicalModel
-        , wordsForColor lexicalModel
-        , frequencyStats lexicalModel
-        ]
+maybePair : comparable -> Dict comparable a -> Maybe ( comparable, a )
+maybePair key dict =
+    Dict.get key dict |> Maybe.map ((,) key)
+
+
+viewLexicalModel : Model -> Html Msg
+viewLexicalModel model =
+    let
+        lexicalModel : LexicalModel
+        lexicalModel =
+            model.lexical
+    in
+        div []
+            [ showColorsOfCurrentWord lexicalModel
+            , p [] [ Misc.zipLists rainbowList |> toString |> text ]
+            , showSaveButton
+            , showTextInput lexicalModel
+            , lazy colorButtons lexicalModel.hideColors
+            , p [] []
+            , viewMaybeDraggable (maybePair "text1" model.draggables) resetButtons
+            , wordsPerLine lexicalModel
+            , wordStats lexicalModel
+            , wordsForColor lexicalModel
+            , frequencyStats lexicalModel
+            ]
 
 
 showColorsOfCurrentWord : LexicalModel -> Html Msg

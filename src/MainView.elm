@@ -17,7 +17,7 @@ root model =
     div []
         [ Css.style [ Html.Attributes.scoped True ] LexicalView.stylesheet
         , lazy DragView.viewDraggables (Dict.toList model.draggables)
-        , lazy LexicalView.viewLexicalModel model.lexical
+        , lazy LexicalView.viewLexicalModel model
         , colophon
         , table []
             [ tr []
