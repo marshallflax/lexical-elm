@@ -19,7 +19,7 @@ combinedSubscriptions =
     Misc.combineSubscriptions
         [ MainView.viewSubscriptions
         , webSubscriptions
-        , DragView.dragSubscriptions << .draggables
+        , .draggables >> Dict.toList >> DragView.dragSubscriptions
         ]
 
 

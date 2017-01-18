@@ -3,6 +3,7 @@ module MainView exposing (viewSubscriptions, root)
 import BowlingScoreView
 import Css
 import DragView exposing (viewDraggables)
+import Dict
 import Html exposing (Html, button, div, span, text, input, p, table, tr, td)
 import Html.Attributes exposing (style, value, checked, type_, readonly, placeholder, href)
 import Html.Lazy exposing (lazy, lazy2)
@@ -15,7 +16,7 @@ root : Model -> Html Msg
 root model =
     div []
         [ Css.style [ Html.Attributes.scoped True ] LexicalView.stylesheet
-        , lazy DragView.viewDraggables model.draggables
+        , lazy DragView.viewDraggables (Dict.toList model.draggables)
         , lazy LexicalView.viewLexicalModel model.lexical
         , colophon
         , table []

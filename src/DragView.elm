@@ -1,6 +1,5 @@
 module DragView exposing (dragSubscriptions, viewDraggables)
 
-import Dict exposing (Dict)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events
@@ -21,25 +20,21 @@ px number =
 
 viewDraggable : IdentifiedDraggableWidget -> Html Msg
 viewDraggable ( key, draggable ) =
-    let
-        html : Html Msg
-        html =
-            div
-                [ style
-                    [ "background-color" => "#3C8D2F"
-                    , "cursor" => "move"
-                    , "width" => "100px"
-                    , "height" => "100px"
-                    , "border-radius" => "4px"
-                    , "color" => "white"
-                    , "align-items" => "center"
-                    , "justify-content" => "center"
-                    , "display" => "flex"
-                    ]
-                ]
-                [ text key ]
-    in
-        viewDraggableHtml ( key, draggable ) html
+    div
+        [ style
+            [ "background-color" => "#3C8D2F"
+            , "cursor" => "move"
+            , "width" => "100px"
+            , "height" => "100px"
+            , "border-radius" => "4px"
+            , "color" => "white"
+            , "align-items" => "center"
+            , "justify-content" => "center"
+            , "display" => "flex"
+            ]
+        ]
+        [ text key ]
+        |> viewDraggableHtml ( key, draggable )
 
 
 viewDraggableHtml : IdentifiedDraggableWidget -> Html Msg -> Html Msg
@@ -70,12 +65,12 @@ viewDraggableHtml ( id, draggable ) html =
             [ html ]
 
 
-viewDraggables : Dict String DraggableWidget -> Html Msg
+viewDraggables : List IdentifiedDraggableWidget -> Html Msg
 viewDraggables draggables =
-    div [] (List.map viewDraggable (Dict.toList draggables))
+    div [] (List.map viewDraggable draggables)
 
 
-dragSubscriptions : Dict String DraggableWidget -> Sub Msg
+dragSubscriptions : List IdentifiedDraggableWidget -> Sub Msg
 dragSubscriptions draggables =
     let
         computeSub : IdentifiedDraggableWidget -> Sub Msg
@@ -90,4 +85,4 @@ dragSubscriptions draggables =
                         , Mouse.ups (DragMessage key << DragEnd)
                         ]
     in
-        (List.map computeSub (Dict.toList draggables)) |> Sub.batch
+        List.map computeSub draggables |> Sub.batch
