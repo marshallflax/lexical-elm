@@ -41,9 +41,6 @@ type alias ComputedModel a =
 type alias DraggableWidget =
     { position : Position
     , drag : Maybe DragState
-    , text : String
-    , width : String
-    , height : String
     }
 
 
