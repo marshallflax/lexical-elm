@@ -17,17 +17,16 @@ import Set exposing (Set)
 import Types exposing (..)
 
 
-maybePair : comparable -> Dict comparable a -> Maybe ( comparable, a )
-maybePair key dict =
-    Dict.get key dict |> Maybe.map ((,) key)
-
-
 viewLexicalModel : Model -> Html Msg
 viewLexicalModel model =
     let
         lexicalModel : LexicalModel
         lexicalModel =
             model.lexical
+
+        maybePair : comparable -> Dict comparable a -> Maybe ( comparable, a )
+        maybePair key dict =
+            Dict.get key dict |> Maybe.map ((,) key)
     in
         div []
             [ showColorsOfCurrentWord lexicalModel
