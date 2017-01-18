@@ -74,7 +74,7 @@ update msg model =
 
         DragMessage key dragVerb ->
             ( { model
-                | draggables = Dict.update key (Maybe.map <| DragController.doCmd dragVerb) model.draggables
+                | draggables = Dict.update key (DragController.doCmd dragVerb |> Maybe.map) model.draggables
               }
             , Cmd.none
             )
