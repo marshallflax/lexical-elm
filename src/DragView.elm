@@ -90,4 +90,4 @@ dragSubscriptions draggables =
                         , Mouse.ups (DragMessage key << DragEnd)
                         ]
     in
-        Sub.batch (List.map computeSub (Dict.toList draggables))
+        (List.map computeSub (Dict.toList draggables)) |> Sub.batch

@@ -5,8 +5,8 @@ import Types exposing (DraggableWidget, DragState, DragCmd(..))
 
 
 doCmd : DragCmd -> DraggableWidget -> DraggableWidget
-doCmd cmd widget =
-    case cmd of
+doCmd dragCmd widget =
+    case dragCmd of
         DragStart xy ->
             { widget
                 | drag = Just (DragState xy xy)
