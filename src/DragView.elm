@@ -43,11 +43,11 @@ viewDraggable ( key, draggable ) =
                 ]
                 [ text key ]
     in
-        viewDraggableHtml html dcm ( key, draggable )
+        viewDraggableHtml dcm draggable html
 
 
-viewDraggableHtml : Html Msg -> (DragCmd -> Msg) -> ( String, DraggableWidget ) -> Html Msg
-viewDraggableHtml html dcm ( key, draggable ) =
+viewDraggableHtml : (DragCmd -> Msg) -> DraggableWidget -> Html Msg -> Html Msg
+viewDraggableHtml dcm draggable html =
     let
         getPosition : DraggableWidget -> Position
         getPosition { position, drag } =
