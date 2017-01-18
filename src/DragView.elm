@@ -1,7 +1,7 @@
-module DragView exposing (dragSubscriptions, viewDraggables)
+module DragView exposing (dragSubscriptions, viewDraggables, viewMaybeDraggable)
 
-import Html exposing (..)
-import Html.Attributes exposing (..)
+import Html exposing (div, text, Html, Attribute)
+import Html.Attributes exposing (style)
 import Html.Events
 import Json.Decode as Decode
 import Mouse exposing (Position)
@@ -35,6 +35,16 @@ viewDraggable ( key, draggable ) =
         ]
         [ text key ]
         |> viewDraggableHtml ( key, draggable )
+
+
+viewMaybeDraggable : Maybe IdentifiedDraggableWidget -> Html Msg -> Html Msg
+viewMaybeDraggable maybeDraggable html =
+    case maybeDraggable of
+        Just draggable ->
+            viewDraggableHtml draggable html
+
+        Nothing ->
+            html
 
 
 viewDraggableHtml : IdentifiedDraggableWidget -> Html Msg -> Html Msg
