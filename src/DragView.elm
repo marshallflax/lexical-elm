@@ -22,10 +22,6 @@ px number =
 viewDraggable : ( String, DraggableWidget ) -> Html Msg
 viewDraggable ( key, draggable ) =
     let
-        msgFactory : DragCmd -> Msg
-        msgFactory =
-            DragMessage key
-
         html : Html Msg
         html =
             div
@@ -43,11 +39,11 @@ viewDraggable ( key, draggable ) =
                 ]
                 [ text key ]
     in
-        viewDraggableHtml msgFactory draggable html
+        viewDraggableHtml key draggable html
 
 
-viewDraggableHtml : (DragCmd -> Msg) -> DraggableWidget -> Html Msg -> Html Msg
-viewDraggableHtml msgFactory draggable html =
+viewDraggableHtml : String -> DraggableWidget -> Html Msg -> Html Msg
+viewDraggableHtml id draggable html =
     let
         getPosition : DraggableWidget -> Position
         getPosition { position, drag } =
@@ -61,7 +57,7 @@ viewDraggableHtml msgFactory draggable html =
         onMouseDown : Attribute Msg
         onMouseDown =
             Html.Events.on "mousedown"
-                (Decode.map (DragStart >> msgFactory) Mouse.position)
+                (Decode.map (DragStart >> (DragMessage id)) Mouse.position)
     in
         div
             [ onMouseDown
