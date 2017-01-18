@@ -19,7 +19,7 @@ combinedSubscriptions =
     Misc.combineSubscriptions
         [ MainView.viewSubscriptions
         , webSubscriptions
-        , DragView.dragSubscriptions
+        , DragView.dragSubscriptions << .draggables
         ]
 
 
@@ -44,7 +44,7 @@ echoServer =
 
 
 webSubscriptions : Model -> Sub Msg
-webSubscriptions model =
+webSubscriptions _ =
     WebSocket.listen echoServer (LexicalMessage << WebsocketMessage)
 
 

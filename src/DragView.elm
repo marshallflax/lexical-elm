@@ -57,7 +57,7 @@ viewDraggableHtml ( id, draggable ) html =
         onMouseDown : Attribute Msg
         onMouseDown =
             Html.Events.on "mousedown"
-                (Decode.map (DragStart >> (DragMessage id)) Mouse.position)
+                (Decode.map ((DragMessage id) << DragStart) Mouse.position)
     in
         div
             [ onMouseDown
@@ -75,10 +75,10 @@ viewDraggables draggables =
     div [] (List.map viewDraggable (Dict.toList draggables))
 
 
-dragSubscriptions : Model -> Sub Msg
-dragSubscriptions model =
+dragSubscriptions : Dict String DraggableWidget -> Sub Msg
+dragSubscriptions draggables =
     let
-        computeSub : ( String, DraggableWidget ) -> Sub Msg
+        computeSub : IdentifiedDraggableWidget -> Sub Msg
         computeSub ( key, draggable ) =
             case draggable.drag of
                 Nothing ->
@@ -90,4 +90,4 @@ dragSubscriptions model =
                         , Mouse.ups (DragMessage key << DragEnd)
                         ]
     in
-        Sub.batch (List.map computeSub (Dict.toList model.draggables))
+        Sub.batch (List.map computeSub (Dict.toList draggables))
