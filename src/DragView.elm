@@ -6,7 +6,7 @@ import Html.Attributes exposing (..)
 import Html.Events
 import Json.Decode as Decode
 import Mouse exposing (Position)
-import Types exposing (Model, DraggableWidget, Msg(DragMessage), DragCmd(DragStart, DragAt, DragEnd))
+import Types exposing (Model, IdentifiedDraggableWidget, DraggableWidget, Msg(DragMessage), DragCmd(DragStart, DragAt, DragEnd))
 
 
 (=>) : a -> b -> ( a, b )
@@ -19,7 +19,7 @@ px number =
     toString number ++ "px"
 
 
-viewDraggable : ( String, DraggableWidget ) -> Html Msg
+viewDraggable : IdentifiedDraggableWidget -> Html Msg
 viewDraggable ( key, draggable ) =
     let
         html : Html Msg
@@ -39,11 +39,11 @@ viewDraggable ( key, draggable ) =
                 ]
                 [ text key ]
     in
-        viewDraggableHtml key draggable html
+        viewDraggableHtml ( key, draggable ) html
 
 
-viewDraggableHtml : String -> DraggableWidget -> Html Msg -> Html Msg
-viewDraggableHtml id draggable html =
+viewDraggableHtml : IdentifiedDraggableWidget -> Html Msg -> Html Msg
+viewDraggableHtml ( id, draggable ) html =
     let
         getPosition : DraggableWidget -> Position
         getPosition { position, drag } =

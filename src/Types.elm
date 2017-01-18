@@ -44,6 +44,10 @@ type alias DraggableWidget =
     }
 
 
+type alias IdentifiedDraggableWidget =
+    ( String, DraggableWidget )
+
+
 type alias DragState =
     { start : Position
     , current : Position
