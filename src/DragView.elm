@@ -1,4 +1,4 @@
-module DragView exposing (dragSubscriptions, viewDraggables, viewMaybeDraggable)
+module DragView exposing (dragSubscriptions, viewMaybeDraggable)
 
 import Html exposing (div, text, Html, Attribute)
 import Html.Attributes exposing (style)
@@ -8,43 +8,14 @@ import Mouse exposing (Position)
 import Types exposing (Model, IdentifiedDraggableWidget, DraggableWidget, Msg(DragMessage), DragCmd(DragStart, DragAt, DragEnd))
 
 
-(=>) : a -> b -> ( a, b )
-(=>) =
-    (,)
-
-
-px : Int -> String
-px number =
-    toString number ++ "px"
-
-
-viewDraggable : IdentifiedDraggableWidget -> Html Msg
-viewDraggable ( key, draggable ) =
-    div
-        [ style
-            [ "background-color" => "#3C8D2F"
-            , "cursor" => "move"
-            , "width" => "100px"
-            , "height" => "100px"
-            , "border-radius" => "4px"
-            , "color" => "white"
-            , "align-items" => "center"
-            , "justify-content" => "center"
-            , "display" => "flex"
-            ]
-        ]
-        [ text key ]
-        |> viewDraggableHtml ( key, draggable )
-
-
 viewMaybeDraggable : Maybe IdentifiedDraggableWidget -> Html Msg -> Html Msg
 viewMaybeDraggable maybeDraggable html =
     case maybeDraggable of
-        Just draggable ->
-            viewDraggableHtml draggable html
-
         Nothing ->
             html
+
+        Just draggable ->
+            viewDraggableHtml draggable html
 
 
 viewDraggableHtml : IdentifiedDraggableWidget -> Html Msg -> Html Msg
@@ -63,21 +34,20 @@ viewDraggableHtml ( id, draggable ) html =
         onMouseDown =
             Html.Events.on "mousedown"
                 (Decode.map ((DragMessage id) << DragStart) Mouse.position)
+
+        px : Int -> String
+        px number =
+            toString number ++ "px"
     in
         div
             [ onMouseDown
             , style
-                [ "position" => "absolute"
-                , "left" => px (.x (getPosition draggable))
-                , "top" => px (.y (getPosition draggable))
+                [ ( "position", "absolute" )
+                , ( "left", px (.x (getPosition draggable)) )
+                , ( "top", px (.y (getPosition draggable)) )
                 ]
             ]
             [ html ]
-
-
-viewDraggables : List IdentifiedDraggableWidget -> Html Msg
-viewDraggables draggables =
-    div [] (List.map viewDraggable draggables)
 
 
 dragSubscriptions : List IdentifiedDraggableWidget -> Sub Msg
