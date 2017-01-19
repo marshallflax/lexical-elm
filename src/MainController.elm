@@ -72,24 +72,9 @@ update msg model =
                 ( model, WebSocket.send echoServer encoded )
 
         DragMessage key dragVerb ->
-            ( let
-                alter : Maybe DraggableWidget -> Maybe DraggableWidget
-                alter maybeWidget =
-                    case maybeWidget of
-                        Nothing ->
-                            Just initialDrag
-
-                        Just widget ->
-                            Just (DragController.doCmd dragVerb widget)
-              in
-                { model
-                    | draggables =
-                        Dict.update key alter model.draggables
-                }
+            ( { model
+                | draggables =
+                    Dict.update key (DragController.doCmd dragVerb) model.draggables
+              }
             , Cmd.none
             )
-
-
-initialDrag : DraggableWidget
-initialDrag =
-    (DraggableWidget (Position 0 0) Nothing)
