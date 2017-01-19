@@ -1,5 +1,6 @@
 module DragView exposing (dragSubscriptions, viewMaybeDraggable)
 
+import Dict exposing (Dict)
 import Html exposing (div, text, Html, Attribute)
 import Html.Attributes exposing (style)
 import Html.Events
@@ -13,9 +14,12 @@ px number =
     toString number ++ "px"
 
 
-viewMaybeDraggable : String -> Maybe DraggableWidget -> Html Msg -> Html Msg
-viewMaybeDraggable key maybeDraggable html =
+viewMaybeDraggable : Dict String DraggableWidget -> String -> Html Msg -> Html Msg
+viewMaybeDraggable dict key html =
     let
+        maybeDraggable =
+            Dict.get key dict
+
         onMouseDown : Attribute Msg
         onMouseDown =
             Html.Events.on "mousedown"

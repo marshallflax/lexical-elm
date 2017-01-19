@@ -31,7 +31,7 @@ viewLexicalModel model =
             , showTextInput lexicalModel
             , lazy colorButtons lexicalModel.hideColors
             , p [] []
-            , viewMaybeDraggable "text1" (Dict.get "text1" model.draggables) resetButtons
+            , viewMaybeDraggable model.draggables "text1"  resetButtons
             , wordsPerLine lexicalModel
             , wordStats lexicalModel
             , wordsForColor lexicalModel
