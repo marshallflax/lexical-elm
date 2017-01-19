@@ -1,4 +1,4 @@
-module DragView exposing (dragSubscriptions, viewMaybeDraggable)
+module DragView exposing (dragSubscriptions, viewDraggable)
 
 import Dict exposing (Dict)
 import Html exposing (div, text, Html, Attribute)
@@ -14,8 +14,8 @@ px number =
     toString number ++ "px"
 
 
-viewMaybeDraggable : Dict String DraggableWidget -> String -> Html Msg -> Html Msg
-viewMaybeDraggable dict key html =
+viewDraggable : Dict String DraggableWidget -> String -> Html Msg -> Html Msg
+viewDraggable dict key html =
     let
         maybeDraggable =
             Dict.get key dict

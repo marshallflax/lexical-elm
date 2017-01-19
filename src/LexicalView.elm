@@ -4,8 +4,7 @@ import Array
 import ColoredWord exposing (ColoredWord, matchingWordsForColor)
 import ColoredWordView exposing (colorStyle, renderWord)
 import Css
-import Dict exposing (Dict)
-import DragView exposing (viewMaybeDraggable)
+import DragView exposing (viewDraggable)
 import FreqInfoView exposing (renderFrequencies)
 import Html exposing (Html, button, div, span, text, input, p, table, tr, td)
 import Html.Attributes exposing (style, value, checked, type_, readonly, placeholder, href)
@@ -31,7 +30,7 @@ viewLexicalModel model =
             , showTextInput lexicalModel
             , lazy colorButtons lexicalModel.hideColors
             , p [] []
-            , viewMaybeDraggable model.draggables "text1"  resetButtons
+            , viewDraggable model.draggables "text1" resetButtons
             , wordsPerLine lexicalModel
             , wordStats lexicalModel
             , wordsForColor lexicalModel
