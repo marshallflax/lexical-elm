@@ -28,7 +28,6 @@ init =
     ( { lexical = LexicalController.init
       , draggables =
             Dict.empty
-                |> Dict.insert "text1" (DraggableWidget (Position 200 200) Nothing)
                 |> Dict.insert "text2" (DraggableWidget (Position 300 300) Nothing)
       , tableState = BowlingScoreView.initialTableState
       , lastKeyCode = Char.toCode '!'
@@ -73,8 +72,24 @@ update msg model =
                 ( model, WebSocket.send echoServer encoded )
 
         DragMessage key dragVerb ->
-            ( { model
-                | draggables = Dict.update key (DragController.doCmd dragVerb |> Maybe.map) model.draggables
-              }
+            ( let
+                alter : Maybe DraggableWidget -> Maybe DraggableWidget
+                alter maybeWidget =
+                    case maybeWidget of
+                        Nothing ->
+                            Just initialDrag
+
+                        Just widget ->
+                            Just (DragController.doCmd dragVerb widget)
+              in
+                { model
+                    | draggables =
+                        Dict.update key alter model.draggables
+                }
             , Cmd.none
             )
+
+
+initialDrag : DraggableWidget
+initialDrag =
+    (DraggableWidget (Position 0 0) Nothing)
