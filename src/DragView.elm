@@ -8,46 +8,42 @@ import Mouse exposing (Position)
 import Types exposing (Model, IdentifiedDraggableWidget, DraggableWidget, Msg(DragMessage), DragCmd(DragStart, DragAt, DragEnd))
 
 
+px : Int -> String
+px number =
+    toString number ++ "px"
+
+
 viewMaybeDraggable : Maybe IdentifiedDraggableWidget -> Html Msg -> Html Msg
 viewMaybeDraggable maybeDraggable html =
     case maybeDraggable of
         Nothing ->
             html
 
-        Just draggable ->
-            viewDraggableHtml draggable html
+        Just (key, draggable) ->
+            let
+                getPosition : DraggableWidget -> Position
+                getPosition { position, drag } =
+                    case drag of
+                        Nothing ->
+                            position
 
+                        Just { start, current } ->
+                            Position (position.x + current.x - start.x) (position.y + current.y - start.y)
 
-viewDraggableHtml : IdentifiedDraggableWidget -> Html Msg -> Html Msg
-viewDraggableHtml ( id, draggable ) html =
-    let
-        getPosition : DraggableWidget -> Position
-        getPosition { position, drag } =
-            case drag of
-                Nothing ->
-                    position
-
-                Just { start, current } ->
-                    Position (position.x + current.x - start.x) (position.y + current.y - start.y)
-
-        onMouseDown : Attribute Msg
-        onMouseDown =
-            Html.Events.on "mousedown"
-                (Decode.map ((DragMessage id) << DragStart) Mouse.position)
-
-        px : Int -> String
-        px number =
-            toString number ++ "px"
-    in
-        div
-            [ onMouseDown
-            , style
-                [ ( "position", "absolute" )
-                , ( "left", px (.x (getPosition draggable)) )
-                , ( "top", px (.y (getPosition draggable)) )
-                ]
-            ]
-            [ html ]
+                onMouseDown : Attribute Msg
+                onMouseDown =
+                    Html.Events.on "mousedown"
+                        (Decode.map ((DragMessage key) << DragStart) Mouse.position)
+            in
+                div
+                    [ onMouseDown
+                    , style
+                        [ ( "position", "absolute" )
+                        , ( "left", px (.x (getPosition draggable)) )
+                        , ( "top", px (.y (getPosition draggable)) )
+                        ]
+                    ]
+                    [ html ]
 
 
 dragSubscriptions : List IdentifiedDraggableWidget -> Sub Msg
