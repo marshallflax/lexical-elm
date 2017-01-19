@@ -23,10 +23,6 @@ viewLexicalModel model =
         lexicalModel : LexicalModel
         lexicalModel =
             model.lexical
-
-        maybePair : comparable -> Dict comparable a -> Maybe ( comparable, a )
-        maybePair key dict =
-            Dict.get key dict |> Maybe.map ((,) key)
     in
         div []
             [ showColorsOfCurrentWord lexicalModel
@@ -35,7 +31,7 @@ viewLexicalModel model =
             , showTextInput lexicalModel
             , lazy colorButtons lexicalModel.hideColors
             , p [] []
-            , viewMaybeDraggable (maybePair "text1" model.draggables) resetButtons
+            , viewMaybeDraggable "text1" (Dict.get "text1" model.draggables) resetButtons
             , wordsPerLine lexicalModel
             , wordStats lexicalModel
             , wordsForColor lexicalModel

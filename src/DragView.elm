@@ -13,13 +13,13 @@ px number =
     toString number ++ "px"
 
 
-viewMaybeDraggable : Maybe IdentifiedDraggableWidget -> Html Msg -> Html Msg
-viewMaybeDraggable maybeDraggable html =
+viewMaybeDraggable : String -> Maybe DraggableWidget -> Html Msg -> Html Msg
+viewMaybeDraggable key maybeDraggable html =
     case maybeDraggable of
         Nothing ->
             html
 
-        Just ( key, draggable ) ->
+        Just draggable ->
             let
                 position : Position
                 position =
