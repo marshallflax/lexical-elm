@@ -9,7 +9,6 @@ import FreqInfoView exposing (renderFrequencies)
 import Html exposing (Html, button, div, span, text, input, p, table, tr, td)
 import Html.Attributes exposing (style, value, checked, type_, readonly, placeholder, href)
 import Html.Events exposing (onClick, onInput, onMouseEnter)
-import Html.Lazy exposing (lazy)
 import LexicalController exposing (countWords, countWordsMatching, currentWordFromIndex, dumpState, partitionedList, rainbowList)
 import Misc
 import Set exposing (Set)
@@ -28,7 +27,7 @@ viewLexicalModel model =
             , p [] [ Misc.zipLists rainbowList |> toString |> text ]
             , showSaveButton
             , showTextInput lexicalModel
-            , lazy colorButtons lexicalModel.hideColors
+            , colorButtons model.draggables lexicalModel.hideColors
             , p [] []
             , viewDraggable model.draggables "text1" resetButtons
             , wordsPerLine lexicalModel
@@ -63,8 +62,8 @@ showTextInput lexicalModel =
         []
 
 
-colorButtons : Set String -> Html Msg
-colorButtons hideColors =
+colorButtons : DraggableModel -> Set String -> Html Msg
+colorButtons draggablesModel hideColors =
     div
         []
         (let
@@ -78,20 +77,23 @@ colorButtons hideColors =
 
             doCell : String -> Html Msg
             doCell l =
-                td []
-                    [ input
-                        [ type_ "checkbox"
-                        , onClick (LexicalMessage (ToggleColorEnabled l))
-                        , checked (Set.member l hideColors)
+                viewDraggable draggablesModel
+                    l
+                    (td []
+                        [ input
+                            [ type_ "checkbox"
+                            , onClick (LexicalMessage (ToggleColorEnabled l))
+                            , checked (Set.member l hideColors)
+                            ]
+                            []
+                        , button
+                            [ Html.Attributes.attribute "id" ("colorButton" ++ l)
+                            , colorStyle l
+                            , onClick (LexicalMessage (SetCurrentColor l))
+                            ]
+                            [ text l ]
                         ]
-                        []
-                    , button
-                        [ Html.Attributes.attribute "id" ("colorButton" ++ l)
-                        , colorStyle l
-                        , onClick (LexicalMessage (SetCurrentColor l))
-                        ]
-                        [ text l ]
-                    ]
+                    )
 
             doRow : List String -> Html Msg
             doRow ls =

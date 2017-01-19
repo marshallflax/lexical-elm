@@ -1,12 +1,12 @@
 module DragView exposing (dragSubscriptions, viewDraggable)
 
 import Dict exposing (Dict)
-import Html exposing (div, text, Html, Attribute)
+import Html exposing (div, span, text, Html, Attribute)
 import Html.Attributes exposing (style)
 import Html.Events
 import Json.Decode as Decode
 import Mouse exposing (Position)
-import Types exposing (Model, IdentifiedDraggableWidget, DraggableWidget, Msg(DragMessage), DragCmd(DragStart, DragAt, DragEnd))
+import Types exposing (Model, DraggableModel, IdentifiedDraggableWidget, DraggableWidget, Msg(DragMessage), DragCmd(DragStart, DragAt, DragEnd))
 
 
 px : Int -> String
@@ -14,7 +14,7 @@ px number =
     toString number ++ "px"
 
 
-viewDraggable : Dict String DraggableWidget -> String -> Html Msg -> Html Msg
+viewDraggable : DraggableModel -> String -> Html Msg -> Html Msg
 viewDraggable dict key html =
     let
         maybeDraggable =
@@ -27,7 +27,7 @@ viewDraggable dict key html =
     in
         case maybeDraggable of
             Nothing ->
-                div
+                span
                     [ onMouseDown ]
                     [ html ]
 
@@ -44,7 +44,7 @@ viewDraggable dict key html =
                                     (draggable.position.x + current.x - start.x)
                                     (draggable.position.y + current.y - start.y)
                 in
-                    div
+                    span
                         [ onMouseDown
                         , style
                             [ ( "position", "relative" )

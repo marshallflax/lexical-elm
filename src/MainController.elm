@@ -9,7 +9,6 @@ import DragView
 import LexicalController
 import MainView
 import Misc
-import Mouse exposing (Position)
 import Types exposing (Model, Msg(..), DraggableWidget, LexicalCmd(..), encodeSavedModel)
 import WebSocket
 

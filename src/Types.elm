@@ -16,11 +16,15 @@ import Testing exposing (TestResult)
 
 type alias Model =
     { lexical : LexicalModel
-    , draggables : Dict String DraggableWidget
+    , draggables : DraggableModel
     , lastKeyCode : Keyboard.KeyCode
     , bowlingResults : List ( Int, Testing.TestResult )
     , tableState : Table.State
     }
+
+
+type alias DraggableModel =
+    Dict String DraggableWidget
 
 
 type alias LexicalModel =
