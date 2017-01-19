@@ -30,6 +30,9 @@ viewMaybeDraggable maybeDraggable html =
                         Just { start, current } ->
                             Position (position.x + current.x - start.x) (position.y + current.y - start.y)
 
+                p : Position
+                p = getPosition draggable
+
                 onMouseDown : Attribute Msg
                 onMouseDown =
                     Html.Events.on "mousedown"
@@ -39,8 +42,8 @@ viewMaybeDraggable maybeDraggable html =
                     [ onMouseDown
                     , style
                         [ ( "position", "absolute" )
-                        , ( "left", px (.x (getPosition draggable)) )
-                        , ( "top", px (.y (getPosition draggable)) )
+                        , ( "left", px (.x p) )
+                        , ( "top", px (.y p) )
                         ]
                     ]
                     [ html ]
