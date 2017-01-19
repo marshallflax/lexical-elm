@@ -15,37 +15,40 @@ px number =
 
 viewMaybeDraggable : String -> Maybe DraggableWidget -> Html Msg -> Html Msg
 viewMaybeDraggable key maybeDraggable html =
-    case maybeDraggable of
-        Nothing ->
-            html
-
-        Just draggable ->
-            let
-                position : Position
-                position =
-                    case draggable.drag of
-                        Nothing ->
-                            draggable.position
-
-                        Just { start, current } ->
-                            Position
-                                (draggable.position.x + current.x - start.x)
-                                (draggable.position.y + current.y - start.y)
-
-                onMouseDown : Attribute Msg
-                onMouseDown =
-                    Html.Events.on "mousedown"
-                        (Decode.map ((DragMessage key) << DragStart) Mouse.position)
-            in
+    let
+        onMouseDown : Attribute Msg
+        onMouseDown =
+            Html.Events.on "mousedown"
+                (Decode.map ((DragMessage key) << DragStart) Mouse.position)
+    in
+        case maybeDraggable of
+            Nothing ->
                 div
-                    [ onMouseDown
-                    , style
-                        [ ( "position", "absolute" )
-                        , ( "left", px (.x position) )
-                        , ( "top", px (.y position) )
-                        ]
-                    ]
+                    [ onMouseDown ]
                     [ html ]
+
+            Just draggable ->
+                let
+                    position : Position
+                    position =
+                        case draggable.drag of
+                            Nothing ->
+                                draggable.position
+
+                            Just { start, current } ->
+                                Position
+                                    (draggable.position.x + current.x - start.x)
+                                    (draggable.position.y + current.y - start.y)
+                in
+                    div
+                        [ onMouseDown
+                        , style
+                            [ ( "position", "absolute" )
+                            , ( "left", px (.x position) )
+                            , ( "top", px (.y position) )
+                            ]
+                        ]
+                        [ html ]
 
 
 dragSubscriptions : List IdentifiedDraggableWidget -> Sub Msg
