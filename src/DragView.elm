@@ -14,45 +14,41 @@ px number =
     toString number ++ "px"
 
 
+onMouseDown : String -> Attribute Msg
+onMouseDown key =
+    Html.Events.on "mousedown"
+        (Decode.map ((DragMessage key) << DragStart) Mouse.position)
+
+
 viewDraggable : DraggableModel -> String -> Html Msg -> Html Msg
 viewDraggable dict key html =
-    let
-        maybeDraggable =
-            Dict.get key dict
+    case
+        Dict.get key dict
+    of
+        Nothing ->
+            span
+                [ onMouseDown key ]
+                [ html ]
 
-        onMouseDown : Attribute Msg
-        onMouseDown =
-            Html.Events.on "mousedown"
-                (Decode.map ((DragMessage key) << DragStart) Mouse.position)
-    in
-        case maybeDraggable of
-            Nothing ->
+        Just draggable ->
+            let
+                position =
+                    case draggable.drag of
+                        Nothing ->
+                            draggable.position
+
+                        Just { start, current } ->
+                            Position (draggable.position.x + current.x - start.x) (draggable.position.y + current.y - start.y)
+            in
                 span
-                    [ onMouseDown ]
-                    [ html ]
-
-            Just draggable ->
-                let
-                    position : Position
-                    position =
-                        case draggable.drag of
-                            Nothing ->
-                                draggable.position
-
-                            Just { start, current } ->
-                                Position
-                                    (draggable.position.x + current.x - start.x)
-                                    (draggable.position.y + current.y - start.y)
-                in
-                    span
-                        [ onMouseDown
-                        , style
-                            [ ( "position", "relative" )
-                            , ( "left", px (.x position) )
-                            , ( "top", px (.y position) )
-                            ]
+                    [ onMouseDown key
+                    , style
+                        [ ( "position", "relative" )
+                        , ( "left", px (.x position) )
+                        , ( "top", px (.y position) )
                         ]
-                        [ html ]
+                    ]
+                    [ html ]
 
 
 dragSubscriptions : List IdentifiedDraggableWidget -> Sub Msg
