@@ -26,9 +26,7 @@ combinedSubscriptions =
 init : ( Model, Cmd msg )
 init =
     ( { lexical = LexicalController.init
-      , draggables =
-            Dict.empty
-                |> Dict.insert "text2" (DraggableWidget (Position 300 300) Nothing)
+      , draggables = Dict.empty
       , tableState = BowlingScoreView.initialTableState
       , lastKeyCode = Char.toCode '!'
       , bowlingResults = BowlingScoreTest.testResults

@@ -43,7 +43,7 @@ viewMaybeDraggable key maybeDraggable html =
                     div
                         [ onMouseDown
                         , style
-                            [ ( "position", "absolute" )
+                            [ ( "position", "relative" )
                             , ( "left", px (.x position) )
                             , ( "top", px (.y position) )
                             ]
