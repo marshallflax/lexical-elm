@@ -19,19 +19,18 @@ viewMaybeDraggable maybeDraggable html =
         Nothing ->
             html
 
-        Just (key, draggable) ->
+        Just ( key, draggable ) ->
             let
-                getPosition : DraggableWidget -> Position
-                getPosition { position, drag } =
-                    case drag of
+                position : Position
+                position =
+                    case draggable.drag of
                         Nothing ->
-                            position
+                            draggable.position
 
                         Just { start, current } ->
-                            Position (position.x + current.x - start.x) (position.y + current.y - start.y)
-
-                p : Position
-                p = getPosition draggable
+                            Position
+                                (draggable.position.x + current.x - start.x)
+                                (draggable.position.y + current.y - start.y)
 
                 onMouseDown : Attribute Msg
                 onMouseDown =
@@ -42,8 +41,8 @@ viewMaybeDraggable maybeDraggable html =
                     [ onMouseDown
                     , style
                         [ ( "position", "absolute" )
-                        , ( "left", px (.x p) )
-                        , ( "top", px (.y p) )
+                        , ( "left", px (.x position) )
+                        , ( "top", px (.y position) )
                         ]
                     ]
                     [ html ]
