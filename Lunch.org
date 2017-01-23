@@ -61,9 +61,6 @@
 **** Typical: [[https://en.wikipedia.org/wiki/Zipper_(data_structure)][zipper]] that keeps track of location within the data structure
 *** Map/Reduce approach to processing data yields hotspot-friendly code
 **** "Fold" is the standard "Reduce" operation.
-* But how can this work? Lots of recursive function calls.
-*** Loops implemented through recursion
-*** Tail Call Optimization allows us to avoid blowing-out the stack
 * But how can this work? Union Types
 ** Classic example:
    : Maybe d = Nothing | Just d
@@ -99,7 +96,52 @@
 ** Elm does double-buffering against a "Virtual DOM"
 *** Computes the delta and sends exactly that to the actual DOM
 *** The actual DOM is write-only ... any reads are from the Virtual DOM
-**** Events do contain info from the actual DOM of course
+*** Events do contain info from the actual DOM of course
+* But how can this work? Lots of recursive function calls.
+*** Loops implemented through recursion
+*** Tail Call Optimization allows us to avoid blowing-out the stack...compiler does this for you automatically when possible
+**** Inefficient:
+#+BEGIN_SRC
+fib n = if (n < 2) then 1 else (fib (n-1)) + (fib (n-2))
+#+END_SRC
+**** Faster
+#+BEGIN_SRC
+fib2: Int -> Int
+fib2 n =
+  let
+   helper : (Int, Int, Int) -> (Int, Int, Int)
+   helper (i, f2, f1) =
+    if (i <= 0) then (0, f1, f1+f2)
+    else helper(i-1, f1, f1+f2)
+
+   (zero, prior, answer) = helper (n, 0, 1)
+  in
+   answer
+#+END_SRC
+**** Super-generic
+#+BEGIN_SRC
+myiterate : Int -> (a -> a) -> (a -> a)
+myiterate n f =
+    List.foldl (>>) identity (List.repeat n f)
+
+fibStep : ( number, number ) -> ( number, number )
+fibStep ( x, y ) =
+    ( y, y + x )
+
+generalizedFib : Int -> ( number, number ) -> ( number, number )
+generalizedFib n =
+    myiterate n fibStep
+
+fib2 : Int -> Int
+fib2 n =
+    ( 0, 1 ) |> generalizedFib n |> Tuple.first
+#+END_SRC
+**** Idiomatic
+#+BEGIN_SRC
+fib3 : Int -> Int
+fib3 n =
+    List.foldl (\_ ( x, y ) -> ( y, y + x )) ( 0, 1 ) (List.repeat n 0) |> Tuple.first
+#+END_SRC
 * Modular Structure
 ** Modules declare what they export and what they import
 *** Cyclic dependencies result in a compilation error
@@ -140,7 +182,7 @@
 ** Widget library is still developing
 *** New widgets can be written using pure Elm
 ** View is simply native HTML layout -- lack of tools to graphically edit them
-* Time travel! [[http://localhost:8000/src/Main.elm]]
+* Time travel!!! [[http://localhost:8000/src/Main.elm]]
 #+AUTHOR: Marshall Flax
 #+OPTIONS: num:nil p:nil pri:nil stat:nilt tags:t tasks:t tex:t timestamp:nil toc:nil html-postamble:nil
 #+LATEX_HEADER: \usepackage[margin=0.5in]{geometry}
