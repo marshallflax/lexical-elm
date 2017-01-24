@@ -152,8 +152,7 @@ frequencyStats lexicalModel =
 
                     renderLine : List ( Int, ColoredWord ) -> Html Msg
                     renderLine listPart =
-                        Html.div [ stylesheet.class MyClass ]
-                            (List.map doWord listPart)
+                        Html.div [ stylesheet.class MyClass ] (List.map doWord listPart)
                  in
                     List.map renderLine (partitionedList lexicalModel)
                 )
@@ -165,7 +164,7 @@ frequencyStats lexicalModel =
         , tr
             []
             [ td [] [ text lexicalModel.graphs ]
-            , td [ style [ ( "width", "400px" ), ( "vertical-align", "top" ) ] ]
+            , td [ style [ ( "width", "800px" ), ( "vertical-align", "top" ) ] ]
                 [ FreqInfoView.renderNgraphs (Dict.get 3 lexicalModel.ngraphs) ]
             ]
         ]

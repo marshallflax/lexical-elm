@@ -47,30 +47,28 @@ renderWords currentWordsNormalized words =
 
 renderNgraphs : Maybe (Dict Int (List String)) -> Html Msg
 renderNgraphs freqToWords =
-    table
-        [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ]
-        ]
-        (List.map renderNgraph (List.reverse (Dict.toList (Maybe.withDefault Dict.empty freqToWords))))
-
-
-renderNgraph : ( Int, List String ) -> Html Msg
-renderNgraph ( size, words ) =
-    tr []
-        [ td [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ] ]
-            [ text (toString size) ]
-        , renderGraph words
-        ]
-
-
-renderGraph : List String -> Html Msg
-renderGraph words =
     let
         doWord : String -> Html Msg
         doWord word =
             span
                 []
                 [ text (" <" ++ word ++ "> ") ]
+
+        renderGraph : List String -> Html Msg
+        renderGraph words =
+            td
+                [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ] ]
+                (List.map doWord words)
+
+        renderNgraph : ( Int, List String ) -> Html Msg
+        renderNgraph ( size, words ) =
+            tr []
+                [ td [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ] ]
+                    [ text (toString size) ]
+                , renderGraph words
+                ]
     in
-        td
-            [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ] ]
-            (List.map doWord words)
+        table
+            [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ]
+            ]
+            (List.map renderNgraph (List.reverse (Dict.toList (Maybe.withDefault Dict.empty freqToWords))))
