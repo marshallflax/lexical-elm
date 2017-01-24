@@ -34,16 +34,24 @@ countList list =
 pairedList : Bool -> Int -> List String -> List String
 pairedList interposeUnderscores widths wordList =
     let
+        listOfLists : List (List String)
+        listOfLists =
+            List.map
+                (wordList |> flip List.drop)
+                (List.range 0 (widths - 1))
+
         perhapsInterperse : List String -> List String
         perhapsInterperse =
             if (interposeUnderscores) then
                 List.intersperse "_"
             else
                 identity
+
+        zipped : List (List String)
+        zipped =
+            listOfLists |> Misc.zipLists
     in
-        List.map (wordList |> flip List.drop) (List.range 0 (widths - 1))
-            |> Misc.zipLists
-            |> List.map (perhapsInterperse >> List.foldl (++) "")
+        zipped |> List.map (perhapsInterperse >> List.foldr (++) "")
 
 
 multiRemove : List comparable -> Dict comparable v -> Dict comparable v
@@ -54,9 +62,15 @@ multiRemove list dict =
 countFreq : Bool -> List ( Int, Int ) -> List String -> FreqInfo
 countFreq interposeUnderscores desired wordList =
     let
-        computeFrequencies len =
-            pairedList interposeUnderscores len wordList |> countList
+        pl : Int -> List String
+        pl len =
+            pairedList interposeUnderscores len wordList
 
+        computeFrequencies : Int -> Dict Int (List String)
+        computeFrequencies len =
+            pl len |> countList
+
+        addNGram : ( Int, Int ) -> Dict Int (Dict Int (List String)) -> Dict Int (Dict Int (List String))
         addNGram ( len, drop ) =
             Dict.insert len (computeFrequencies len |> multiRemove (List.range 1 drop))
     in
