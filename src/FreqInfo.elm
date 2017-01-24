@@ -38,8 +38,10 @@ pairedList widths wordList =
         |> List.map (List.intersperse "_" >> List.foldl (++) "")
 
 
-countFreq : List String -> FreqInfo
-countFreq wordList =
-    Dict.empty
-        |> Dict.insert 1 (countList (pairedList 1 wordList))
-        |> Dict.insert 2 (countList (pairedList 2 wordList) |> Dict.remove 1)
+countFreq : List ( Int, Int ) -> List String -> FreqInfo
+countFreq desired wordList =
+    let
+        addNGram ( len, drop ) =
+            Dict.insert len (countList (pairedList len wordList) |> Dict.remove drop)
+    in
+        List.foldl addNGram Dict.empty desired
