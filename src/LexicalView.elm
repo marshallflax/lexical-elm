@@ -4,6 +4,7 @@ import Array
 import ColoredWord exposing (ColoredWord, matchingWordsForColor)
 import ColoredWordView exposing (colorStyle, renderWord)
 import Css
+import Dict
 import DragView exposing (viewDraggable)
 import FreqInfoView exposing (renderFrequencies)
 import Html exposing (Html, button, div, span, text, input, p, table, tr, td)
@@ -157,9 +158,9 @@ frequencyStats lexicalModel =
                     List.map renderLine (partitionedList lexicalModel)
                 )
             , td [ style [ ( "width", "800px" ), ( "vertical-align", "top" ) ] ]
-                [ FreqInfoView.renderFrequencies lexicalModel.workingNormalized lexicalModel.frequencies.words ]
+                [ FreqInfoView.renderFrequencies lexicalModel.workingNormalized (Dict.get 1 lexicalModel.frequencies) ]
             , td [ style [ ( "width", "400px" ), ( "vertical-align", "top" ) ] ]
-                [ FreqInfoView.renderFrequencies lexicalModel.workingNormalized lexicalModel.frequencies.n2 ]
+                [ FreqInfoView.renderFrequencies lexicalModel.workingNormalized (Dict.get 2 lexicalModel.frequencies) ]
             ]
         ]
 

@@ -5,14 +5,12 @@ import Misc exposing (dictToListL)
 
 
 type alias FreqInfo =
-    { words : Dict Int (List String)
-    , n2 : Dict Int (List String)
-    }
+    Dict Int (Dict Int (List String))
 
 
 empty : FreqInfo
 empty =
-    { words = Dict.empty, n2 = Dict.empty }
+    Dict.empty
 
 
 {-|
@@ -42,8 +40,6 @@ pairedList widths wordList =
 
 countFreq : List String -> FreqInfo
 countFreq wordList =
-    { words =
-        countList (pairedList 1 wordList)
-    , n2 =
-        countList (pairedList 2 wordList) |> Dict.remove 1
-    }
+    Dict.empty
+        |> Dict.insert 1 (countList (pairedList 1 wordList))
+        |> Dict.insert 2 (countList (pairedList 2 wordList) |> Dict.remove 1)

@@ -9,14 +9,14 @@ import Set exposing (..)
 import Types exposing (..)
 
 
-renderFrequencies : Set String -> Dict Int (List String) -> Html Msg
+renderFrequencies : Set String -> Maybe (Dict Int (List String)) -> Html Msg
 renderFrequencies currentWordsNormalized freqToWords =
     table
         [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ]
         ]
         (List.map
             (renderFrequency currentWordsNormalized)
-            (List.reverse (Dict.toList freqToWords))
+            (List.reverse (Dict.toList (Maybe.withDefault Dict.empty freqToWords)))
         )
 
 
