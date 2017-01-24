@@ -39,6 +39,8 @@ type alias ComputedModel a =
         , workingNormalized : Set String
         , hideColors : Set String
         , frequencies : FreqInfo
+        , graphs : String
+        , ngraphs : FreqInfo
     }
 
 

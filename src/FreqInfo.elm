@@ -31,17 +31,25 @@ countList list =
             |> List.foldl (\( val, count ) -> Dict.update count (accumulateMaybe [] ((::) val))) Dict.empty
 
 
-pairedList : Int -> List String -> List String
-pairedList widths wordList =
-    List.map (wordList |> flip List.drop) (List.range 0 (widths - 1))
-        |> Misc.zipLists
-        |> List.map (List.intersperse "_" >> List.foldl (++) "")
+pairedList : Bool -> Int -> List String -> List String
+pairedList interposeUnderscores widths wordList =
+    let
+        perhapsInterperse : List String -> List String
+        perhapsInterperse =
+            if (interposeUnderscores) then
+                List.intersperse "_"
+            else
+                identity
+    in
+        List.map (wordList |> flip List.drop) (List.range 0 (widths - 1))
+            |> Misc.zipLists
+            |> List.map (perhapsInterperse >> List.foldl (++) "")
 
 
-countFreq : List ( Int, Int ) -> List String -> FreqInfo
-countFreq desired wordList =
+countFreq : Bool -> List ( Int, Int ) -> List String -> FreqInfo
+countFreq interposeUnderscores desired wordList =
     let
         addNGram ( len, drop ) =
-            Dict.insert len (countList (pairedList len wordList) |> Dict.remove drop)
+            Dict.insert len (countList (pairedList interposeUnderscores len wordList) |> Dict.remove drop)
     in
         List.foldl addNGram Dict.empty desired

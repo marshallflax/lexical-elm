@@ -162,6 +162,12 @@ frequencyStats lexicalModel =
             , td [ style [ ( "width", "400px" ), ( "vertical-align", "top" ) ] ]
                 [ FreqInfoView.renderFrequencies lexicalModel.workingNormalized (Dict.get 2 lexicalModel.frequencies) ]
             ]
+        , tr
+            []
+            [ td [] [ text lexicalModel.graphs ]
+            , td [ style [ ( "width", "400px" ), ( "vertical-align", "top" ) ] ]
+                [ FreqInfoView.renderFrequencies lexicalModel.workingNormalized (Dict.get 3 lexicalModel.ngraphs) ]
+            ]
         ]
 
 

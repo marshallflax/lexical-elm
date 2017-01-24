@@ -21,6 +21,8 @@ init =
     , hideColors = Set.empty
     , wordsPerLine = 10
     , frequencies = FreqInfo.empty
+    , graphs = "Graphs"
+    , ngraphs = FreqInfo.empty
     }
 
 
@@ -144,13 +146,18 @@ setWordsPerLine wordString model =
 
 dumpState : LexicalModel -> String
 dumpState model =
-    List.map dumpColoredWord (Array.toList model.words)
+    Array.toList model.words
+        |> List.map dumpColoredWord
         |> (String.join " ")
 
 
 updateModelWithNewText : String -> LexicalModel -> LexicalModel
 updateModelWithNewText newText model =
     let
+        graphs =
+            Regex.replace Regex.All (Regex.regex "[^0-9a-zA-Z]+") (\_ -> " ") newText
+                |> String.toLower
+
         words =
             splitIntoColorwords newText
 
@@ -160,5 +167,7 @@ updateModelWithNewText newText model =
         { model
             | text = newText
             , words = words
-            , frequencies = countFreq [ ( 1, 0 ), ( 2, 1 ) ] wordList
+            , frequencies = countFreq True [ ( 1, 0 ), ( 2, 1 ) ] wordList
+            , graphs = graphs
+            , ngraphs = countFreq False [ ( 3, 1 ) ] (String.toList graphs |> List.map String.fromChar)
         }
