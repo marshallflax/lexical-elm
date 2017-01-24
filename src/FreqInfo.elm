@@ -31,12 +31,8 @@ pairedList interposeUnderscores widths wordList =
                 List.intersperse "_"
             else
                 identity
-
-        zipped : List (List String)
-        zipped =
-            listOfLists |> Misc.zipLists
     in
-        zipped |> List.map (perhapsInterperse >> List.foldr (++) "")
+        listOfLists |> Misc.zipLists |> List.map (perhapsInterperse >> List.foldr (++) "")
 
 
 countFreq : Bool -> List ( Int, Int ) -> List String -> FreqInfo
@@ -58,7 +54,7 @@ countFreq interposeUnderscores desired wordList =
 
         computeFrequencies : Int -> Dict Int (List String)
         computeFrequencies len =
-            pairedList interposeUnderscores len wordList  |> countList
+            pairedList interposeUnderscores len wordList |> countList
 
         multiRemove : List comparable -> Dict comparable v -> Dict comparable v
         multiRemove list dict =
