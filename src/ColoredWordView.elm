@@ -1,12 +1,12 @@
-module ColoredWordView exposing (..)
+module ColoredWordView exposing (colorStyle, matchingStyle, renderWord)
 
-import ColoredWord exposing (..)
-import Html exposing (..)
+import ColoredWord exposing (ColoredWord)
+import Html exposing (Html, Attribute, span, text)
 import Html.Attributes exposing (value, checked, type_, readonly, placeholder, href)
 import Html.Events exposing (on, onClick, onInput, onMouseEnter)
 import Set exposing (Set)
 import Types exposing (..)
-import MiscView exposing (..)
+import MiscView exposing (onShiftedMouseEnter)
 
 
 colorStyle : String -> Html.Attribute msg
