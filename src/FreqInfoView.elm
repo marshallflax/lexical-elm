@@ -42,26 +42,26 @@ renderFrequencies currentWordsNormalized freqToWords =
 renderNgraphs : Maybe (Dict Int (List String)) -> Html Msg
 renderNgraphs freqToWords =
     let
-        doWord : String -> Html Msg
-        doWord word =
+        doInstance : String -> Html Msg
+        doInstance instance =
             span
                 []
-                [ text (" <" ++ word ++ "> ") ]
+                [ text ("<" ++ instance ++ "> ") ]
 
-        renderGraph : List String -> Html Msg
-        renderGraph words =
+        renderInstances : List String -> Html Msg
+        renderInstances instances =
             td
                 [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ] ]
-                (List.map doWord words)
+                (List.map doInstance instances)
 
-        renderNgraph : ( Int, List String ) -> Html Msg
-        renderNgraph ( size, words ) =
+        renderFrequency : ( Int, List String ) -> Html Msg
+        renderFrequency ( frequency, instances ) =
             tr []
                 [ td [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ] ]
-                    [ text (toString size) ]
-                , renderGraph words
+                    [ text (toString frequency) ]
+                , renderInstances instances
                 ]
     in
         table
             [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ] ]
-            (List.map renderNgraph (List.reverse (Dict.toList (Maybe.withDefault Dict.empty freqToWords))))
+            (List.map renderFrequency (List.reverse (Dict.toList (Maybe.withDefault Dict.empty freqToWords))))
