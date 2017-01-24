@@ -1,4 +1,4 @@
-module FreqInfoView exposing (renderFrequencies)
+module FreqInfoView exposing (renderFrequencies, renderNgraphs)
 
 import ColoredWordView exposing (matchingStyle)
 import Dict exposing (..)
@@ -38,6 +38,37 @@ renderWords currentWordsNormalized words =
                 [ onShiftedMouseEnter (LexicalMessage (SetCurrentNormalized word))
                 , style (matchingStyle (Set.member word currentWordsNormalized))
                 ]
+                [ text (" <" ++ word ++ "> ") ]
+    in
+        td
+            [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ] ]
+            (List.map doWord words)
+
+
+renderNgraphs : Maybe (Dict Int (List String)) -> Html Msg
+renderNgraphs freqToWords =
+    table
+        [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ]
+        ]
+        (List.map renderNgraph (List.reverse (Dict.toList (Maybe.withDefault Dict.empty freqToWords))))
+
+
+renderNgraph : ( Int, List String ) -> Html Msg
+renderNgraph ( size, words ) =
+    tr []
+        [ td [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ] ]
+            [ text (toString size) ]
+        , renderGraph words
+        ]
+
+
+renderGraph : List String -> Html Msg
+renderGraph words =
+    let
+        doWord : String -> Html Msg
+        doWord word =
+            span
+                []
                 [ text (" <" ++ word ++ "> ") ]
     in
         td

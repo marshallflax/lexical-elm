@@ -166,7 +166,7 @@ frequencyStats lexicalModel =
             []
             [ td [] [ text lexicalModel.graphs ]
             , td [ style [ ( "width", "400px" ), ( "vertical-align", "top" ) ] ]
-                [ FreqInfoView.renderFrequencies lexicalModel.workingNormalized (Dict.get 3 lexicalModel.ngraphs) ]
+                [ FreqInfoView.renderNgraphs (Dict.get 3 lexicalModel.ngraphs) ]
             ]
         ]
 
