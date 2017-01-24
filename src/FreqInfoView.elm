@@ -1,11 +1,11 @@
 module FreqInfoView exposing (renderFrequencies, renderNgraphs)
 
 import ColoredWordView exposing (matchingStyle)
-import Dict exposing (..)
+import Dict exposing (Dict)
 import Html exposing (Html, table, tr, td, text, span)
 import Html.Attributes exposing (style)
-import MiscView exposing (..)
-import Set exposing (..)
+import MiscView exposing (onShiftedMouseEnter)
+import Set exposing (Set)
 import Types exposing (..)
 
 
