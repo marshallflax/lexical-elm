@@ -16,25 +16,6 @@ empty =
     Dict.empty
 
 
-pairedList : Bool -> Int -> List String -> List String
-pairedList interposeUnderscores widths wordList =
-    let
-        listOfLists : List (List String)
-        listOfLists =
-            List.map
-                (wordList |> flip List.drop)
-                (List.range 0 (widths - 1))
-
-        perhapsInterperse : List String -> List String
-        perhapsInterperse =
-            if (interposeUnderscores) then
-                List.intersperse "_"
-            else
-                identity
-    in
-        listOfLists |> Misc.zipLists |> List.map (perhapsInterperse >> List.foldr (++) "")
-
-
 countFreq : Bool -> List ( Int, Int ) -> List String -> FreqInfo
 countFreq interposeUnderscores desired wordList =
     let
@@ -52,9 +33,25 @@ countFreq interposeUnderscores desired wordList =
                 |> dictToListL
                 |> List.foldl (\( val, count ) -> Dict.update count (accumulateMaybe [] ((::) val))) Dict.empty
 
+        perhapsInterperse : Bool -> List String -> List String
+        perhapsInterperse interposeUnderscores =
+            if (interposeUnderscores) then
+                List.intersperse "_"
+            else
+                identity
+
+        listOfLists : Int -> List a -> List (List a)
+        listOfLists widths list =
+            List.map
+                (list |> flip List.drop)
+                (List.range 0 (widths - 1))
+
         computeFrequencies : Int -> Dict Int (List String)
         computeFrequencies len =
-            pairedList interposeUnderscores len wordList |> countList
+            listOfLists len wordList
+                |> Misc.zipLists
+                |> List.map (perhapsInterperse interposeUnderscores >> List.foldr (++) "")
+                |> countList
 
         multiRemove : List comparable -> Dict comparable v -> Dict comparable v
         multiRemove list dict =
