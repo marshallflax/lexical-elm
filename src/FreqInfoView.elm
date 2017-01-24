@@ -38,7 +38,7 @@ renderWords currentWordsNormalized words =
                 [ onShiftedMouseEnter (LexicalMessage (SetCurrentNormalized word))
                 , style (matchingStyle (Set.member word currentWordsNormalized))
                 ]
-                [ text (" " ++ word ++ " ") ]
+                [ text (" <" ++ word ++ "> ") ]
     in
         td
             [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ] ]
