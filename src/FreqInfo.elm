@@ -4,6 +4,9 @@ import Dict exposing (Dict)
 import Misc exposing (dictToListL)
 
 
+{-|
+length_of_sequence -> frequency_of_occurrence -> list_of_occurrences
+-}
 type alias FreqInfo =
     Dict Int (Dict Int (List String))
 
@@ -11,24 +14,6 @@ type alias FreqInfo =
 empty : FreqInfo
 empty =
     Dict.empty
-
-
-{-|
-        -- first: count instances of each element into dict of {element -> count}
-        -- then: convert to list of (element, count) pairs
-        -- then: convert to dict of {count -> list element}
--}
-countList : List comparable -> Dict Int (List comparable)
-countList list =
-    let
-        accumulateMaybe : b -> (b -> a) -> Maybe b -> Maybe a
-        accumulateMaybe default verb maybe =
-            Maybe.withDefault default maybe |> verb |> Just
-    in
-        list
-            |> List.foldl (flip Dict.update (accumulateMaybe 0 ((+) 1))) Dict.empty
-            |> dictToListL
-            |> List.foldl (\( val, count ) -> Dict.update count (accumulateMaybe [] ((::) val))) Dict.empty
 
 
 pairedList : Bool -> Int -> List String -> List String
@@ -54,21 +39,30 @@ pairedList interposeUnderscores widths wordList =
         zipped |> List.map (perhapsInterperse >> List.foldr (++) "")
 
 
-multiRemove : List comparable -> Dict comparable v -> Dict comparable v
-multiRemove list dict =
-    List.foldl (\k -> Dict.remove k) dict list
-
-
 countFreq : Bool -> List ( Int, Int ) -> List String -> FreqInfo
 countFreq interposeUnderscores desired wordList =
     let
-        pl : Int -> List String
-        pl len =
-            pairedList interposeUnderscores len wordList
+        accumulateMaybe : b -> (b -> a) -> Maybe b -> Maybe a
+        accumulateMaybe default verb maybe =
+            Maybe.withDefault default maybe |> verb |> Just
+
+        -- first: count instances of each element into dict of {element -> count}
+        -- then: convert to list of (element, count) pairs
+        -- then: convert to dict of {count -> list element}
+        countList : List comparable -> Dict Int (List comparable)
+        countList list =
+            list
+                |> List.foldl (flip Dict.update (accumulateMaybe 0 ((+) 1))) Dict.empty
+                |> dictToListL
+                |> List.foldl (\( val, count ) -> Dict.update count (accumulateMaybe [] ((::) val))) Dict.empty
 
         computeFrequencies : Int -> Dict Int (List String)
         computeFrequencies len =
-            pl len |> countList
+            pairedList interposeUnderscores len wordList  |> countList
+
+        multiRemove : List comparable -> Dict comparable v -> Dict comparable v
+        multiRemove list dict =
+            List.foldl (\k -> Dict.remove k) dict list
 
         addNGram : ( Int, Int ) -> Dict Int (Dict Int (List String)) -> Dict Int (Dict Int (List String))
         addNGram ( len, drop ) =
