@@ -14,8 +14,7 @@ root : Model -> Html Msg
 root model =
     div []
         [ Css.style [ Html.Attributes.scoped True ] LexicalView.stylesheet
-          --  , lazy DragView.viewDraggables (Dict.toList model.draggables)
-        , lazy LexicalView.viewLexicalModel model
+        , lazy LexicalView.viewLexicalModel ( model.draggables, model.lexical )
         , colophon
         , table [ style [ ( "display", "none" ) ] ]
             [ tr []

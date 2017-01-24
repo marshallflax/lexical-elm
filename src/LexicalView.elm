@@ -16,26 +16,21 @@ import Set exposing (Set)
 import Types exposing (..)
 
 
-viewLexicalModel : Model -> Html Msg
-viewLexicalModel model =
-    let
-        lexicalModel : LexicalModel
-        lexicalModel =
-            model.lexical
-    in
-        div []
-            [ showColorsOfCurrentWord lexicalModel
-            , p [] [ Misc.zipLists rainbowList |> toString |> text ]
-            , showSaveButton
-            , showTextInput lexicalModel
-            , colorButtons model.draggables lexicalModel.hideColors
-            , p [] []
-            , viewDraggable model.draggables "text1" resetButtons
-            , wordsPerLine lexicalModel
-            , wordStats lexicalModel
-            , wordsForColor lexicalModel
-            , frequencyStats lexicalModel
-            ]
+viewLexicalModel : ( DraggableModel, LexicalModel ) -> Html Msg
+viewLexicalModel ( draggables, lexicalModel ) =
+    div []
+        [ showColorsOfCurrentWord lexicalModel
+        , p [] [ Misc.zipLists rainbowList |> toString |> text ]
+        , showSaveButton
+        , showTextInput lexicalModel
+        , colorButtons draggables lexicalModel.hideColors
+        , p [] []
+        , viewDraggable draggables "text1" resetButtons
+        , wordsPerLine lexicalModel
+        , wordStats lexicalModel
+        , wordsForColor lexicalModel
+        , frequencyStats lexicalModel
+        ]
 
 
 showColorsOfCurrentWord : LexicalModel -> Html Msg
