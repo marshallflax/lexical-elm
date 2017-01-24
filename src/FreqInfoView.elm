@@ -11,26 +11,6 @@ import Types exposing (..)
 
 renderFrequencies : Set String -> Maybe (Dict Int (List String)) -> Html Msg
 renderFrequencies currentWordsNormalized freqToWords =
-    table
-        [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ]
-        ]
-        (List.map
-            (renderFrequency currentWordsNormalized)
-            (List.reverse (Dict.toList (Maybe.withDefault Dict.empty freqToWords)))
-        )
-
-
-renderFrequency : Set String -> ( Int, List String ) -> Html Msg
-renderFrequency currentWordsNormalized ( size, words ) =
-    tr []
-        [ td [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ] ]
-            [ text (toString size) ]
-        , renderWords currentWordsNormalized words
-        ]
-
-
-renderWords : Set String -> List String -> Html Msg
-renderWords currentWordsNormalized words =
     let
         doWord : String -> Html Msg
         doWord word =
@@ -39,10 +19,27 @@ renderWords currentWordsNormalized words =
                 , style (matchingStyle (Set.member word currentWordsNormalized))
                 ]
                 [ text (" <" ++ word ++ "> ") ]
+
+        renderWords : Set String -> List String -> Html Msg
+        renderWords currentWordsNormalized words =
+            td
+                [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ] ]
+                (List.map doWord words)
+
+        renderFrequency : Set String -> ( Int, List String ) -> Html Msg
+        renderFrequency currentWordsNormalized ( size, words ) =
+            tr []
+                [ td [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ] ]
+                    [ text (toString size) ]
+                , renderWords currentWordsNormalized words
+                ]
     in
-        td
+        table
             [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ] ]
-            (List.map doWord words)
+            (List.map
+                (renderFrequency currentWordsNormalized)
+                (List.reverse (Dict.toList (Maybe.withDefault Dict.empty freqToWords)))
+            )
 
 
 renderNgraphs : Maybe (Dict Int (List String)) -> Html Msg
