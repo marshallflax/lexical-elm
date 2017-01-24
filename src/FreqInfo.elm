@@ -40,15 +40,9 @@ countFreq interposeUnderscores desired wordList =
             else
                 identity
 
-        listOfLists : Int -> List a -> List (List a)
-        listOfLists widths list =
-            List.map
-                (list |> flip List.drop)
-                (List.range 0 (widths - 1))
-
         computeFrequencies : Int -> Dict Int (List String)
         computeFrequencies len =
-            listOfLists len wordList
+            List.map (wordList |> flip List.drop) (List.range 0 (len - 1))
                 |> Misc.zipLists
                 |> List.map (perhapsInterperse interposeUnderscores >> List.foldr (++) "")
                 |> countList
