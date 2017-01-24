@@ -45,11 +45,14 @@ pairedList interposeUnderscores widths wordList =
             |> Misc.zipLists
             |> List.map (perhapsInterperse >> List.foldl (++) "")
 
+multiRemove : List comparable -> Dict comparable v -> Dict comparable v
+multiRemove list dict =
+    List.foldl (\k -> Dict.remove k) dict list
 
 countFreq : Bool -> List ( Int, Int ) -> List String -> FreqInfo
 countFreq interposeUnderscores desired wordList =
     let
         addNGram ( len, drop ) =
-            Dict.insert len (countList (pairedList interposeUnderscores len wordList) |> Dict.remove drop)
+            Dict.insert len (countList (pairedList interposeUnderscores len wordList) |> multiRemove (List.range 1 drop))
     in
         List.foldl addNGram Dict.empty desired

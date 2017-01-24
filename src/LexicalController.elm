@@ -169,5 +169,5 @@ updateModelWithNewText newText model =
             , words = words
             , frequencies = countFreq True [ ( 1, 0 ), ( 2, 1 ) ] wordList
             , graphs = graphs
-            , ngraphs = countFreq False [ ( 3, 1 ) ] (String.toList graphs |> List.map String.fromChar)
+            , ngraphs = countFreq False [ ( 3, 3 ) ] (String.toList graphs |> List.map String.fromChar)
         }
