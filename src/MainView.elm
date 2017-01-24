@@ -17,13 +17,13 @@ root model =
           --  , lazy DragView.viewDraggables (Dict.toList model.draggables)
         , lazy LexicalView.viewLexicalModel model
         , colophon
-        , table []
+        , table [ style [ ( "display", "none" ) ] ]
             [ tr []
                 [ td [] [ lazy BowlingScoreView.showTestResultsOld model.bowlingResults ]
                 , td [] [ lazy2 BowlingScoreView.showTestResults model.tableState model.bowlingResults ]
                 ]
             ]
-        , p [] [ text (toString model.lastKeyCode) ]
+        , p [ style [ ( "display", "none" ) ] ] [ text (toString model.lastKeyCode) ]
         ]
 
 

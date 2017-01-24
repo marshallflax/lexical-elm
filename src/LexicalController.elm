@@ -21,7 +21,7 @@ init =
     , hideColors = Set.empty
     , wordsPerLine = 10
     , frequencies = FreqInfo.empty
-    , graphs = "Graphs"
+    , graphs = ""
     , ngraphs = FreqInfo.empty
     }
 
@@ -155,7 +155,9 @@ updateModelWithNewText : String -> LexicalModel -> LexicalModel
 updateModelWithNewText newText model =
     let
         graphs =
-            Regex.replace Regex.All (Regex.regex "[^0-9a-zA-Z]+") (\_ -> " ") newText
+            newText
+                |> Regex.replace Regex.All (Regex.regex "[']") (\_ -> "")
+                |> Regex.replace Regex.All (Regex.regex "[^0-9a-zA-Z]+") (\_ -> " ")
                 |> String.toLower
 
         words =
@@ -169,5 +171,5 @@ updateModelWithNewText newText model =
             , words = words
             , frequencies = countFreq True [ ( 1, 0 ), ( 2, 1 ) ] wordList
             , graphs = graphs
-            , ngraphs = countFreq False [ ( 3, 3 ) ] (String.toList graphs |> List.map String.fromChar)
+            , ngraphs = countFreq False [ ( 3, 1 ) ] (String.toList graphs |> List.map String.fromChar)
         }
