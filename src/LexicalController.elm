@@ -148,15 +148,6 @@ dumpState model =
         |> (String.join " ")
 
 
-
--- all stats for length 1 and all but singletons for length 2
-
-
-desiredWordFrequencies : List ( Int, Int )
-desiredWordFrequencies =
-    [ ( 1, 0 ), ( 2, 1 ) ]
-
-
 updateModelWithNewText : String -> LexicalModel -> LexicalModel
 updateModelWithNewText newText model =
     let
@@ -169,5 +160,5 @@ updateModelWithNewText newText model =
         { model
             | text = newText
             , words = words
-            , frequencies = countFreq desiredWordFrequencies wordList
+            , frequencies = countFreq [ ( 1, 0 ), ( 2, 1 ) ] wordList
         }
