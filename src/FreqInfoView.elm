@@ -36,7 +36,7 @@ renderFrequencies currentWordsNormalized freqToWords =
     in
         table
             [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ] ]
-            (List.map renderFrequency (List.reverse (Dict.toList (Maybe.withDefault Dict.empty freqToWords))))
+            (List.map renderFrequency <| List.reverse <| Dict.toList <| Maybe.withDefault Dict.empty freqToWords)
 
 
 renderNgraphs : Maybe (Dict Int (List String)) -> Html Msg
@@ -64,4 +64,4 @@ renderNgraphs freqToWords =
     in
         table
             [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ] ]
-            (List.map renderFrequency (List.reverse (Dict.toList (Maybe.withDefault Dict.empty freqToWords))))
+            (List.map renderFrequency <| List.reverse <| Dict.toList <| Maybe.withDefault Dict.empty freqToWords)
