@@ -27,22 +27,11 @@ countFreq perhapsIntersperse desiredLengthsAndMinimumFrequencies wordList =
         accumulateMaybe default verb maybe =
             Maybe.withDefault default maybe |> verb |> Just
 
-        -- first, compute lists omitting 0, 1, 2, ..., len-1
-        -- then: zip them together to get (0, 1, ..., len-1), (1, 2, ... len), (2, 3, ..., len+1) ...
-        -- then: join them using the perhapsIntersperse
-        -- then: count instances of each element into dict of {element -> count}
-        computeWordToCount : Int -> Dict String Int
-        computeWordToCount len =
-            List.map (wordList |> flip List.drop) (List.range 0 (len - 1))
-                |> Misc.zipLists
-                |> List.map (perhapsIntersperse >> List.foldr (++) "")
-                |> List.foldl (flip Dict.update (accumulateMaybe 0 ((+) 1))) Dict.empty
-
         -- then: convert to list of (element, count) pairs
         -- then: convert to dict of {count -> list element} (using foldr so the :: in the foldr does what we want)
-        computeFrequencies : Int -> Int -> LenInfo
-        computeFrequencies drop len =
-            computeWordToCount len
+        computeFrequencies : Int -> Dict String Int -> LenInfo
+        computeFrequencies drop wordToCount =
+            wordToCount
                 |> Dict.toList
                 |> List.foldr (\( val, count ) -> Dict.update count (accumulateMaybe [] ((::) val))) Dict.empty
                 |> (List.foldl Dict.remove |> flip) (List.range 1 drop)
@@ -50,9 +39,16 @@ countFreq perhapsIntersperse desiredLengthsAndMinimumFrequencies wordList =
         addNGram : ( Int, Int ) -> Dict Int LenInfo -> Dict Int LenInfo
         addNGram ( len, drop ) =
             let
+                -- first, compute lists omitting 0, 1, 2, ..., len-1
+                -- then: zip them together to get (0, 1, ..., len-1), (1, 2, ... len), (2, 3, ..., len+1) ...
+                -- then: join them using the perhapsIntersperse
+                -- then: count instances of each element into dict of {element -> count}
                 wordToCount =
-                    computeWordToCount len
+                    List.map (wordList |> flip List.drop) (List.range 0 (len - 1))
+                        |> Misc.zipLists
+                        |> List.map (perhapsIntersperse >> List.foldr (++) "")
+                        |> List.foldl (flip Dict.update (accumulateMaybe 0 ((+) 1))) Dict.empty
             in
-                computeFrequencies drop len |> Dict.insert len
+                computeFrequencies drop wordToCount |> Dict.insert len
     in
         List.foldl addNGram Dict.empty desiredLengthsAndMinimumFrequencies
