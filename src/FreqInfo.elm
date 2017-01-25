@@ -27,15 +27,6 @@ countFreq perhapsIntersperse desiredLengthsAndMinimumFrequencies wordList =
         accumulateMaybe default verb maybe =
             Maybe.withDefault default maybe |> verb |> Just
 
-        -- then: convert to list of (element, count) pairs
-        -- then: convert to dict of {count -> list element} (using foldr so the :: in the foldr does what we want)
-        computeFrequencies : Int -> Dict String Int -> LenInfo
-        computeFrequencies drop wordToCount =
-            wordToCount
-                |> Dict.toList
-                |> List.foldr (\( val, count ) -> Dict.update count (accumulateMaybe [] ((::) val))) Dict.empty
-                |> (List.foldl Dict.remove |> flip) (List.range 1 drop)
-
         addNGram : ( Int, Int ) -> Dict Int LenInfo -> Dict Int LenInfo
         addNGram ( len, drop ) =
             let
@@ -48,6 +39,15 @@ countFreq perhapsIntersperse desiredLengthsAndMinimumFrequencies wordList =
                         |> Misc.zipLists
                         |> List.map (perhapsIntersperse >> List.foldr (++) "")
                         |> List.foldl (flip Dict.update (accumulateMaybe 0 ((+) 1))) Dict.empty
+
+                -- then: convert to list of (element, count) pairs
+                -- then: convert to dict of {count -> list element} (using foldr so the :: in the foldr does what we want)
+                computeFrequencies : Int -> Dict String Int -> LenInfo
+                computeFrequencies drop wordToCount =
+                    wordToCount
+                        |> Dict.toList
+                        |> List.foldr (\( val, count ) -> Dict.update count (accumulateMaybe [] ((::) val))) Dict.empty
+                        |> (List.foldl Dict.remove |> flip) (List.range 1 drop)
             in
                 computeFrequencies drop wordToCount |> Dict.insert len
     in
