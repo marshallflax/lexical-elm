@@ -1,6 +1,5 @@
-module Misc exposing (toggleSet, combineSubscriptions, zipLists)
+module Misc exposing (toggleSet, combineSubscriptions, zipLists, accumulateMaybe)
 
-import Dict exposing (Dict)
 import Set exposing (Set)
 
 
@@ -15,6 +14,11 @@ toggleSet element set =
 combineSubscriptions : List (m -> Sub msg) -> (m -> Sub msg)
 combineSubscriptions list model =
     Sub.batch (List.map ((|>) model) list)
+
+
+accumulateMaybe : b -> (b -> a) -> Maybe b -> Maybe a
+accumulateMaybe default verb maybe =
+    Maybe.withDefault default maybe |> verb |> Just
 
 
 zipLists : List (List a) -> List (List a)
