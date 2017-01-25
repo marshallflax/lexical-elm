@@ -17,7 +17,7 @@ empty =
 
 
 countFreq : (List String -> List String) -> List ( Int, Int ) -> List String -> FreqInfo
-countFreq perhapsIntersperse desired wordList =
+countFreq perhapsIntersperse desiredLengthsAndMinimumFrequencies wordList =
     let
         accumulateMaybe : b -> (b -> a) -> Maybe b -> Maybe a
         accumulateMaybe default verb maybe =
@@ -25,8 +25,8 @@ countFreq perhapsIntersperse desired wordList =
 
         -- Same as Dict.toList except uses foldl rather than foldr to get list from end, which is useful if piped into a List.foldl
         dictToListL : Dict comparable v -> List ( comparable, v )
-        dictToListL dict =
-            Dict.foldl (\key value list -> ( key, value ) :: list) [] dict
+        dictToListL =
+            Dict.foldl (\key value list -> ( key, value ) :: list) []
 
         -- first: count instances of each element into dict of {element -> count}
         -- then: convert to list of (element, count) pairs
@@ -45,12 +45,9 @@ countFreq perhapsIntersperse desired wordList =
                 |> List.map (perhapsIntersperse >> List.foldr (++) "")
                 |> countList
 
-        multiRemove : List comparable -> Dict comparable v -> Dict comparable v
-        multiRemove =
-            List.foldl Dict.remove |> flip
-
         addNGram : ( Int, Int ) -> Dict Int (Dict Int (List String)) -> Dict Int (Dict Int (List String))
         addNGram ( len, drop ) =
-            Dict.insert len (computeFrequencies len |> multiRemove (List.range 1 drop))
+            Dict.insert len
+                (computeFrequencies len |> (List.foldl Dict.remove |> flip) (List.range 1 drop))
     in
-        List.foldl addNGram Dict.empty desired
+        List.foldl addNGram Dict.empty desiredLengthsAndMinimumFrequencies
