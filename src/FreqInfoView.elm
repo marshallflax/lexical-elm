@@ -10,15 +10,13 @@ import Set exposing (Set)
 import Types exposing (..)
 
 
-renderFrequencies : Set String -> Maybe LenInfo -> Html Msg
-renderFrequencies currentWordsNormalized freqToWords =
+renderGeneric : (String -> List (Html.Attribute Msg)) -> Set String -> Maybe LenInfo -> Html Msg
+renderGeneric computeStyle currentWordsNormalized freqToWords =
     let
         doWord : String -> Html Msg
         doWord word =
             span
-                [ onShiftedMouseEnter (LexicalMessage (SetCurrentNormalized word))
-                , style (matchingStyle (Set.member word currentWordsNormalized))
-                ]
+                (computeStyle word)
                 [ text (" <" ++ word ++ "> ") ]
 
         renderWords : List String -> Html Msg
@@ -40,29 +38,27 @@ renderFrequencies currentWordsNormalized freqToWords =
             (List.map renderFrequency <| List.reverse <| Dict.toList <| .freqToList <| Maybe.withDefault emptyLenInfo freqToWords)
 
 
+renderFrequencies : Set String -> Maybe LenInfo -> Html Msg
+renderFrequencies currentWordsNormalized freqToWords =
+    let
+        computeStyle : String -> List (Html.Attribute Msg)
+        computeStyle word =
+            [ onShiftedMouseEnter (LexicalMessage (SetCurrentNormalized word))
+            , style (matchingStyle (Set.member word currentWordsNormalized))
+            ]
+    in
+        renderGeneric computeStyle currentWordsNormalized freqToWords
+
+
 renderNgraphs : Maybe LenInfo -> Html Msg
 renderNgraphs freqToWords =
     let
-        doInstance : String -> Html Msg
-        doInstance instance =
-            span
-                []
-                [ text ("<" ++ instance ++ "> ") ]
+        computeStyle : String -> List (Html.Attribute Msg)
+        computeStyle word =
+            []
 
-        renderInstances : List String -> Html Msg
-        renderInstances instances =
-            td
-                [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ] ]
-                (List.map doInstance instances)
-
-        renderFrequency : ( Int, List String ) -> Html Msg
-        renderFrequency ( frequency, instances ) =
-            tr []
-                [ td [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ] ]
-                    [ text (toString frequency) ]
-                , renderInstances instances
-                ]
+        currentWordsNormalized : Set String
+        currentWordsNormalized =
+            Set.empty
     in
-        table
-            [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ] ]
-            (List.map renderFrequency <| List.reverse <| Dict.toList <| .freqToList <| Maybe.withDefault emptyLenInfo freqToWords)
+        renderGeneric computeStyle currentWordsNormalized freqToWords

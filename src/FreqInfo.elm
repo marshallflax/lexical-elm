@@ -12,7 +12,9 @@ type alias LenInfo =
 
 emptyLenInfo : LenInfo
 emptyLenInfo =
-    { tokenToCount = Dict.empty, freqToList = Dict.empty }
+    { tokenToCount = Dict.empty
+    , freqToList = Dict.empty
+    }
 
 
 type alias FreqInfo =
