@@ -23,27 +23,20 @@ countFreq perhapsIntersperse desiredLengthsAndMinimumFrequencies wordList =
         accumulateMaybe default verb maybe =
             Maybe.withDefault default maybe |> verb |> Just
 
-        -- Same as Dict.toList except uses foldl rather than foldr to get list from end, which is useful if piped into a List.foldl
-        dictToListL : Dict comparable v -> List ( comparable, v )
-        dictToListL =
-            Dict.foldl (\key value list -> ( key, value ) :: list) []
-
-        -- first: count instances of each element into dict of {element -> count}
+        -- first, compute lists omitting 0, 1, 2, ..., len-1
+        -- then: zip them together to get (0, 1, ..., len-1), (1, 2, ... len), (2, 3, ..., len+1) ...
+        -- then: join them using the perhapsIntersperse
+        -- then: count instances of each element into dict of {element -> count}
         -- then: convert to list of (element, count) pairs
-        -- then: convert to dict of {count -> list element}
-        countList : List comparable -> Dict Int (List comparable)
-        countList list =
-            list
-                |> List.foldl (flip Dict.update (accumulateMaybe 0 ((+) 1))) Dict.empty
-                |> dictToListL
-                |> List.foldl (\( val, count ) -> Dict.update count (accumulateMaybe [] ((::) val))) Dict.empty
-
+        -- then: convert to dict of {count -> list element} (using foldr so the :: in the foldr does what we want)
         computeFrequencies : Int -> Dict Int (List String)
         computeFrequencies len =
             List.map (wordList |> flip List.drop) (List.range 0 (len - 1))
                 |> Misc.zipLists
                 |> List.map (perhapsIntersperse >> List.foldr (++) "")
-                |> countList
+                |> List.foldl (flip Dict.update (accumulateMaybe 0 ((+) 1))) Dict.empty
+                |> Dict.toList
+                |> List.foldr (\( val, count ) -> Dict.update count (accumulateMaybe [] ((::) val))) Dict.empty
 
         addNGram : ( Int, Int ) -> Dict Int (Dict Int (List String)) -> Dict Int (Dict Int (List String))
         addNGram ( len, drop ) =
