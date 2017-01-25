@@ -33,18 +33,18 @@ countFreq perhapsIntersperse desiredLengthsAndMinimumFrequencies wordList =
         -- then: count instances of each element into dict of {element -> count}
         -- then: convert to list of (element, count) pairs
         -- then: convert to dict of {count -> list element} (using foldr so the :: in the foldr does what we want)
-        computeFrequencies : Int -> LenInfo
-        computeFrequencies len =
+        computeFrequencies : Int -> Int -> LenInfo
+        computeFrequencies len drop =
             List.map (wordList |> flip List.drop) (List.range 0 (len - 1))
                 |> Misc.zipLists
                 |> List.map (perhapsIntersperse >> List.foldr (++) "")
                 |> List.foldl (flip Dict.update (accumulateMaybe 0 ((+) 1))) Dict.empty
                 |> Dict.toList
                 |> List.foldr (\( val, count ) -> Dict.update count (accumulateMaybe [] ((::) val))) Dict.empty
+                |> (List.foldl Dict.remove |> flip) (List.range 1 drop)
 
         addNGram : ( Int, Int ) -> Dict Int LenInfo -> Dict Int LenInfo
         addNGram ( len, drop ) =
-            Dict.insert len
-                (computeFrequencies len |> (List.foldl Dict.remove |> flip) (List.range 1 drop))
+            computeFrequencies len drop |> Dict.insert len
     in
         List.foldl addNGram Dict.empty desiredLengthsAndMinimumFrequencies
