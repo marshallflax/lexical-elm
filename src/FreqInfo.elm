@@ -4,11 +4,15 @@ import Dict exposing (Dict)
 import Misc exposing (zipLists)
 
 
+type alias LenInfo =
+    Dict Int (List String)
+
+
 {-|
 length_of_sequence -> frequency_of_occurrence -> list_of_occurrences
 -}
 type alias FreqInfo =
-    Dict Int (Dict Int (List String))
+    Dict Int LenInfo
 
 
 empty : FreqInfo
@@ -29,7 +33,7 @@ countFreq perhapsIntersperse desiredLengthsAndMinimumFrequencies wordList =
         -- then: count instances of each element into dict of {element -> count}
         -- then: convert to list of (element, count) pairs
         -- then: convert to dict of {count -> list element} (using foldr so the :: in the foldr does what we want)
-        computeFrequencies : Int -> Dict Int (List String)
+        computeFrequencies : Int -> LenInfo
         computeFrequencies len =
             List.map (wordList |> flip List.drop) (List.range 0 (len - 1))
                 |> Misc.zipLists
@@ -38,7 +42,7 @@ countFreq perhapsIntersperse desiredLengthsAndMinimumFrequencies wordList =
                 |> Dict.toList
                 |> List.foldr (\( val, count ) -> Dict.update count (accumulateMaybe [] ((::) val))) Dict.empty
 
-        addNGram : ( Int, Int ) -> Dict Int (Dict Int (List String)) -> Dict Int (Dict Int (List String))
+        addNGram : ( Int, Int ) -> Dict Int LenInfo -> Dict Int LenInfo
         addNGram ( len, drop ) =
             Dict.insert len
                 (computeFrequencies len |> (List.foldl Dict.remove |> flip) (List.range 1 drop))
