@@ -1,11 +1,18 @@
-module FreqInfo exposing (FreqInfo, empty, countFreq)
+module FreqInfo exposing (LenInfo, emptyLenInfo, FreqInfo, empty, countFreq)
 
 import Dict exposing (Dict)
 import Misc exposing (zipLists, accumulateMaybe)
 
 
 type alias LenInfo =
-    Dict Int (List String)
+    { tokenToCount : Dict String Int
+    , freqToList : Dict Int (List String)
+    }
+
+
+emptyLenInfo : LenInfo
+emptyLenInfo =
+    { tokenToCount = Dict.empty, freqToList = Dict.empty }
 
 
 type alias FreqInfo =
@@ -32,13 +39,13 @@ countFreq perhapsIntersperse desiredLengthsAndMinimumFrequencies tokenList =
                         |> List.foldl (flip Dict.update (accumulateMaybe 0 ((+) 1))) Dict.empty
 
                 -- convert to list of (element, count) pairs, convert to dict of {count -> list element} (using foldr so the :: in the foldr does what we want)
-                computeFrequencies : LenInfo
-                computeFrequencies =
+                freqToList : Dict Int (List String)
+                freqToList =
                     tokenToCount
                         |> Dict.toList
                         |> List.foldr (\( val, count ) -> Dict.update count (accumulateMaybe [] ((::) val))) Dict.empty
                         |> (List.foldl Dict.remove |> flip) (List.range 1 drop)
             in
-                Dict.insert len computeFrequencies
+                Dict.insert len { tokenToCount = tokenToCount, freqToList = freqToList }
     in
         List.foldl addNGram Dict.empty desiredLengthsAndMinimumFrequencies

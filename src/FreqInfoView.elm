@@ -2,6 +2,7 @@ module FreqInfoView exposing (renderFrequencies, renderNgraphs)
 
 import ColoredWordView exposing (matchingStyle)
 import Dict exposing (Dict)
+import FreqInfo exposing (LenInfo, emptyLenInfo)
 import Html exposing (Html, table, tr, td, text, span)
 import Html.Attributes exposing (style)
 import MiscView exposing (onShiftedMouseEnter)
@@ -9,7 +10,7 @@ import Set exposing (Set)
 import Types exposing (..)
 
 
-renderFrequencies : Set String -> Maybe (Dict Int (List String)) -> Html Msg
+renderFrequencies : Set String -> Maybe LenInfo -> Html Msg
 renderFrequencies currentWordsNormalized freqToWords =
     let
         doWord : String -> Html Msg
@@ -36,10 +37,10 @@ renderFrequencies currentWordsNormalized freqToWords =
     in
         table
             [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ] ]
-            (List.map renderFrequency <| List.reverse <| Dict.toList <| Maybe.withDefault Dict.empty freqToWords)
+            (List.map renderFrequency <| List.reverse <| Dict.toList <| .freqToList <| Maybe.withDefault emptyLenInfo freqToWords)
 
 
-renderNgraphs : Maybe (Dict Int (List String)) -> Html Msg
+renderNgraphs : Maybe LenInfo -> Html Msg
 renderNgraphs freqToWords =
     let
         doInstance : String -> Html Msg
@@ -64,4 +65,4 @@ renderNgraphs freqToWords =
     in
         table
             [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ] ]
-            (List.map renderFrequency <| List.reverse <| Dict.toList <| Maybe.withDefault Dict.empty freqToWords)
+            (List.map renderFrequency <| List.reverse <| Dict.toList <| .freqToList <| Maybe.withDefault emptyLenInfo freqToWords)
