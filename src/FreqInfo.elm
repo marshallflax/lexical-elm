@@ -1,7 +1,7 @@
 module FreqInfo exposing (FreqInfo, empty, countFreq)
 
 import Dict exposing (Dict)
-import Misc exposing (dictToListL)
+import Misc exposing (zipLists)
 
 
 {-|
@@ -22,6 +22,11 @@ countFreq interposeUnderscores desired wordList =
         accumulateMaybe : b -> (b -> a) -> Maybe b -> Maybe a
         accumulateMaybe default verb maybe =
             Maybe.withDefault default maybe |> verb |> Just
+
+        -- Same as Dict.toList except uses foldl rather than foldr to get list from end, which is useful if piped into a List.foldl
+        dictToListL : Dict comparable v -> List ( comparable, v )
+        dictToListL dict =
+            Dict.foldl (\key value list -> ( key, value ) :: list) [] dict
 
         -- first: count instances of each element into dict of {element -> count}
         -- then: convert to list of (element, count) pairs
@@ -48,8 +53,8 @@ countFreq interposeUnderscores desired wordList =
                 |> countList
 
         multiRemove : List comparable -> Dict comparable v -> Dict comparable v
-        multiRemove list dict =
-            List.foldl (\k -> Dict.remove k) dict list
+        multiRemove =
+            List.foldl Dict.remove |> flip
 
         addNGram : ( Int, Int ) -> Dict Int (Dict Int (List String)) -> Dict Int (Dict Int (List String))
         addNGram ( len, drop ) =

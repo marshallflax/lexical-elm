@@ -1,14 +1,7 @@
-module Misc exposing (dictToListL, toggleSet, combineSubscriptions, zipLists)
+module Misc exposing (toggleSet, combineSubscriptions, zipLists)
 
 import Dict exposing (Dict)
 import Set exposing (Set)
-
-
-{-| Same as Dict.toList except uses foldl rather than foldr to get list from end, which is useful if piped into a List.foldl
--}
-dictToListL : Dict comparable v -> List ( comparable, v )
-dictToListL dict =
-    Dict.foldl (\key value list -> ( key, value ) :: list) [] dict
 
 
 toggleSet : comparable1 -> Set comparable1 -> Set comparable1
