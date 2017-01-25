@@ -151,6 +151,14 @@ dumpState model =
         |> (String.join " ")
 
 
+perhapsInterperse : Bool -> List String -> List String
+perhapsInterperse interposeUnderscores =
+    if (interposeUnderscores) then
+        List.intersperse "_"
+    else
+        identity
+
+
 updateModelWithNewText : String -> LexicalModel -> LexicalModel
 updateModelWithNewText newText model =
     let
@@ -169,7 +177,7 @@ updateModelWithNewText newText model =
         { model
             | text = newText
             , words = words
-            , frequencies = countFreq True [ ( 1, 0 ), ( 2, 1 ) ] wordList
+            , frequencies = countFreq (perhapsInterperse True) [ ( 1, 0 ), ( 2, 1 ) ] wordList
             , graphs = graphs
-            , ngraphs = countFreq False [ ( 3, 1 ) ] (String.toList graphs |> List.map String.fromChar)
+            , ngraphs = countFreq (perhapsInterperse False) [ ( 3, 1 ) ] (String.toList graphs |> List.map String.fromChar)
         }

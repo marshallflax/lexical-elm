@@ -16,8 +16,8 @@ empty =
     Dict.empty
 
 
-countFreq : Bool -> List ( Int, Int ) -> List String -> FreqInfo
-countFreq interposeUnderscores desired wordList =
+countFreq : (List String -> List String) -> List ( Int, Int ) -> List String -> FreqInfo
+countFreq perhapsIntersperse desired wordList =
     let
         accumulateMaybe : b -> (b -> a) -> Maybe b -> Maybe a
         accumulateMaybe default verb maybe =
@@ -38,18 +38,11 @@ countFreq interposeUnderscores desired wordList =
                 |> dictToListL
                 |> List.foldl (\( val, count ) -> Dict.update count (accumulateMaybe [] ((::) val))) Dict.empty
 
-        perhapsInterperse : Bool -> List String -> List String
-        perhapsInterperse interposeUnderscores =
-            if (interposeUnderscores) then
-                List.intersperse "_"
-            else
-                identity
-
         computeFrequencies : Int -> Dict Int (List String)
         computeFrequencies len =
             List.map (wordList |> flip List.drop) (List.range 0 (len - 1))
                 |> Misc.zipLists
-                |> List.map (perhapsInterperse interposeUnderscores >> List.foldr (++) "")
+                |> List.map (perhapsIntersperse >> List.foldr (++) "")
                 |> countList
 
         multiRemove : List comparable -> Dict comparable v -> Dict comparable v
