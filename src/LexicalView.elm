@@ -139,32 +139,36 @@ cellStyle width =
     style [ ( "width", width ), ( "vertical-align", "top" ) ]
 
 
+renderWords : LexicalModel -> List (Html Msg)
+renderWords lexicalModel =
+    let
+        doWord : ( Int, ColoredWord ) -> Html Msg
+        doWord =
+            renderWord lexicalModel.hideColors lexicalModel.workingColor lexicalModel.workingNormalized
+
+        renderLine : List ( Int, ColoredWord ) -> Html Msg
+        renderLine listPart =
+            Html.div [ stylesheet.class MyClass ] (List.map doWord listPart)
+    in
+        List.map renderLine (partitionedList lexicalModel)
+
+
 frequencyStats : LexicalModel -> Html Msg
 frequencyStats lexicalModel =
     Html.table
         []
         [ tr []
             [ td [ cellStyle "800px" ]
-                (let
-                    doWord : ( Int, ColoredWord ) -> Html Msg
-                    doWord =
-                        renderWord lexicalModel.hideColors lexicalModel.workingColor lexicalModel.workingNormalized
-
-                    renderLine : List ( Int, ColoredWord ) -> Html Msg
-                    renderLine listPart =
-                        Html.div [ stylesheet.class MyClass ] (List.map doWord listPart)
-                 in
-                    List.map renderLine (partitionedList lexicalModel)
-                )
+                (renderWords lexicalModel)
             , td [ cellStyle "800px" ]
                 [ FreqInfoView.renderFrequencies lexicalModel.workingNormalized (Dict.get 1 lexicalModel.frequencies) ]
             , td [ cellStyle "400px" ]
                 [ FreqInfoView.renderFrequencies lexicalModel.workingNormalized (Dict.get 2 lexicalModel.frequencies) ]
             ]
-        , tr
-            []
-            [ td [] [ text lexicalModel.graphs ]
-            , td [ style [ ( "width", "800px" ), ( "vertical-align", "top" ) ] ]
+        , tr []
+            [ td [ cellStyle "800px" ]
+                [ text lexicalModel.graphs ]
+            , td [ cellStyle "800px" ]
                 [ FreqInfoView.renderNgraphs (Dict.get 3 lexicalModel.ngraphs) ]
             ]
         ]
