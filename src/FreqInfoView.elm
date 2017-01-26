@@ -13,6 +13,7 @@ import Types exposing (..)
 renderGeneric : (String -> Html Msg) -> Maybe LenInfo -> Html Msg
 renderGeneric renderWord freqToWords =
     let
+        solidBorder : Html.Attribute msg
         solidBorder =
             style [ ( "border", "solid" ), ( "border-width", "1px" ) ]
 
@@ -35,7 +36,6 @@ renderGeneric renderWord freqToWords =
 renderFrequencies : Set String -> Maybe LenInfo -> Html Msg
 renderFrequencies currentWordsNormalized freqToWords =
     let
-        renderWord : String -> Html Msg
         renderWord word =
             span
                 [ onShiftedMouseEnter (LexicalMessage (SetCurrentNormalized word))
@@ -49,7 +49,6 @@ renderFrequencies currentWordsNormalized freqToWords =
 renderNgraphs : Maybe LenInfo -> Html Msg
 renderNgraphs freqToWords =
     let
-        renderWord : String -> Html Msg
         renderWord word =
             span [] [ text (" <" ++ word ++ "> ") ]
     in
