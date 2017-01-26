@@ -17,15 +17,11 @@ renderGeneric renderWord freqToWords =
         solidBorder =
             style [ ( "border", "solid" ), ( "border-width", "1px" ) ]
 
-        renderWords : List String -> Html Msg
-        renderWords words =
-            td [ solidBorder ] (List.map renderWord words)
-
         renderFrequency : ( Int, List String ) -> Html Msg
         renderFrequency ( size, words ) =
             tr []
                 [ td [ solidBorder ] [ text (toString size) ]
-                , renderWords words
+                , td [ solidBorder ] (List.map renderWord words)
                 ]
     in
         table
@@ -48,8 +44,6 @@ renderFrequencies currentWordsNormalized freqToWords =
 
 renderNgraphs : Maybe LenInfo -> Html Msg
 renderNgraphs freqToWords =
-    let
-        renderWord word =
-            span [] [ text (" <" ++ word ++ "> ") ]
-    in
-        renderGeneric renderWord freqToWords
+    renderGeneric
+        (\word -> span [] [ text (" <" ++ word ++ "> ") ])
+        freqToWords
