@@ -10,8 +10,8 @@ import Set exposing (Set)
 import Types exposing (..)
 
 
-renderGeneric : (String -> List (Html.Attribute Msg)) -> Set String -> Maybe LenInfo -> Html Msg
-renderGeneric computeStyle currentWordsNormalized freqToWords =
+renderGeneric : (String -> List (Html.Attribute Msg)) -> Maybe LenInfo -> Html Msg
+renderGeneric computeStyle freqToWords =
     let
         doWord : String -> Html Msg
         doWord word =
@@ -47,7 +47,7 @@ renderFrequencies currentWordsNormalized freqToWords =
             , style (matchingStyle (Set.member word currentWordsNormalized))
             ]
     in
-        renderGeneric computeStyle currentWordsNormalized freqToWords
+        renderGeneric computeStyle freqToWords
 
 
 renderNgraphs : Maybe LenInfo -> Html Msg
@@ -56,9 +56,5 @@ renderNgraphs freqToWords =
         computeStyle : String -> List (Html.Attribute Msg)
         computeStyle word =
             []
-
-        currentWordsNormalized : Set String
-        currentWordsNormalized =
-            Set.empty
     in
-        renderGeneric computeStyle currentWordsNormalized freqToWords
+        renderGeneric computeStyle freqToWords
