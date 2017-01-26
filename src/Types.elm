@@ -41,6 +41,7 @@ type alias ComputedModel a =
         , frequencies : FreqInfo
         , graphs : String
         , ngraphs : FreqInfo
+        , currentTrigraph : String
     }
 
 
@@ -95,6 +96,7 @@ type LexicalCmd
     | ResetSomeColors (List String)
     | SetCurrentColor String
     | SetCurrentNormalized String
+    | SetCurrentTrigraph String
     | SetCurrentWord Int
     | SetText String
     | SetWordsPerLine String

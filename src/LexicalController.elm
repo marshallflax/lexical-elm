@@ -23,6 +23,7 @@ init =
     , frequencies = FreqInfo.empty
     , graphs = ""
     , ngraphs = FreqInfo.empty
+    , currentTrigraph = ""
     }
 
 
@@ -58,6 +59,9 @@ lexicalUpdate msg model =
               }
             , Cmd.none
             )
+
+        SetCurrentTrigraph trigraph ->
+            ( { model | currentTrigraph = trigraph }, Cmd.none )
 
         SetText newText ->
             ( updateModelWithNewText newText model, Cmd.none )

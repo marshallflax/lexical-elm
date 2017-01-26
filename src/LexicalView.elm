@@ -13,6 +13,7 @@ import Html.Attributes exposing (style, value, checked, type_, readonly, placeho
 import Html.Events exposing (onClick, onInput, onMouseEnter)
 import LexicalController exposing (countWords, countWordsMatching, currentWordFromIndex, dumpState, partitionedList, rainbowList)
 import Misc
+import MiscView exposing (onShiftedMouseEnter)
 import Set exposing (Set)
 import Types exposing (..)
 
@@ -189,9 +190,11 @@ renderGraphs lexicalModel =
             else
                 "purple"
 
-        countToStyle : Int -> List (Html.Attribute Msg)
-        countToStyle freq =
-            [ Html.Attributes.style [ ( "backgroundColor", numberToColor freq ) ] ]
+        countToStyle : ( Int, String ) -> List (Html.Attribute Msg)
+        countToStyle ( freq, trigraph ) =
+            [ Html.Attributes.style [ ( "backgroundColor", numberToColor freq ) ]
+            , onShiftedMouseEnter (LexicalMessage (SetCurrentTrigraph trigraph))
+            ]
 
         renderChar : ( String, String ) -> Html Msg
         renderChar ( c, c3 ) =
@@ -199,7 +202,7 @@ renderGraphs lexicalModel =
                 count =
                     Dict.get c3 lenInfo |> Maybe.withDefault 0
             in
-                span (countToStyle count) [ text c ]
+                span (countToStyle (count, c3)) [ text c ]
     in
         List.map renderChar charAndTriplet
 
