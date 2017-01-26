@@ -47,7 +47,9 @@ renderNgraphs currentTrigraph freqToWords =
     let
         renderWord word =
             span
-                [ style (matchingStyle (word == currentTrigraph)) ]
+                [ onShiftedMouseEnter (LexicalMessage (SetCurrentTrigraph word))
+                , style (matchingStyle (word == currentTrigraph))
+                ]
                 [ text (" <" ++ word ++ "> ") ]
     in
         renderGeneric renderWord freqToWords
