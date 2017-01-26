@@ -160,20 +160,18 @@ renderGraphs lexicalModel =
         chars =
             String.toList lexicalModel.graphs |> List.map String.fromChar
 
-        three : List (List String)
-        three =
-            List.map (\rot -> ((List.drop rot chars) ++ (List.take rot [" "," ", " "]))) (List.range 0 2)
-                |> Misc.zipLists
-
-        triplets : List String
-        triplets =
-            List.map String.concat three
-
         charAndTriplet : List ( String, String )
         charAndTriplet =
-            List.map2 (,) chars triplets
+            List.map (\rot -> ((List.drop rot chars) ++ (List.take rot [ " ", " ", " " ]))) (List.range 0 2)
+                |> Misc.zipLists
+                |> List.map String.concat
+                |> List.map2 (,) chars
+
+        renderChar : ( String, String ) -> Html Msg
+        renderChar ( c, c3 ) =
+            span [] [ text c ]
     in
-        List.map (\c -> span [] [ c |> toString |> text ]) charAndTriplet
+        List.map renderChar charAndTriplet
 
 
 frequencyStats : LexicalModel -> Html Msg
