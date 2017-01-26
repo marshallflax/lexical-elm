@@ -162,12 +162,18 @@ renderGraphs lexicalModel =
         chars =
             String.toList lexicalModel.graphs |> List.map String.fromChar
 
-        charAndTriplet : List ( String, String )
-        charAndTriplet =
+        triplets : List String
+        triplets =
             Misc.zipShifts " " (List.range 0 2) chars
-                |> Misc.zipLists
                 |> List.map String.concat
-                |> List.map2 (,) chars
+
+        tripletsTriples : List (List String)
+        tripletsTriples =
+            Misc.zipShifts " " (List.range 0 2) triplets
+
+        charAndTriplets : List ( String, List String )
+        charAndTriplets =
+            List.map2 (,) chars tripletsTriples
 
         lenInfo : Dict String Int
         lenInfo =
@@ -197,15 +203,18 @@ renderGraphs lexicalModel =
             , onShiftedMouseEnter (LexicalMessage (SetCurrentTrigraph trigraph))
             ]
 
-        renderChar : ( String, String ) -> Html Msg
-        renderChar ( c, c3 ) =
+        renderChar : ( String, List String ) -> Html Msg
+        renderChar ( c, triplets ) =
             let
+                c3 =
+                    List.head triplets |> Maybe.withDefault ""
+
                 count =
                     Dict.get c3 lenInfo |> Maybe.withDefault 0
             in
                 span (countToStyle ( count, c3 )) [ text c ]
     in
-        List.map renderChar charAndTriplet
+        List.map renderChar charAndTriplets
 
 
 frequencyStats : LexicalModel -> Html Msg

@@ -52,4 +52,4 @@ zipShifts default shifts list =
         doShift shift =
             ((List.drop shift list) ++ (List.repeat shift default))
     in
-        List.map doShift shifts
+        List.map doShift shifts |> zipLists
