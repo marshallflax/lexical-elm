@@ -194,10 +194,12 @@ renderGraphs lexicalModel =
             else
                 "#DDF"
 
-        countToStyle : ( Int, String ) -> List (Html.Attribute Msg)
-        countToStyle ( freq, trigraph ) =
+        countToStyle : ( List Int, String ) -> List (Html.Attribute Msg)
+        countToStyle ( freqs, trigraph ) =
             [ Html.Attributes.style
-                (( "backgroundColor", numberToColor freq )
+                (( "background"
+                 , "linear-gradient(0deg," ++ (String.join "," (List.map numberToColor freqs)) ++ ")"
+                 )
                     :: (ColoredWordView.matchingStyle (trigraph == lexicalModel.currentTrigraph))
                 )
             , onShiftedMouseEnter (LexicalMessage (SetCurrentTrigraph trigraph))
@@ -209,10 +211,11 @@ renderGraphs lexicalModel =
                 thisTrigraph =
                     List.head triplets |> Maybe.withDefault ""
 
-                count =
-                    Dict.get thisTrigraph lenInfo |> Maybe.withDefault 0
+                counts : List Int
+                counts =
+                    List.map (\x -> Dict.get x lenInfo |> Maybe.withDefault 0) triplets
             in
-                span (countToStyle ( count, thisTrigraph )) [ text letter ]
+                span (countToStyle ( counts, thisTrigraph )) [ text letter ]
     in
         List.map renderChar charAndTriplets
 
