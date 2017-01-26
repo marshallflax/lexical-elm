@@ -134,12 +134,17 @@ wordsForColor lexicalModel =
         []
 
 
+cellStyle : String -> Html.Attribute msg
+cellStyle width =
+    style [ ( "width", width ), ( "vertical-align", "top" ) ]
+
+
 frequencyStats : LexicalModel -> Html Msg
 frequencyStats lexicalModel =
     Html.table
         []
         [ tr []
-            [ td [ style [ ( "width", "800px" ), ( "vertical-align", "top" ) ] ]
+            [ td [ cellStyle "800px" ]
                 (let
                     doWord : ( Int, ColoredWord ) -> Html Msg
                     doWord =
@@ -151,9 +156,9 @@ frequencyStats lexicalModel =
                  in
                     List.map renderLine (partitionedList lexicalModel)
                 )
-            , td [ style [ ( "width", "800px" ), ( "vertical-align", "top" ) ] ]
+            , td [ cellStyle "800px" ]
                 [ FreqInfoView.renderFrequencies lexicalModel.workingNormalized (Dict.get 1 lexicalModel.frequencies) ]
-            , td [ style [ ( "width", "400px" ), ( "vertical-align", "top" ) ] ]
+            , td [ cellStyle "400px" ]
                 [ FreqInfoView.renderFrequencies lexicalModel.workingNormalized (Dict.get 2 lexicalModel.frequencies) ]
             ]
         , tr
