@@ -192,7 +192,10 @@ renderGraphs lexicalModel =
 
         countToStyle : ( Int, String ) -> List (Html.Attribute Msg)
         countToStyle ( freq, trigraph ) =
-            [ Html.Attributes.style [ ( "backgroundColor", numberToColor freq ) ]
+            [ Html.Attributes.style
+                (( "backgroundColor", numberToColor freq )
+                    :: (ColoredWordView.matchingStyle (trigraph == lexicalModel.currentTrigraph))
+                )
             , onShiftedMouseEnter (LexicalMessage (SetCurrentTrigraph trigraph))
             ]
 
@@ -202,7 +205,7 @@ renderGraphs lexicalModel =
                 count =
                     Dict.get c3 lenInfo |> Maybe.withDefault 0
             in
-                span (countToStyle (count, c3)) [ text c ]
+                span (countToStyle ( count, c3 )) [ text c ]
     in
         List.map renderChar charAndTriplet
 
@@ -224,9 +227,9 @@ frequencyStats lexicalModel =
         , Html.table
             []
             [ tr []
-                [ td [ cellStyle "1000px" ]
+                [ td [ cellStyle "600px" ]
                     (renderGraphs lexicalModel)
-                , td [ cellStyle "1000px" ]
+                , td [ cellStyle "1600px" ]
                     [ FreqInfoView.renderNgraphs lexicalModel.currentTrigraph (Dict.get 3 lexicalModel.ngraphs) ]
                 ]
             ]

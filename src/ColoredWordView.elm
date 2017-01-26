@@ -4,9 +4,9 @@ import ColoredWord exposing (ColoredWord)
 import Html exposing (Html, Attribute, span, text)
 import Html.Attributes exposing (value, checked, type_, readonly, placeholder, href)
 import Html.Events exposing (on, onClick, onInput, onMouseEnter)
+import MiscView exposing (onShiftedMouseEnter)
 import Set exposing (Set)
 import Types exposing (..)
-import MiscView exposing (onShiftedMouseEnter)
 
 
 colorStyle : String -> Html.Attribute msg
@@ -16,10 +16,16 @@ colorStyle colorName =
 
 matchingStyle : Bool -> List ( String, String )
 matchingStyle matches =
-    if matches then
-        [ ( "borderStyle", "solid" ), ( "borderColor", "black" ) ]
-    else
-        [ ( "borderStyle", "solid" ), ( "borderColor", "transparent" ) ]
+    [ ( "borderStyle", "solid" )
+    , ( "borderColor"
+      , (if matches then
+            "black"
+         else
+            "transparent"
+        )
+      )
+      --    , ( "padding", "1px" )    , ( "margin", "2px" )
+    ]
 
 
 colorStyles : Set String -> ColoredWord -> Set String -> Html.Attribute msg
