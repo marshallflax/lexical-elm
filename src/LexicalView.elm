@@ -6,8 +6,7 @@ import ColoredWordView exposing (colorStyle, renderWord)
 import Css
 import Dict
 import DragView exposing (viewDraggable)
-import FreqInfo exposing (LenInfo)
-import FreqInfoView exposing (renderFrequencies)
+import FreqInfoView
 import Html exposing (Html, button, div, span, text, input, p, table, tr, td)
 import Html.Attributes exposing (style, value, checked, type_, readonly, placeholder, href)
 import Html.Events exposing (onClick, onInput, onMouseEnter)
