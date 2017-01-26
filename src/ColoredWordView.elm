@@ -24,7 +24,6 @@ matchingStyle matches =
             "transparent"
         )
       )
-      --    , ( "padding", "1px" )    , ( "margin", "2px" )
     ]
 
 
