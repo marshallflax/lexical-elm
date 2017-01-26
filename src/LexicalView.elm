@@ -168,7 +168,7 @@ renderGraphs lexicalModel =
 
         charAndTriplet : List ( String, String )
         charAndTriplet =
-            List.map (\rot -> ((List.drop rot chars) ++ (List.take rot [ " ", " ", " " ]))) (List.range 0 2)
+            rotates " " (List.range 0 2) chars
                 |> Misc.zipLists
                 |> List.map String.concat
                 |> List.map2 (,) chars
