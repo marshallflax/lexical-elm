@@ -178,17 +178,15 @@ renderGraphs lexicalModel =
         numberToColor : Int -> String
         numberToColor number =
             if (number <= 1) then
-                "red"
+                "#F88"
             else if (number <= 3) then
-                "orange"
+                "#FF8"
             else if (number <= 5) then
-                "yellow"
+                "#8F8"
             else if (number <= 7) then
-                "green"
-            else if (number <= 9) then
-                "blue"
+                "#8FF"
             else
-                "purple"
+                "#88F"
 
         countToStyle : ( Int, String ) -> List (Html.Attribute Msg)
         countToStyle ( freq, trigraph ) =
