@@ -4,8 +4,9 @@ import Array
 import ColoredWord exposing (ColoredWord, matchingWordsForColor)
 import ColoredWordView exposing (colorStyle, renderWord)
 import Css
-import Dict
+import Dict exposing (Dict)
 import DragView exposing (viewDraggable)
+import FreqInfo
 import FreqInfoView
 import Html exposing (Html, button, div, span, text, input, p, table, tr, td)
 import Html.Attributes exposing (style, value, checked, type_, readonly, placeholder, href)
@@ -167,9 +168,38 @@ renderGraphs lexicalModel =
                 |> List.map String.concat
                 |> List.map2 (,) chars
 
+        lenInfo : Dict String Int
+        lenInfo =
+            Dict.get 3 lexicalModel.ngraphs
+                |> Maybe.withDefault FreqInfo.emptyLenInfo
+                |> .tokenToCount
+
+        numberToColor : Int -> String
+        numberToColor number =
+            if (number <= 1) then
+                "red"
+            else if (number <= 3) then
+                "orange"
+            else if (number <= 5) then
+                "yellow"
+            else if (number <= 7) then
+                "green"
+            else if (number <= 9) then
+                "blue"
+            else
+                "purple"
+
+        countToStyle : Int -> List (Html.Attribute Msg)
+        countToStyle freq =
+            [ Html.Attributes.style [ ( "backgroundColor", numberToColor freq ) ] ]
+
         renderChar : ( String, String ) -> Html Msg
         renderChar ( c, c3 ) =
-            span [] [ text c ]
+            let
+                count =
+                    Dict.get c3 lenInfo |> Maybe.withDefault 0
+            in
+                span (countToStyle count) [ text c ]
     in
         List.map renderChar charAndTriplet
 
