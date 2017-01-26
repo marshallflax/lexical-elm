@@ -227,7 +227,7 @@ frequencyStats lexicalModel =
                 [ td [ cellStyle "1000px" ]
                     (renderGraphs lexicalModel)
                 , td [ cellStyle "1000px" ]
-                    [ FreqInfoView.renderNgraphs (Dict.get 3 lexicalModel.ngraphs) ]
+                    [ FreqInfoView.renderNgraphs lexicalModel.currentTrigraph (Dict.get 3 lexicalModel.ngraphs) ]
                 ]
             ]
         ]

@@ -42,8 +42,12 @@ renderFrequencies currentWordsNormalized freqToWords =
         renderGeneric renderWord freqToWords
 
 
-renderNgraphs : Maybe LenInfo -> Html Msg
-renderNgraphs freqToWords =
-    renderGeneric
-        (\word -> span [] [ text (" <" ++ word ++ "> ") ])
-        freqToWords
+renderNgraphs : String -> Maybe LenInfo -> Html Msg
+renderNgraphs currentTrigraph freqToWords =
+    let
+        renderWord word =
+            span
+                [ style (matchingStyle (word == currentTrigraph)) ]
+                [ text (" <" ++ word ++ "> ") ]
+    in
+        renderGeneric renderWord freqToWords
