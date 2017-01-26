@@ -134,7 +134,7 @@ wordsForColor lexicalModel =
         []
 
 
-cellStyle : String -> Html.Attribute msg
+cellStyle : String -> Html.Attribute Msg
 cellStyle width =
     style [ ( "width", width ), ( "vertical-align", "top" ) ]
 
@@ -153,6 +153,29 @@ renderWords lexicalModel =
         List.map renderLine (partitionedList lexicalModel)
 
 
+renderGraphs : LexicalModel -> List (Html Msg)
+renderGraphs lexicalModel =
+    let
+        chars : List String
+        chars =
+            String.toList lexicalModel.graphs |> List.map String.fromChar
+
+        three : List (List String)
+        three =
+            List.map (\rot -> ((List.drop rot chars) ++ (List.take rot [" "," ", " "]))) (List.range 0 2)
+                |> Misc.zipLists
+
+        triplets : List String
+        triplets =
+            List.map String.concat three
+
+        charAndTriplet : List ( String, String )
+        charAndTriplet =
+            List.map2 (,) chars triplets
+    in
+        List.map (\c -> span [] [ c |> toString |> text ]) charAndTriplet
+
+
 frequencyStats : LexicalModel -> Html Msg
 frequencyStats lexicalModel =
     Html.table
@@ -167,7 +190,7 @@ frequencyStats lexicalModel =
             ]
         , tr []
             [ td [ cellStyle "800px" ]
-                [ text lexicalModel.graphs ]
+                (renderGraphs lexicalModel)
             , td [ cellStyle "800px" ]
                 [ FreqInfoView.renderNgraphs (Dict.get 3 lexicalModel.ngraphs) ]
             ]
