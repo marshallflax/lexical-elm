@@ -10,51 +10,47 @@ import Set exposing (Set)
 import Types exposing (..)
 
 
-renderGeneric : (String -> List (Html.Attribute Msg)) -> Maybe LenInfo -> Html Msg
-renderGeneric computeStyle freqToWords =
+renderGeneric : (String -> Html Msg) -> Maybe LenInfo -> Html Msg
+renderGeneric renderWord freqToWords =
     let
-        doWord : String -> Html Msg
-        doWord word =
-            span
-                (computeStyle word)
-                [ text (" <" ++ word ++ "> ") ]
+        solidBorder =
+            style [ ( "border", "solid" ), ( "border-width", "1px" ) ]
 
         renderWords : List String -> Html Msg
         renderWords words =
-            td
-                [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ] ]
-                (List.map doWord words)
+            td [ solidBorder ] (List.map renderWord words)
 
         renderFrequency : ( Int, List String ) -> Html Msg
         renderFrequency ( size, words ) =
             tr []
-                [ td [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ] ]
-                    [ text (toString size) ]
+                [ td [ solidBorder ] [ text (toString size) ]
                 , renderWords words
                 ]
     in
         table
-            [ style [ ( "border", "solid" ), ( "border-width", "1px" ) ] ]
+            [ solidBorder ]
             (List.map renderFrequency <| List.reverse <| Dict.toList <| .freqToList <| Maybe.withDefault emptyLenInfo freqToWords)
 
 
 renderFrequencies : Set String -> Maybe LenInfo -> Html Msg
 renderFrequencies currentWordsNormalized freqToWords =
     let
-        computeStyle : String -> List (Html.Attribute Msg)
-        computeStyle word =
-            [ onShiftedMouseEnter (LexicalMessage (SetCurrentNormalized word))
-            , style (matchingStyle (Set.member word currentWordsNormalized))
-            ]
+        renderWord : String -> Html Msg
+        renderWord word =
+            span
+                [ onShiftedMouseEnter (LexicalMessage (SetCurrentNormalized word))
+                , style (matchingStyle (Set.member word currentWordsNormalized))
+                ]
+                [ text (" <" ++ word ++ "> ") ]
     in
-        renderGeneric computeStyle freqToWords
+        renderGeneric renderWord freqToWords
 
 
 renderNgraphs : Maybe LenInfo -> Html Msg
 renderNgraphs freqToWords =
     let
-        computeStyle : String -> List (Html.Attribute Msg)
-        computeStyle word =
-            []
+        renderWord : String -> Html Msg
+        renderWord word =
+            span [] [ text (" <" ++ word ++ "> ") ]
     in
-        renderGeneric computeStyle freqToWords
+        renderGeneric renderWord freqToWords
