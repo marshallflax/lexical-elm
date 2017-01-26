@@ -206,21 +206,26 @@ renderGraphs lexicalModel =
 
 frequencyStats : LexicalModel -> Html Msg
 frequencyStats lexicalModel =
-    Html.table
-        []
-        [ tr []
-            [ td [ cellStyle "800px" ]
-                (renderWords lexicalModel)
-            , td [ cellStyle "800px" ]
-                [ FreqInfoView.renderFrequencies lexicalModel.workingNormalized (Dict.get 1 lexicalModel.frequencies) ]
-            , td [ cellStyle "400px" ]
-                [ FreqInfoView.renderFrequencies lexicalModel.workingNormalized (Dict.get 2 lexicalModel.frequencies) ]
+    Html.div []
+        [ Html.table
+            []
+            [ tr []
+                [ td [ cellStyle "800px" ]
+                    (renderWords lexicalModel)
+                , td [ cellStyle "800px" ]
+                    [ FreqInfoView.renderFrequencies lexicalModel.workingNormalized (Dict.get 1 lexicalModel.frequencies) ]
+                , td [ cellStyle "400px" ]
+                    [ FreqInfoView.renderFrequencies lexicalModel.workingNormalized (Dict.get 2 lexicalModel.frequencies) ]
+                ]
             ]
-        , tr []
-            [ td [ cellStyle "800px" ]
-                (renderGraphs lexicalModel)
-            , td [ cellStyle "800px" ]
-                [ FreqInfoView.renderNgraphs (Dict.get 3 lexicalModel.ngraphs) ]
+        , Html.table
+            []
+            [ tr []
+                [ td [ cellStyle "1000px" ]
+                    (renderGraphs lexicalModel)
+                , td [ cellStyle "1000px" ]
+                    [ FreqInfoView.renderNgraphs (Dict.get 3 lexicalModel.ngraphs) ]
+                ]
             ]
         ]
 
