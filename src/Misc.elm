@@ -1,4 +1,4 @@
-module Misc exposing (toggleSet, combineSubscriptions, zipLists, accumulateMaybe)
+module Misc exposing (toggleSet, combineSubscriptions, zipLists, accumulateMaybe, zipShifts)
 
 import Set exposing (Set)
 
@@ -44,3 +44,12 @@ zipLists lists =
         zipListHelper ( lists, [] )
             |> Tuple.second
             |> List.reverse
+
+
+zipShifts : a -> List Int -> List a -> List (List a)
+zipShifts default shifts list =
+    let
+        doShift shift =
+            ((List.drop shift list) ++ (List.repeat shift default))
+    in
+        List.map doShift shifts

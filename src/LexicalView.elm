@@ -162,13 +162,9 @@ renderGraphs lexicalModel =
         chars =
             String.toList lexicalModel.graphs |> List.map String.fromChar
 
-        rotates : a -> List Int -> List a -> List (List a)
-        rotates default rots list =
-            List.map (\rot -> ((List.drop rot list) ++ (List.repeat rot default))) rots
-
         charAndTriplet : List ( String, String )
         charAndTriplet =
-            rotates " " (List.range 0 2) chars
+            Misc.zipShifts " " (List.range 0 2) chars
                 |> Misc.zipLists
                 |> List.map String.concat
                 |> List.map2 (,) chars
