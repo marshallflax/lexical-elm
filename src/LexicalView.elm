@@ -204,15 +204,15 @@ renderGraphs lexicalModel =
             ]
 
         renderChar : ( String, List String ) -> Html Msg
-        renderChar ( c, triplets ) =
+        renderChar ( letter, triplets ) =
             let
-                c3 =
+                thisTrigraph =
                     List.head triplets |> Maybe.withDefault ""
 
                 count =
-                    Dict.get c3 lenInfo |> Maybe.withDefault 0
+                    Dict.get thisTrigraph lenInfo |> Maybe.withDefault 0
             in
-                span (countToStyle ( count, c3 )) [ text c ]
+                span (countToStyle ( count, thisTrigraph )) [ text letter ]
     in
         List.map renderChar charAndTriplets
 
