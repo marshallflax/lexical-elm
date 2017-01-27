@@ -184,22 +184,24 @@ renderGraphs lexicalModel =
         numberToColor : Int -> String
         numberToColor number =
             if (number <= 1) then
-                "#FDD"
+                "#FCC"
             else if (number <= 3) then
-                "#FFD"
+                "#FFC"
             else if (number <= 5) then
-                "#DFD"
+                "#CFC"
             else if (number <= 7) then
-                "#DFF"
+                "#CFF"
             else
-                "#DDF"
+                "#CCF"
 
         countToStyle : ( List Int, String ) -> List (Html.Attribute Msg)
         countToStyle ( freqs, trigraph ) =
             [ Html.Attributes.style
-                (( "background"
-                 , "linear-gradient(0deg," ++ (String.join "," (List.map numberToColor freqs)) ++ ")"
-                 )
+                (( "background", "linear-gradient(135deg," ++ (String.join "," (List.map numberToColor freqs)) ++ ")" )
+                    :: ( "backgroundClip", "content-box" )
+                    :: ( "background-clip", "content-box" )
+                    :: ( "backgroundClip", "contentBox" )
+                    :: ( "background-clip", "contentBox" )
                     :: (ColoredWordView.matchingStyle (trigraph == lexicalModel.currentTrigraph))
                 )
             , onShiftedMouseEnter (LexicalMessage (SetCurrentTrigraph trigraph))
@@ -208,6 +210,7 @@ renderGraphs lexicalModel =
         renderChar : ( String, List String ) -> Html Msg
         renderChar ( letter, triplets ) =
             let
+                thisTrigraph : String
                 thisTrigraph =
                     List.head triplets |> Maybe.withDefault ""
 
