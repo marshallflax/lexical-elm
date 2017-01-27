@@ -150,7 +150,8 @@ renderWords lexicalModel =
 
         renderLine : List ( Int, ColoredWord ) -> Html Msg
         renderLine listPart =
-            Html.div [ stylesheet.class MyClass ] (List.map doWord listPart)
+            Html.div [ stylesheet.class NumberLineClass ]
+                (List.map doWord listPart)
     in
         List.map renderLine (partitionedList lexicalModel)
 
@@ -198,13 +199,10 @@ renderGraphs lexicalModel =
         countToStyle ( freqs, trigraph ) =
             [ Html.Attributes.style
                 (( "background", "linear-gradient(135deg," ++ (String.join "," (List.map numberToColor freqs)) ++ ")" )
-                    :: ( "backgroundClip", "content-box" )
-                    :: ( "background-clip", "content-box" )
-                    :: ( "backgroundClip", "contentBox" )
-                    :: ( "background-clip", "contentBox" )
                     :: (ColoredWordView.matchingStyle (trigraph == lexicalModel.currentTrigraph))
                 )
             , onShiftedMouseEnter (LexicalMessage (SetCurrentTrigraph trigraph))
+            , (stylesheet.class GradientClass)
             ]
 
         renderChar : ( String, List String ) -> Html Msg
@@ -259,7 +257,8 @@ type Id
 
 
 type Class
-    = MyClass
+    = NumberLineClass
+    | GradientClass
 
 
 imports : List String
@@ -269,10 +268,13 @@ imports =
 
 rules : List { descriptor : Css.Descriptor, selectors : List (Css.Sel Id Class) }
 rules =
-    [ { selectors = [ Css.Class MyClass ]
+    [ { selectors = [ Css.Class NumberLineClass ]
       , descriptor = [ ( "counter-increment", "line" ) ]
       }
-    , { selectors = [ Css.Pseudo [ Css.Before ] (Css.Class MyClass) ]
+    , { selectors = [ Css.Pseudo [ Css.Before ] (Css.Class NumberLineClass) ]
       , descriptor = [ ( "content", "counter(line)" ), ( "color", "red" ) ]
+      }
+    , { selectors = [ Css.Class GradientClass ]
+      , descriptor = [ ( "background-clip", "content-box !important" ) ]
       }
     ]
