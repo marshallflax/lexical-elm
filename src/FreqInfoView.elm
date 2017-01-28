@@ -34,9 +34,10 @@ renderFrequencies currentWordsNormalized freqToWords =
     let
         renderWord word =
             span
-                [ onShiftedMouseEnter (LexicalMessage (SetCurrentNormalized word))
-                , style (matchingStyle (Set.member word currentWordsNormalized))
-                ]
+                ((onShiftedMouseEnter (LexicalMessage (SetCurrentNormalized word))
+                    :: [ matchingStyle (Set.member word currentWordsNormalized) ]
+                 )
+                )
                 [ text (" <" ++ word ++ "> ") ]
     in
         renderGeneric renderWord freqToWords
@@ -47,9 +48,9 @@ renderNgraphs currentTrigraph freqToWords =
     let
         renderWord word =
             span
-                [ onShiftedMouseEnter (LexicalMessage (SetCurrentTrigraph word))
-                , style (matchingStyle (word == currentTrigraph))
-                ]
+                ((onShiftedMouseEnter (LexicalMessage (SetCurrentTrigraph word)))
+                    :: [ matchingStyle (word == currentTrigraph) ]
+                )
                 [ text (" <" ++ word ++ "> ") ]
     in
         renderGeneric renderWord freqToWords

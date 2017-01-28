@@ -192,12 +192,10 @@ renderGraphs lexicalModel =
 
         countToStyle : ( List Int, String ) -> List (Html.Attribute Msg)
         countToStyle ( freqs, trigraph ) =
-            [ Html.Attributes.style
-                (( "background", "linear-gradient(135deg," ++ (String.join "," (List.map numberToColor freqs)) ++ ")" )
-                    :: (ColoredWordView.matchingStyle (trigraph == lexicalModel.currentTrigraph))
-                )
+            [ Html.Attributes.style [( "background", "linear-gradient(135deg," ++ (String.join "," (List.map numberToColor freqs)) ++ ")" )]
+            , ColoredWordView.matchingStyle (trigraph == lexicalModel.currentTrigraph)
             , onShiftedMouseEnter (LexicalMessage (SetCurrentTrigraph trigraph))
-            , (Styles.useClass Styles.GradientClass)
+            , Styles.useClass Styles.GradientClass
             ]
 
         renderChar : ( String, List String ) -> Html Msg

@@ -6,6 +6,7 @@ import Html.Attributes exposing (value, checked, type_, readonly, placeholder, h
 import Html.Events exposing (on, onClick, onInput, onMouseEnter)
 import MiscView exposing (onShiftedMouseEnter)
 import Set exposing (Set)
+import Styles
 import Types exposing (..)
 
 
@@ -14,20 +15,15 @@ colorStyle colorName =
     Html.Attributes.style [ ( "backgroundColor", colorName ) ]
 
 
-matchingStyle : Bool -> List ( String, String )
+matchingStyle : Bool -> Attribute msg
 matchingStyle matches =
-    [ ( "borderStyle", "solid" )
-    , ( "borderColor"
-      , (if matches then
-            "black"
-         else
-            "transparent"
-        )
-      )
-    ]
+    if (matches) then
+        Styles.useClass Styles.SolidBlackBorder
+    else
+        Styles.useClass Styles.SolidTransparentBorder
 
 
-colorStyles : Set String -> ColoredWord -> Set String -> Html.Attribute msg
+colorStyles : Set String -> ColoredWord -> Set String -> List (Html.Attribute msg)
 colorStyles excludeSet coloredWord currentWordsNormalized =
     let
         colorSet =
@@ -40,18 +36,18 @@ colorStyles excludeSet coloredWord currentWordsNormalized =
             Set.member coloredWord.normalized currentWordsNormalized
     in
         if (size == 0) then
-            Html.Attributes.style (matchingStyle isMatch)
+            [ matchingStyle isMatch ]
         else if (size <= 1) then
-            Html.Attributes.style (( "backgroundColor", String.join "," (Set.toList colorSet) ) :: (matchingStyle isMatch))
+            (Html.Attributes.style [ ( "backgroundColor", String.join "," (Set.toList colorSet) ) ]) :: [ matchingStyle isMatch ]
         else
-            Html.Attributes.style (( "background", "linear-gradient(90deg," ++ String.join "," (Set.toList colorSet) ++ ")" ) :: (matchingStyle isMatch))
+            (Html.Attributes.style [ ( "background", "linear-gradient(90deg," ++ String.join "," (Set.toList colorSet) ++ ")" ) ]) :: [ matchingStyle isMatch ]
 
 
 renderWord : Set String -> String -> Set String -> ( Int, ColoredWord ) -> Html Msg
 renderWord hideColors currentColor currentWordsNormalized ( index, w ) =
     span
-        [ colorStyles hideColors w currentWordsNormalized
-        , onClick (LexicalMessage (ToggleColor index currentColor))
-        , onShiftedMouseEnter (LexicalMessage (SetCurrentWord index))
-        ]
+        (onClick (LexicalMessage (ToggleColor index currentColor))
+            :: onShiftedMouseEnter (LexicalMessage (SetCurrentWord index))
+            :: colorStyles hideColors w currentWordsNormalized
+        )
         [ text (" " ++ w.text ++ " ") ]
