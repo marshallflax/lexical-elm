@@ -8,7 +8,7 @@ import DragView exposing (viewDraggable)
 import FreqInfo
 import FreqInfoView
 import Html exposing (Html, button, div, span, text, input, p, table, tr, td)
-import Html.Attributes exposing (style, value, checked, type_, readonly, placeholder, href)
+import Html.Attributes exposing (value, checked, type_, readonly, placeholder, href)
 import Html.Events exposing (onClick, onInput, onMouseEnter)
 import LexicalController exposing (countWords, countWordsMatching, currentWordFromIndex, dumpState, partitionedList, rainbowList)
 import Misc
@@ -55,7 +55,7 @@ showTextInput lexicalModel =
     input
         [ value (dumpState lexicalModel)
         , onInput (LexicalMessage << SetText)
-        , style [ ( "width", "800px" ) ]
+        , Styles.useClass Styles.Cell800px
         ]
         []
 
@@ -129,7 +129,7 @@ wordsForColor lexicalModel =
                 |> Array.toList
                 |> String.join ", "
             )
-        , style [ ( "width", "800px" ) ]
+        , Styles.useClass Styles.Cell800px
         , readonly True
         , colorStyle lexicalModel.workingColor
         ]
@@ -222,20 +222,20 @@ frequencyStats lexicalModel =
         [ Html.table
             []
             [ tr []
-                [ td [ Styles.useClass Styles.Cell800px]
+                [ td [ Styles.useClass Styles.Cell800px ]
                     (renderWords lexicalModel)
-                , td [ Styles.useClass Styles.Cell800px]
+                , td [ Styles.useClass Styles.Cell800px ]
                     [ FreqInfoView.renderFrequencies lexicalModel.workingNormalized (Dict.get 1 lexicalModel.frequencies) ]
-                , td [Styles.useClass Styles.Cell800px]
+                , td [ Styles.useClass Styles.Cell800px ]
                     [ FreqInfoView.renderFrequencies lexicalModel.workingNormalized (Dict.get 2 lexicalModel.frequencies) ]
                 ]
             ]
         , Html.table
             []
             [ tr []
-                [ td [Styles.useClass Styles.Cell800px]
+                [ td [ Styles.useClass Styles.Cell800px ]
                     (renderGraphs lexicalModel)
-                , td [Styles.useClass Styles.Cell800px]
+                , td [ Styles.useClass Styles.Cell800px ]
                     [ FreqInfoView.renderNgraphs lexicalModel.currentTrigraph (Dict.get 3 lexicalModel.ngraphs) ]
                 ]
             ]
