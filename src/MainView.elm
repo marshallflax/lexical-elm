@@ -3,7 +3,7 @@ module MainView exposing (viewSubscriptions, root)
 import BowlingScoreView
 import Css
 import Html exposing (Html, button, div, span, text, input, p, table, tr, td)
-import Html.Attributes exposing (style, value, checked, type_, readonly, placeholder, href)
+import Html.Attributes exposing (value, checked, type_, readonly, placeholder, href)
 import Html.Lazy exposing (lazy, lazy2)
 import Keyboard
 import LexicalView
@@ -23,13 +23,11 @@ root model =
                 , td [] [ lazy2 BowlingScoreView.showTestResults model.tableState model.bowlingResults ]
                 ]
             ]
-        , p [ style [ displayNone ] ] [ text (toString model.lastKeyCode) ]
+        , p [ Styles.useClass Styles.DisplayNone ] [ text (toString model.lastKeyCode) ]
         ]
 
 
-displayNone : ( String, String )
-displayNone =
-    ( "display", "none" )
+
 
 
 viewSubscriptions : Model -> Sub Msg
@@ -39,7 +37,7 @@ viewSubscriptions _ =
 
 colophon : Html msg
 colophon =
-    p [ style [ ( "fontSize", "25%" ) ] ]
+    p [ Styles.useClass Styles.Colophon]
         [ text "(c) marshall.flax@gmail.com; licensed "
         , Html.a [ href "https://www.gnu.org/licenses/gpl-3.0.en.html" ] [ text "GPL3.0 +" ]
         , text " "

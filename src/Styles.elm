@@ -25,6 +25,8 @@ type Class
     | Cell400px
     | TestGood
     | TestBad
+    | DisplayNone
+    | Colophon
 
 
 imports : List String
@@ -54,5 +56,11 @@ rules =
       }
     , { selectors = [ Css.Class TestBad ]
       , descriptor = [ ( "background", "red" ) ]
+      }
+    , { selectors = [ Css.Class DisplayNone ]
+      , descriptor = [ ( "display", "none" ) ]
+      }
+    , { selectors = [ Css.Class Colophon ]
+      , descriptor = [ ( "font-size", "25%" ) ]
       }
     ]
