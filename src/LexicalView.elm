@@ -37,12 +37,13 @@ viewLexicalModel ( draggables, lexicalModel ) =
 
 showColorsOfCurrentWord : LexicalModel -> Html Msg
 showColorsOfCurrentWord lexicalModel =
-    let
-        currentWord =
-            currentWordFromIndex lexicalModel.workingWord lexicalModel.words
-    in
-        span []
-            [ currentWord.colors |> Set.toList |> toString |> text ]
+    span []
+        [ currentWordFromIndex lexicalModel.workingWord lexicalModel.words
+            |> .colors
+            |> Set.toList
+            |> toString
+            |> text
+        ]
 
 
 showSaveButton : Html Msg
@@ -192,10 +193,10 @@ renderGraphs lexicalModel =
 
         countToStyle : ( List Int, String ) -> List (Html.Attribute Msg)
         countToStyle ( freqs, trigraph ) =
-            [ Html.Attributes.style [( "background", "linear-gradient(135deg," ++ (String.join "," (List.map numberToColor freqs)) ++ ")" )]
+            [ Html.Attributes.style [ ( "background", "linear-gradient(135deg," ++ (String.join "," (List.map numberToColor freqs)) ++ ")" ) ]
             , ColoredWordView.matchingStyle (trigraph == lexicalModel.currentTrigraph)
-            , onShiftedMouseEnter (LexicalMessage (SetCurrentTrigraph trigraph))
             , Styles.useClass Styles.GradientClass
+            , onShiftedMouseEnter (LexicalMessage (SetCurrentTrigraph trigraph))
             ]
 
         renderChar : ( String, List String ) -> Html Msg
