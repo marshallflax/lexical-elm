@@ -15,7 +15,7 @@ import Misc
 import MiscView exposing (onShiftedMouseEnter)
 import Set exposing (Set)
 import Styles
-import Types exposing (..)
+import Types exposing (DraggableModel, LexicalModel, Msg(SaveModel, LexicalMessage), LexicalCmd(..))
 
 
 viewLexicalModel : ( DraggableModel, LexicalModel ) -> Html Msg
