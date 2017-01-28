@@ -1,11 +1,17 @@
 module Styles exposing (..)
 
 import Css
+import Html
 
 
 stylesheet : Css.Stylesheet Id Class msg
 stylesheet =
     Css.stylesheet imports rules
+
+
+useClass : Class -> Html.Attribute msg
+useClass =
+    stylesheet.class
 
 
 type Id

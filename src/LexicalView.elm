@@ -150,7 +150,7 @@ renderWords lexicalModel =
 
         renderLine : List ( Int, ColoredWord ) -> Html Msg
         renderLine listPart =
-            Html.div [ (.class Styles.stylesheet) Styles.NumberLineClass ]
+            Html.div [ Styles.useClass Styles.NumberLineClass ]
                 (List.map doWord listPart)
     in
         List.map renderLine (partitionedList lexicalModel)
@@ -202,7 +202,7 @@ renderGraphs lexicalModel =
                     :: (ColoredWordView.matchingStyle (trigraph == lexicalModel.currentTrigraph))
                 )
             , onShiftedMouseEnter (LexicalMessage (SetCurrentTrigraph trigraph))
-            , ((.class Styles.stylesheet) Styles.GradientClass)
+            , (Styles.useClass Styles.GradientClass)
             ]
 
         renderChar : ( String, List String ) -> Html Msg
