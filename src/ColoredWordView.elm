@@ -1,10 +1,10 @@
 module ColoredWordView exposing (colorStyle, matchingStyle, renderWord)
 
 import ColoredWord exposing (ColoredWord)
-import Html exposing (Html, Attribute, span, text)
-import Html.Attributes exposing (value, checked, type_, readonly, placeholder, href)
-import Html.Events exposing (on, onClick, onInput, onMouseEnter)
-import MiscView exposing (onShiftedMouseEnter)
+import Html exposing (Html)
+import Html.Attributes
+import Html.Events exposing (onClick)
+import MiscView
 import Set exposing (Set)
 import Styles
 import Types exposing (..)
@@ -15,7 +15,7 @@ colorStyle colorName =
     Html.Attributes.style [ ( "backgroundColor", colorName ) ]
 
 
-matchingStyle : Bool -> Attribute msg
+matchingStyle : Bool -> Html.Attribute msg
 matchingStyle matches =
     if (matches) then
         Styles.useClass Styles.SolidBlackBorder
@@ -32,26 +32,26 @@ colorStyles excludeSet coloredWord currentWordsNormalized =
         size =
             Set.size colorSet
 
-        isMatch =
-            Set.member coloredWord.normalized currentWordsNormalized
+        matchStyle =
+            matchingStyle <| Set.member coloredWord.normalized currentWordsNormalized
     in
         if (size == 0) then
-            [ matchingStyle isMatch ]
+            [ matchStyle ]
         else if (size <= 1) then
             [ Html.Attributes.style [ ( "backgroundColor", String.join "," (Set.toList colorSet) ) ]
-            , matchingStyle isMatch
+            , matchStyle
             ]
         else
             [ Html.Attributes.style [ ( "background", "linear-gradient(90deg," ++ String.join "," (Set.toList colorSet) ++ ")" ) ]
-            , matchingStyle isMatch
+            , matchStyle
             ]
 
 
 renderWord : Set String -> String -> Set String -> ( Int, ColoredWord ) -> Html Msg
 renderWord hideColors currentColor currentWordsNormalized ( index, w ) =
-    span
+    Html.span
         (onClick (LexicalMessage (ToggleColor index currentColor))
-            :: onShiftedMouseEnter (LexicalMessage (SetCurrentWord index))
+            :: MiscView.onShiftedMouseEnter (LexicalMessage (SetCurrentWord index))
             :: colorStyles hideColors w currentWordsNormalized
         )
-        [ text (" " ++ w.text ++ " ") ]
+        [ Html.text (" " ++ w.text ++ " ") ]
