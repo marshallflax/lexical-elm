@@ -75,28 +75,29 @@ colorButtons : DraggableModel -> Set String -> Html Msg
 colorButtons draggablesModel hideColors =
     let
         doCell : String -> Html Msg
-        doCell l =
-            viewDraggable draggablesModel
-                l
-                (td []
-                    [ input
-                        [ Html.Attributes.type_ "checkbox"
-                        , onClick (LexicalMessage (ToggleColorEnabled l))
-                        , Html.Attributes.checked (Set.member l hideColors)
-                        ]
-                        []
-                    , button
-                        [ Html.Attributes.attribute "id" ("colorButton" ++ l)
-                        , colorStyle l
-                        , onClick (LexicalMessage (SetCurrentColor l))
-                        ]
-                        [ text l ]
+        doCell nameOfColor =
+            td []
+                [ input
+                    [ Html.Attributes.type_ "checkbox"
+                    , Html.Attributes.checked (Set.member nameOfColor hideColors)
+                    , onClick (LexicalMessage (ToggleColorEnabled nameOfColor))
                     ]
-                )
+                    []
+                , button
+                    [ Html.Attributes.attribute "id" ("colorButton" ++ nameOfColor)
+                    , colorStyle nameOfColor
+                    , onClick (LexicalMessage (SetCurrentColor nameOfColor))
+                    ]
+                    [ text nameOfColor ]
+                ]
+
+        doDraggableCell : String -> Html Msg
+        doDraggableCell nameOfColor =
+            viewDraggable draggablesModel nameOfColor (doCell nameOfColor)
 
         doRow : List String -> Html Msg
         doRow ls =
-            table [] [ tr [] (enableButton ls :: disableButton ls :: (List.map doCell ls)) ]
+            table [] [ tr [] (enableButton ls :: disableButton ls :: (List.map doDraggableCell ls)) ]
     in
         div [] (List.map doRow rainbowList)
 
@@ -145,10 +146,25 @@ renderWords lexicalModel =
 
         renderLine : List ( Int, ColoredWord ) -> Html Msg
         renderLine listPart =
-            Html.div [ Styles.useClass Styles.NumberLineClass ]
+            Html.div
+                [ Styles.useClass Styles.NumberLineClass ]
                 (List.map doWord listPart)
     in
         List.map renderLine (partitionedList lexicalModel)
+
+
+numberToColor : Int -> String
+numberToColor number =
+    if (number <= 1) then
+        "#FCC"
+    else if (number <= 3) then
+        "#FFC"
+    else if (number <= 5) then
+        "#CFC"
+    else if (number <= 7) then
+        "#CFF"
+    else
+        "#CCF"
 
 
 renderGraphs : LexicalModel -> List (Html Msg)
@@ -176,19 +192,6 @@ renderGraphs lexicalModel =
             Dict.get 3 lexicalModel.ngraphs
                 |> Maybe.withDefault FreqInfo.emptyLenInfo
                 |> .tokenToCount
-
-        numberToColor : Int -> String
-        numberToColor number =
-            if (number <= 1) then
-                "#FCC"
-            else if (number <= 3) then
-                "#FFC"
-            else if (number <= 5) then
-                "#CFC"
-            else if (number <= 7) then
-                "#CFF"
-            else
-                "#CCF"
 
         countToStyle : ( List Int, String ) -> List (Html.Attribute Msg)
         countToStyle ( freqs, trigraph ) =
