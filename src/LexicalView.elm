@@ -14,7 +14,7 @@ import LexicalController exposing (countWords, countWordsMatching, currentWordFr
 import Misc
 import MiscView exposing (onShiftedMouseEnter)
 import Set exposing (Set)
-import Styles exposing (..)
+import Styles
 import Types exposing (..)
 
 
@@ -150,7 +150,7 @@ renderWords lexicalModel =
 
         renderLine : List ( Int, ColoredWord ) -> Html Msg
         renderLine listPart =
-            Html.div [ stylesheet.class NumberLineClass ]
+            Html.div [ (.class Styles.stylesheet) Styles.NumberLineClass ]
                 (List.map doWord listPart)
     in
         List.map renderLine (partitionedList lexicalModel)
@@ -202,7 +202,7 @@ renderGraphs lexicalModel =
                     :: (ColoredWordView.matchingStyle (trigraph == lexicalModel.currentTrigraph))
                 )
             , onShiftedMouseEnter (LexicalMessage (SetCurrentTrigraph trigraph))
-            , (stylesheet.class GradientClass)
+            , ((.class Styles.stylesheet) Styles.GradientClass)
             ]
 
         renderChar : ( String, List String ) -> Html Msg
