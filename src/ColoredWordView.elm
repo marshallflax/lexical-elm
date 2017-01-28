@@ -38,9 +38,13 @@ colorStyles excludeSet coloredWord currentWordsNormalized =
         if (size == 0) then
             [ matchingStyle isMatch ]
         else if (size <= 1) then
-            (Html.Attributes.style [ ( "backgroundColor", String.join "," (Set.toList colorSet) ) ]) :: [ matchingStyle isMatch ]
+            [ Html.Attributes.style [ ( "backgroundColor", String.join "," (Set.toList colorSet) ) ]
+            , matchingStyle isMatch
+            ]
         else
-            (Html.Attributes.style [ ( "background", "linear-gradient(90deg," ++ String.join "," (Set.toList colorSet) ++ ")" ) ]) :: [ matchingStyle isMatch ]
+            [ Html.Attributes.style [ ( "background", "linear-gradient(90deg," ++ String.join "," (Set.toList colorSet) ++ ")" ) ]
+            , matchingStyle isMatch
+            ]
 
 
 renderWord : Set String -> String -> Set String -> ( Int, ColoredWord ) -> Html Msg
