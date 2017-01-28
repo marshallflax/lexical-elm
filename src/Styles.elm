@@ -21,6 +21,8 @@ type Id
 type Class
     = NumberLineClass
     | GradientClass
+    | Cell800px
+    | Cell400px
 
 
 imports : List String
@@ -38,5 +40,11 @@ rules =
       }
     , { selectors = [ Css.Class GradientClass ]
       , descriptor = [ ( "background-clip", "content-box !important" ) ]
+      }
+    , { selectors = [ Css.Class Cell400px ]
+      , descriptor = [ ( "width", "400px" ), ( "vertical-align", "top" ) ]
+      }
+    , { selectors = [ Css.Class Cell800px ]
+      , descriptor = [ ( "width", "800px" ), ( "vertical-align", "top" ) ]
       }
     ]
