@@ -23,6 +23,8 @@ type Class
     | GradientClass
     | Cell800px
     | Cell400px
+    | TestGood
+    | TestBad
 
 
 imports : List String
@@ -46,5 +48,11 @@ rules =
       }
     , { selectors = [ Css.Class Cell800px ]
       , descriptor = [ ( "width", "800px" ), ( "vertical-align", "top" ) ]
+      }
+    , { selectors = [ Css.Class TestGood ]
+      , descriptor = [ ( "background", "lightgreen" ) ]
+      }
+    , { selectors = [ Css.Class TestBad ]
+      , descriptor = [ ( "background", "red" ) ]
       }
     ]

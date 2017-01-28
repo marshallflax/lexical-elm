@@ -1,7 +1,7 @@
 module BowlingScoreView exposing (initialTableState, showTestResults, showTestResultsOld)
 
 import Html exposing (Html, table, tr, td, text)
-import Html.Attributes exposing (style)
+import Styles exposing (..)
 import Table exposing (defaultCustomizations)
 import Testing exposing (TestResult)
 import Types exposing (Msg(SetTableState))
@@ -32,10 +32,10 @@ toRowAttrs : ( Int, TestResult ) -> List (Html.Attribute Msg)
 toRowAttrs ( _, result ) =
     case result of
         Result.Ok _ ->
-            [ style [ ( "background", "lightgreen" ) ] ]
+            [ Styles.useClass Styles.TestGood ]
 
         Result.Err _ ->
-            [ style [ ( "background", "red" ) ] ]
+            [ Styles.useClass Styles.TestBad ]
 
 
 showTestResultsOld : List ( Int, TestResult ) -> Html Msg
@@ -45,13 +45,13 @@ showTestResultsOld testList =
         doTest ( i, scoreTest ) =
             case scoreTest of
                 Result.Ok t ->
-                    tr [ style [ ( "backgroundColor", "lightgreen" ) ] ]
+                    tr [ Styles.useClass Styles.TestGood ]
                         [ td [] [ (text (toString i)) ]
                         , td [] [ (text t) ]
                         ]
 
                 Result.Err t ->
-                    tr [ style [ ( "backgroundColor", "red" ) ] ]
+                    tr [ Styles.useClass Styles.TestBad ]
                         [ td [] [ (text (toString i)) ]
                         , td [] [ (text t) ]
                         ]
