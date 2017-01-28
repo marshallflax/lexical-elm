@@ -1,7 +1,7 @@
 module BowlingScoreView exposing (initialTableState, showTestResults, showTestResultsOld)
 
 import Html exposing (Html, table, tr, td, text)
-import Styles exposing (..)
+import Styles
 import Table exposing (defaultCustomizations)
 import Testing exposing (TestResult)
 import Types exposing (Msg(SetTableState))

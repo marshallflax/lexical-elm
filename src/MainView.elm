@@ -1,9 +1,8 @@
 module MainView exposing (viewSubscriptions, root)
 
 import BowlingScoreView
-import Css
 import Html exposing (Html, button, div, span, text, input, p, table, tr, td)
-import Html.Attributes exposing (value, checked, type_, readonly, placeholder, href)
+import Html.Attributes exposing (href)
 import Html.Lazy exposing (lazy, lazy2)
 import Keyboard
 import LexicalView
@@ -14,7 +13,7 @@ import Types exposing (Model, Msg(KeyMsg))
 root : Model -> Html Msg
 root model =
     div []
-        [ Css.style [ Html.Attributes.scoped True ] Styles.stylesheet
+        [ Styles.defs
         , lazy LexicalView.viewLexicalModel ( model.draggables, model.lexical )
         , colophon
         , table []
@@ -27,9 +26,6 @@ root model =
         ]
 
 
-
-
-
 viewSubscriptions : Model -> Sub Msg
 viewSubscriptions _ =
     Keyboard.downs KeyMsg
@@ -37,7 +33,7 @@ viewSubscriptions _ =
 
 colophon : Html msg
 colophon =
-    p [ Styles.useClass Styles.Colophon]
+    p [ Styles.useClass Styles.Colophon ]
         [ text "(c) marshall.flax@gmail.com; licensed "
         , Html.a [ href "https://www.gnu.org/licenses/gpl-3.0.en.html" ] [ text "GPL3.0 +" ]
         , text " "

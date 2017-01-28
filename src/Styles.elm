@@ -1,7 +1,8 @@
-module Styles exposing (Class(..), useClass, stylesheet)
+module Styles exposing (Class(..), useClass, defs)
 
 import Css
 import Html
+import Html.Attributes
 
 
 type Class
@@ -93,6 +94,11 @@ stylesheet =
 useClass : Class -> Html.Attribute msg
 useClass classname =
     stylesheet.class classname
+
+
+defs : Html.Html msg
+defs =
+    Css.style [ Html.Attributes.scoped True ] stylesheet
 
 
 type Id

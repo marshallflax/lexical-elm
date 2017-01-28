@@ -8,7 +8,7 @@ import DragView exposing (viewDraggable)
 import FreqInfo
 import FreqInfoView
 import Html exposing (Html, button, div, span, text, input, p, table, tr, td)
-import Html.Attributes exposing (value, checked, type_, readonly, placeholder, href)
+import Html.Attributes
 import Html.Events exposing (onClick, onInput, onMouseEnter)
 import LexicalController exposing (countWords, countWordsMatching, currentWordFromIndex, dumpState, partitionedList, rainbowList)
 import Misc
@@ -54,7 +54,7 @@ showSaveButton =
 showTextInput : LexicalModel -> Html Msg
 showTextInput lexicalModel =
     input
-        [ value (dumpState lexicalModel)
+        [ Html.Attributes.value (dumpState lexicalModel)
         , onInput (LexicalMessage << SetText)
         , Styles.useClass Styles.Cell800px
         ]
@@ -80,9 +80,9 @@ colorButtons draggablesModel hideColors =
                     l
                     (td []
                         [ input
-                            [ type_ "checkbox"
+                            [ Html.Attributes.type_ "checkbox"
                             , onClick (LexicalMessage (ToggleColorEnabled l))
-                            , checked (Set.member l hideColors)
+                            , Html.Attributes.checked (Set.member l hideColors)
                             ]
                             []
                         , button
@@ -110,7 +110,7 @@ resetButtons =
 wordsPerLine : LexicalModel -> Html Msg
 wordsPerLine lexicalModel =
     input
-        [ value (toString lexicalModel.wordsPerLine)
+        [ Html.Attributes.value (toString lexicalModel.wordsPerLine)
         , onInput (LexicalMessage << SetWordsPerLine)
         ]
         [ text "WordsPerLine" ]
@@ -125,13 +125,13 @@ wordStats lexicalModel =
 wordsForColor : LexicalModel -> Html Msg
 wordsForColor lexicalModel =
     input
-        [ value
+        [ Html.Attributes.value
             (matchingWordsForColor lexicalModel.workingColor lexicalModel.words
                 |> Array.toList
                 |> String.join ", "
             )
         , Styles.useClass Styles.Cell800px
-        , readonly True
+        , Html.Attributes.readonly True
         , colorStyle lexicalModel.workingColor
         ]
         []
