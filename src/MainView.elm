@@ -16,14 +16,19 @@ root model =
         [ Css.style [ Html.Attributes.scoped True ] LexicalView.stylesheet
         , lazy LexicalView.viewLexicalModel ( model.draggables, model.lexical )
         , colophon
-        , table [ style [ ( "display", "none" ) ] ]
+        , table []
             [ tr []
                 [ td [] [ lazy BowlingScoreView.showTestResultsOld model.bowlingResults ]
                 , td [] [ lazy2 BowlingScoreView.showTestResults model.tableState model.bowlingResults ]
                 ]
             ]
-        , p [ style [ ( "display", "none" ) ] ] [ text (toString model.lastKeyCode) ]
+        , p [ style [ displayNone ] ] [ text (toString model.lastKeyCode) ]
         ]
+
+
+displayNone : ( String, String )
+displayNone =
+    ( "display", "none" )
 
 
 viewSubscriptions : Model -> Sub Msg
