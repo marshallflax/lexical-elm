@@ -7,13 +7,14 @@ import Html.Attributes exposing (style, value, checked, type_, readonly, placeho
 import Html.Lazy exposing (lazy, lazy2)
 import Keyboard
 import LexicalView
+import Styles
 import Types exposing (Model, Msg(KeyMsg))
 
 
 root : Model -> Html Msg
 root model =
     div []
-        [ Css.style [ Html.Attributes.scoped True ] LexicalView.stylesheet
+        [ Css.style [ Html.Attributes.scoped True ] Styles.stylesheet
         , lazy LexicalView.viewLexicalModel ( model.draggables, model.lexical )
         , colophon
         , table []
