@@ -16,8 +16,8 @@ stylesheet =
         , { selectors = [ Css.Class TestBad ], descriptor = [ ( "background", "red" ) ] }
         , { selectors = [ Css.Class DisplayNone ], descriptor = [ ( "display", "none" ) ] }
         , { selectors = [ Css.Class Colophon ], descriptor = [ ( "font-size", "25%" ) ] }
-        , { selectors = [ Css.Class SolidBlackBorder ], descriptor = [ ( "borderStyle", "solid" ), ( "borderColor", "black" ) ] }
-        , { selectors = [ Css.Class SolidTransparentBorder ], descriptor = [ ( "borderStyle", "solid" ), ( "borderColor", "transparent" ) ] }
+        , { selectors = [ Css.Class SolidBlackBorder ], descriptor = [ ( "border-style", "solid" ), ( "border-color", "black" ) ] }
+        , { selectors = [ Css.Class SolidTransparentBorder ], descriptor = [ ( "border-style", "solid" ), ( "border-color", "transparent" ) ] }
         , { selectors = [ Css.Class OutlineBorder ], descriptor = [ ( "border", "solid" ), ( "border-width", "1px" ) ] }
         ]
 
