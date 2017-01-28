@@ -29,6 +29,7 @@ type Class
     | Colophon
     | SolidBlackBorder
     | SolidTransparentBorder
+    | OutlineBorder
 
 
 imports : List String
@@ -49,4 +50,5 @@ rules =
     , { selectors = [ Css.Class Colophon ], descriptor = [ ( "font-size", "25%" ) ] }
     , { selectors = [ Css.Class SolidBlackBorder ], descriptor = [ ( "borderStyle", "solid" ), ( "borderColor", "black" ) ] }
     , { selectors = [ Css.Class SolidTransparentBorder ], descriptor = [ ( "borderStyle", "solid" ), ( "borderColor", "transparent" ) ] }
+    , { selectors = [ Css.Class OutlineBorder ], descriptor = [ ( "border", "solid" ), ( "border-width", "1px" ) ] }
     ]

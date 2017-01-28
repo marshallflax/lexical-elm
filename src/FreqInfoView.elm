@@ -4,28 +4,24 @@ import ColoredWordView exposing (matchingStyle)
 import Dict exposing (Dict)
 import FreqInfo exposing (LenInfo, emptyLenInfo)
 import Html exposing (Html, table, tr, td, text, span)
-import Html.Attributes exposing (style)
 import MiscView exposing (onShiftedMouseEnter)
 import Set exposing (Set)
+import Styles
 import Types exposing (..)
 
 
 renderGeneric : (String -> Html Msg) -> Maybe LenInfo -> Html Msg
 renderGeneric renderWord freqToWords =
     let
-        solidBorder : Html.Attribute msg
-        solidBorder =
-            style [ ( "border", "solid" ), ( "border-width", "1px" ) ]
-
         renderFrequency : ( Int, List String ) -> Html Msg
         renderFrequency ( size, words ) =
             tr []
-                [ td [ solidBorder ] [ text (toString size) ]
-                , td [ solidBorder ] (List.map renderWord words)
+                [ td [ Styles.useClass Styles.OutlineBorder ] [ text (toString size) ]
+                , td [ Styles.useClass Styles.OutlineBorder ] (List.map renderWord words)
                 ]
     in
         table
-            [ solidBorder ]
+            [ Styles.useClass Styles.OutlineBorder ]
             (List.map renderFrequency <| List.reverse <| Dict.toList <| .freqToList <| Maybe.withDefault emptyLenInfo freqToWords)
 
 
