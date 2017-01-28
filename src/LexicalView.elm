@@ -61,45 +61,44 @@ showTextInput lexicalModel =
         []
 
 
+enableButton : List String -> Html Msg
+enableButton cs =
+    button [ onClick (LexicalMessage (HideSomeColors cs)) ] [ text "hide" ]
+
+
+disableButton : List String -> Html Msg
+disableButton cs =
+    button [ onClick (LexicalMessage (ResetSomeColors cs)) ] [ text "reset" ]
+
+
 colorButtons : DraggableModel -> Set String -> Html Msg
 colorButtons draggablesModel hideColors =
-    div
-        []
-        (let
-            enableButton : List String -> Html Msg
-            enableButton cs =
-                button [ onClick (LexicalMessage (HideSomeColors cs)) ] [ text "hide" ]
-
-            disableButton : List String -> Html Msg
-            disableButton cs =
-                button [ onClick (LexicalMessage (ResetSomeColors cs)) ] [ text "reset" ]
-
-            doCell : String -> Html Msg
-            doCell l =
-                viewDraggable draggablesModel
-                    l
-                    (td []
-                        [ input
-                            [ Html.Attributes.type_ "checkbox"
-                            , onClick (LexicalMessage (ToggleColorEnabled l))
-                            , Html.Attributes.checked (Set.member l hideColors)
-                            ]
-                            []
-                        , button
-                            [ Html.Attributes.attribute "id" ("colorButton" ++ l)
-                            , colorStyle l
-                            , onClick (LexicalMessage (SetCurrentColor l))
-                            ]
-                            [ text l ]
+    let
+        doCell : String -> Html Msg
+        doCell l =
+            viewDraggable draggablesModel
+                l
+                (td []
+                    [ input
+                        [ Html.Attributes.type_ "checkbox"
+                        , onClick (LexicalMessage (ToggleColorEnabled l))
+                        , Html.Attributes.checked (Set.member l hideColors)
                         ]
-                    )
+                        []
+                    , button
+                        [ Html.Attributes.attribute "id" ("colorButton" ++ l)
+                        , colorStyle l
+                        , onClick (LexicalMessage (SetCurrentColor l))
+                        ]
+                        [ text l ]
+                    ]
+                )
 
-            doRow : List String -> Html Msg
-            doRow ls =
-                table [] [ tr [] (enableButton ls :: disableButton ls :: (List.map doCell ls)) ]
-         in
-            List.map doRow rainbowList
-        )
+        doRow : List String -> Html Msg
+        doRow ls =
+            table [] [ tr [] (enableButton ls :: disableButton ls :: (List.map doCell ls)) ]
+    in
+        div [] (List.map doRow rainbowList)
 
 
 resetButtons : Html Msg
