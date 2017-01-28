@@ -2,7 +2,7 @@ module DragView exposing (dragSubscriptions, viewDraggable)
 
 import Dict exposing (Dict)
 import Html exposing (div, span, text, Html, Attribute)
-import Html.Attributes exposing (style)
+import Html.Attributes
 import Html.Events
 import Json.Decode as Decode
 import Mouse exposing (Position)
@@ -42,7 +42,7 @@ viewDraggable dict key html =
             in
                 span
                     [ onMouseDown key
-                    , style
+                    , Html.Attributes.style
                         [ ( "position", "relative" )
                         , ( "left", px (.x position) )
                         , ( "top", px (.y position) )
