@@ -76,6 +76,7 @@
     : Result = Err reason | Ok value
 *** The events that a UI processes [[file:src/Types.elm::EnableAllColors]]
 ** (also known as _Algebraic Data Structures_)
+*** [[https://www.youtube.com/watch?v=IcgmSRJHu_8][Making Impossible States Impossible (youtube video)]]
 * But how can this work? Records
 ** Define records as a structure
   : info1 = {a: 2, b: 23, c: "Hello"}
