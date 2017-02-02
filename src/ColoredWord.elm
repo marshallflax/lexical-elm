@@ -35,7 +35,14 @@ tokenize input =
 
         pattern : String
         pattern =
-            "[^" ++ whiteSpaceChar ++ "]+[" ++ whiteSpaceChar ++ "]*"
+            ""
+                ++ "["
+                ++ whiteSpaceChar
+                ++ "]*"
+                ++ "["
+                ++ "^"
+                ++ whiteSpaceChar
+                ++ "]*"
     in
         Regex.find Regex.All (Regex.regex pattern) input
             |> List.map .match

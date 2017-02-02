@@ -152,7 +152,7 @@ dumpState : LexicalModel -> String
 dumpState model =
     Array.toList model.words
         |> List.map dumpColoredWord
-        |> (String.join " ")
+        |> (String.join "")
 
 
 perhapsInterperse : Bool -> List String -> List String

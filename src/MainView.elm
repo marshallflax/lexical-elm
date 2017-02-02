@@ -4,7 +4,6 @@ import BowlingScoreView
 import Html exposing (Html, button, div, span, text, input, p, table, tr, td)
 import Html.Attributes exposing (href)
 import Html.Lazy exposing (lazy, lazy2)
-import Keyboard
 import LexicalView
 import Styles
 import Types exposing (Model, Msg(KeyMsg))
@@ -26,9 +25,11 @@ root model =
         ]
 
 
+{-| Or, Keyboard.downs KeyMsg
+-}
 viewSubscriptions : Model -> Sub Msg
 viewSubscriptions _ =
-    Keyboard.downs KeyMsg
+    Sub.none
 
 
 colophon : Html msg
