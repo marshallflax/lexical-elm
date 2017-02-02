@@ -118,7 +118,7 @@ countWords model =
 
 partitionedList : LexicalModel -> List (List ( Int, ColoredWord ))
 partitionedList model =
-    (Array.toIndexedList model.words)
+    Array.toIndexedList model.words
         |> List.Split.chunksOfLeft model.wordsPerLine
 
 
@@ -133,7 +133,9 @@ countWordsMatching model =
 
 rainbowList : List (List String)
 rainbowList =
-    [ [ "Aqua", "Blue", "Green", "DarkTurquoise", "Fuchsia", "Lime", "Plum", "Yellow" ], [ "Beige", "Indigo", "Purple", "Crimson", "Violet", "Coral", "Pink", "Gold", "Cyan" ] ]
+    [ [ "Aqua", "Blue", "Green", "DarkTurquoise", "Fuchsia", "Lime", "Plum", "Yellow" ]
+    , [ "Beige", "Indigo", "Purple", "Crimson", "Violet", "Coral", "Pink", "Gold", "Cyan" ]
+    ]
 
 
 setWordsPerLine : String -> LexicalModel -> LexicalModel
@@ -152,7 +154,7 @@ dumpState : LexicalModel -> String
 dumpState model =
     Array.toList model.words
         |> List.map dumpColoredWord
-        |> (String.join "")
+        |> String.join ""
 
 
 perhapsInterperse : Bool -> List String -> List String
@@ -181,7 +183,15 @@ updateModelWithNewText newText model =
         { model
             | text = newText
             , words = words
-            , frequencies = countFreq (perhapsInterperse True) [ ( 1, 0 ), ( 2, 1 ) ] wordList
+            , frequencies =
+                countFreq
+                    (perhapsInterperse True)
+                    [ ( 1, 0 ), ( 2, 1 ) ]
+                    wordList
             , graphs = graphs
-            , ngraphs = countFreq (perhapsInterperse False) [ ( 3, 1 ) ] (String.toList graphs |> List.map String.fromChar)
+            , ngraphs =
+                countFreq
+                    (perhapsInterperse False)
+                    [ ( 3, 1 ) ]
+                    (String.toList graphs |> List.map String.fromChar)
         }
