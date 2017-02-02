@@ -8,13 +8,8 @@
 *** NullPointerException impossible
 *** ClassCastException impossible
 *** Generics enforced by compiler
-*** Missing "case" statement in "switch" impossible; no "default" case.
-*** Strong typing enables "semantic versioning" of libraries
-**** Major.minor.patch
-**** If the API provided by a package is unchanged, bump the "patch"
-**** If the API is increased, bump the "minor"
-**** If an existing interface is changed, bump the "major"
-**** Contains a subset of Haskell, but without higher-order types or laziness
+*** Missing "case" statement in "switch" impossible; no "default" case, no falling-through from case to case
+*** Contains a subset of Haskell, but without higher-order types or laziness
 ** [[https://en.wikipedia.org/wiki/Functional_reactive_programming][Functional Reactive Programming]]
 * What is "Functional"
 ** In a functional language *all* data is _immutable_
@@ -43,7 +38,7 @@
 *** How to create commands
 **** Commands triggers can be part of view elements (e.g. <button>)
 **** Commands can be defined as part of websocket or http calls
-** But also, MexicoMarker/MagicMarker/eBlotter are a reactive framework
+** But also, MexicoMarker/MagicMarker/eBlotter are reactive frameworks
 *** View is always downstream, except that it emits messages up
 *** Controller receives commands and emits updates to the Model
 * But how can this work? Persistent Data Structures
@@ -91,7 +86,7 @@
 ** Computations are "carried along" (essentially on the call stack) until they become effective
 ** Syntactic sugar
 ** Also known as [[https://en.wikipedia.org/wiki/Monad_(functional_programming)][Monads]]
-* But how can this work? Virtual DOM, so the real DOM is write-only
+* But how can this work? Virtual DOM hiding the Browser's DOM
 ** Javascript engines are awfully fast -- especially with "clean" javascript
 ** DOM interaction is still slow -- the rendering engine keeps being asked to do more and more
 ** Elm does double-buffering against a "Virtual DOM"
@@ -100,6 +95,7 @@
 *** Events do contain info from the actual DOM of course
 * But how can this work? Lots of recursive function calls.
 *** Loops implemented through recursion
+*** [[file:src/Misc.elm::zipLists lists][Recursion instead of variables]]
 *** Tail Call Optimization allows us to avoid blowing-out the stack...compiler does this for you automatically when possible
 **** Inefficient:
 #+BEGIN_SRC
