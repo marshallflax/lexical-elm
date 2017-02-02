@@ -21,24 +21,29 @@ accumulateMaybe default verb maybe =
     Maybe.withDefault default maybe |> verb |> Just
 
 
+
+-- ListHelper : ( List (List a), List (List a) ) -> ( List (List a), List (List a) )
+-- Start with a list of lists: ((1, 2, 3), (10, 20, 30))
+-- Return the transpose: ((1,10), (2, 20), (3, 30))
+
+
 zipLists : List (List a) -> List (List a)
 zipLists lists =
     let
-        zipListHelper : ( List (List a), List (List a) ) -> ( List (List a), List (List a) )
-        zipListHelper ( inputs, output ) =
+        zipListHelper ( remainingInputs, outputSoFar ) =
             case
                 List.foldr
                     (Maybe.map2 ((::)))
                     (Just [])
-                    (List.map List.head inputs)
+                    (List.map List.head remainingInputs)
             of
                 Nothing ->
-                    ( inputs, output )
+                    ( remainingInputs, outputSoFar )
 
                 Just heads ->
                     zipListHelper
-                        ( List.map (List.drop 1) inputs
-                        , heads :: output
+                        ( List.map (List.drop 1) remainingInputs
+                        , heads :: outputSoFar
                         )
     in
         zipListHelper ( lists, [] )
