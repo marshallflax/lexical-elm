@@ -166,17 +166,17 @@ perhapsInterperse interposeUnderscores =
 updateModelWithNewText : String -> LexicalModel -> LexicalModel
 updateModelWithNewText newText model =
     let
-        graphs =
-            newText
-                |> Regex.replace Regex.All (Regex.regex "[']") (\_ -> "")
-                |> Regex.replace Regex.All (Regex.regex "[^0-9a-zA-Z]+") (\_ -> " ")
-                |> String.toLower
-
         words =
             splitIntoColorwords newText
 
         wordList =
             Array.map .normalized words |> Array.toList
+
+        graphs =
+            String.join " " wordList
+                |> Regex.replace Regex.All (Regex.regex "[']") (\_ -> "")
+                |> Regex.replace Regex.All (Regex.regex "[^0-9a-zA-Z]+") (\_ -> " ")
+                |> String.toLower
     in
         { model
             | text = newText
