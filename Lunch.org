@@ -179,7 +179,7 @@ fib3 n =
 ** Widget library is still developing
 *** New widgets can be written using pure Elm
 ** View is simply native HTML layout -- lack of tools to graphically edit them
-* Time travel!!! [[http://localhost:8000/src/Main.elm]]
+* Time travel!!! [[http://./index.html]]
 #+AUTHOR: Marshall Flax
 #+OPTIONS: num:nil p:nil pri:nil stat:nilt tags:t tasks:t tex:t timestamp:nil toc:nil html-postamble:nil
 #+LATEX_HEADER: \usepackage[margin=0.5in]{geometry}

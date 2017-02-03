@@ -11410,1296 +11410,6 @@ var _marshallflax$lexical_elm$BowlingScoreTest$numberList = function (list) {
 };
 var _marshallflax$lexical_elm$BowlingScoreTest$testResults = _marshallflax$lexical_elm$BowlingScoreTest$numberList(
 	A2(_elm_lang$core$Basics_ops['++'], _marshallflax$lexical_elm$BowlingScoreTest$testGameScore, _marshallflax$lexical_elm$BowlingScoreTest$testFrameIfication));
-var _marshallflax$lexical_elm$ColoredWord$matchingWordsForColor = function (specifiedColor) {
-	return function (_p0) {
-		return A2(
-			_elm_lang$core$Array$map,
-			function (_) {
-				return _.text;
-			},
-			A2(
-				_elm_lang$core$Array$filter,
-				function (_p1) {
-					return A2(
-						_elm_lang$core$Set$member,
-						specifiedColor,
-						function (_) {
-							return _.colors;
-						}(_p1));
-				},
-				_p0));
-	};
-};
-var _marshallflax$lexical_elm$ColoredWord$dumpColoredWord = function (_p2) {
-	var _p3 = _p2;
-	var _p5 = _p3.text;
-	var _p4 = _p3.colors;
-	return _elm_lang$core$Set$isEmpty(_p4) ? _p5 : A2(
-		_elm_lang$core$Basics_ops['++'],
-		_p5,
-		A2(
-			_elm_lang$core$Basics_ops['++'],
-			'<',
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				A2(
-					_elm_lang$core$String$join,
-					',',
-					_elm_lang$core$Set$toList(_p4)),
-				'>')));
-};
-var _marshallflax$lexical_elm$ColoredWord$normalize = function (text) {
-	return A4(
-		_elm_lang$core$Regex$replace,
-		_elm_lang$core$Regex$All,
-		_elm_lang$core$Regex$regex('[^_a-z0-9\'’]'),
-		_elm_lang$core$Basics$always(''),
-		_elm_lang$core$String$toLower(text));
-};
-var _marshallflax$lexical_elm$ColoredWord$chunkToColoredword = function (str) {
-	var textAndColors = A2(
-		_elm_lang$core$Maybe$map,
-		function (_) {
-			return _.submatches;
-		},
-		_elm_lang$core$List$head(
-			A3(
-				_elm_lang$core$Regex$find,
-				_elm_lang$core$Regex$All,
-				_elm_lang$core$Regex$regex('^([^<>]+)<([^>]+)>\\s*$'),
-				str)));
-	var text = A2(
-		_elm_lang$core$Maybe$withDefault,
-		str,
-		A2(
-			_elm_lang$core$Maybe$withDefault,
-			_elm_lang$core$Maybe$Nothing,
-			A2(_elm_lang$core$Maybe$andThen, _elm_lang$core$List$head, textAndColors)));
-	var colors = A2(
-		_elm_lang$core$Maybe$withDefault,
-		_elm_lang$core$Set$empty,
-		A2(
-			_elm_lang$core$Maybe$map,
-			_elm_lang$core$Set$fromList,
-			A2(
-				_elm_lang$core$Maybe$map,
-				A2(
-					_elm_lang$core$Regex$split,
-					_elm_lang$core$Regex$All,
-					_elm_lang$core$Regex$regex(',')),
-				A2(
-					_elm_lang$core$Maybe$withDefault,
-					_elm_lang$core$Maybe$Nothing,
-					A2(
-						_elm_lang$core$Maybe$andThen,
-						_elm_lang$core$List$head,
-						A2(
-							_elm_lang$core$Maybe$map,
-							_elm_lang$core$List$drop(1),
-							textAndColors))))));
-	return {
-		text: text,
-		colors: colors,
-		normalized: _marshallflax$lexical_elm$ColoredWord$normalize(text)
-	};
-};
-var _marshallflax$lexical_elm$ColoredWord$tokenize = function (input) {
-	var whiteSpaceChar = ' \\f\\n\\r\\t\\v\\u00a0\\u1680\\u180e\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff';
-	var pattern = A2(
-		_elm_lang$core$Basics_ops['++'],
-		'[^',
-		A2(
-			_elm_lang$core$Basics_ops['++'],
-			whiteSpaceChar,
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				']+[',
-				A2(_elm_lang$core$Basics_ops['++'], whiteSpaceChar, ']*'))));
-	return A2(
-		_elm_lang$core$List$map,
-		function (_) {
-			return _.match;
-		},
-		A3(
-			_elm_lang$core$Regex$find,
-			_elm_lang$core$Regex$All,
-			_elm_lang$core$Regex$regex(pattern),
-			input));
-};
-var _marshallflax$lexical_elm$ColoredWord$splitIntoColorwords = function (input) {
-	return A2(
-		_elm_lang$core$Array$map,
-		_marshallflax$lexical_elm$ColoredWord$chunkToColoredword,
-		_elm_lang$core$Array$fromList(
-			_marshallflax$lexical_elm$ColoredWord$tokenize(input)));
-};
-var _marshallflax$lexical_elm$ColoredWord$empty = {text: '', colors: _elm_lang$core$Set$empty, normalized: ''};
-var _marshallflax$lexical_elm$Misc$zipLists = function (lists) {
-	var zipListHelper = function (_p0) {
-		zipListHelper:
-		while (true) {
-			var _p1 = _p0;
-			var _p4 = _p1._1;
-			var _p3 = _p1._0;
-			var _p2 = A3(
-				_elm_lang$core$List$foldr,
-				_elm_lang$core$Maybe$map2(
-					F2(
-						function (x, y) {
-							return {ctor: '::', _0: x, _1: y};
-						})),
-				_elm_lang$core$Maybe$Just(
-					{ctor: '[]'}),
-				A2(_elm_lang$core$List$map, _elm_lang$core$List$head, _p3));
-			if (_p2.ctor === 'Nothing') {
-				return {ctor: '_Tuple2', _0: _p3, _1: _p4};
-			} else {
-				var _v2 = {
-					ctor: '_Tuple2',
-					_0: A2(
-						_elm_lang$core$List$map,
-						_elm_lang$core$List$drop(1),
-						_p3),
-					_1: {ctor: '::', _0: _p2._0, _1: _p4}
-				};
-				_p0 = _v2;
-				continue zipListHelper;
-			}
-		}
-	};
-	return _elm_lang$core$List$reverse(
-		_elm_lang$core$Tuple$second(
-			zipListHelper(
-				{
-					ctor: '_Tuple2',
-					_0: lists,
-					_1: {ctor: '[]'}
-				})));
-};
-var _marshallflax$lexical_elm$Misc$combineSubscriptions = F2(
-	function (list, model) {
-		return _elm_lang$core$Platform_Sub$batch(
-			A2(
-				_elm_lang$core$List$map,
-				F2(
-					function (x, y) {
-						return y(x);
-					})(model),
-				list));
-	});
-var _marshallflax$lexical_elm$Misc$toggleSet = F2(
-	function (element, set) {
-		return A2(_elm_lang$core$Set$member, element, set) ? A2(_elm_lang$core$Set$remove, element, set) : A2(_elm_lang$core$Set$insert, element, set);
-	});
-var _marshallflax$lexical_elm$Misc$dictToListL = function (dict) {
-	return A3(
-		_elm_lang$core$Dict$foldl,
-		F3(
-			function (key, value, list) {
-				return {
-					ctor: '::',
-					_0: {ctor: '_Tuple2', _0: key, _1: value},
-					_1: list
-				};
-			}),
-		{ctor: '[]'},
-		dict);
-};
-var _marshallflax$lexical_elm$FreqInfo$multiRemove = F2(
-	function (list, dict) {
-		return A3(
-			_elm_lang$core$List$foldl,
-			function (k) {
-				return _elm_lang$core$Dict$remove(k);
-			},
-			dict,
-			list);
-	});
-var _marshallflax$lexical_elm$FreqInfo$pairedList = F3(
-	function (interposeUnderscores, widths, wordList) {
-		var perhapsInterperse = interposeUnderscores ? _elm_lang$core$List$intersperse('_') : _elm_lang$core$Basics$identity;
-		var listOfLists = A2(
-			_elm_lang$core$List$map,
-			A2(_elm_lang$core$Basics$flip, _elm_lang$core$List$drop, wordList),
-			A2(_elm_lang$core$List$range, 0, widths - 1));
-		var zipped = _marshallflax$lexical_elm$Misc$zipLists(listOfLists);
-		return A2(
-			_elm_lang$core$List$map,
-			function (_p0) {
-				return A3(
-					_elm_lang$core$List$foldr,
-					F2(
-						function (x, y) {
-							return A2(_elm_lang$core$Basics_ops['++'], x, y);
-						}),
-					'',
-					perhapsInterperse(_p0));
-			},
-			zipped);
-	});
-var _marshallflax$lexical_elm$FreqInfo$countList = function (list) {
-	var accumulateMaybe = F3(
-		function ($default, verb, maybe) {
-			return _elm_lang$core$Maybe$Just(
-				verb(
-					A2(_elm_lang$core$Maybe$withDefault, $default, maybe)));
-		});
-	return A3(
-		_elm_lang$core$List$foldl,
-		function (_p1) {
-			var _p2 = _p1;
-			return A2(
-				_elm_lang$core$Dict$update,
-				_p2._1,
-				A2(
-					accumulateMaybe,
-					{ctor: '[]'},
-					F2(
-						function (x, y) {
-							return {ctor: '::', _0: x, _1: y};
-						})(_p2._0)));
-		},
-		_elm_lang$core$Dict$empty,
-		_marshallflax$lexical_elm$Misc$dictToListL(
-			A3(
-				_elm_lang$core$List$foldl,
-				A2(
-					_elm_lang$core$Basics$flip,
-					_elm_lang$core$Dict$update,
-					A2(
-						accumulateMaybe,
-						0,
-						F2(
-							function (x, y) {
-								return x + y;
-							})(1))),
-				_elm_lang$core$Dict$empty,
-				list)));
-};
-var _marshallflax$lexical_elm$FreqInfo$countFreq = F3(
-	function (interposeUnderscores, desired, wordList) {
-		var pl = function (len) {
-			return A3(_marshallflax$lexical_elm$FreqInfo$pairedList, interposeUnderscores, len, wordList);
-		};
-		var computeFrequencies = function (len) {
-			return _marshallflax$lexical_elm$FreqInfo$countList(
-				pl(len));
-		};
-		var addNGram = function (_p3) {
-			var _p4 = _p3;
-			var _p5 = _p4._0;
-			return A2(
-				_elm_lang$core$Dict$insert,
-				_p5,
-				A2(
-					_marshallflax$lexical_elm$FreqInfo$multiRemove,
-					A2(_elm_lang$core$List$range, 1, _p4._1),
-					computeFrequencies(_p5)));
-		};
-		return A3(_elm_lang$core$List$foldl, addNGram, _elm_lang$core$Dict$empty, desired);
-	});
-var _marshallflax$lexical_elm$FreqInfo$empty = _elm_lang$core$Dict$empty;
-var _marshallflax$lexical_elm$Types$encodeSavedModel = function (model) {
-	return A2(
-		_elm_lang$core$Json_Encode$encode,
-		0,
-		_elm_lang$core$Json_Encode$object(
-			{
-				ctor: '::',
-				_0: {
-					ctor: '_Tuple2',
-					_0: 'text',
-					_1: _elm_lang$core$Json_Encode$string(model.lexical.text)
-				},
-				_1: {
-					ctor: '::',
-					_0: {
-						ctor: '_Tuple2',
-						_0: 'wordsPerLine',
-						_1: _elm_lang$core$Json_Encode$int(model.lexical.wordsPerLine)
-					},
-					_1: {ctor: '[]'}
-				}
-			}));
-};
-var _marshallflax$lexical_elm$Types$Model = F5(
-	function (a, b, c, d, e) {
-		return {lexical: a, draggables: b, lastKeyCode: c, bowlingResults: d, tableState: e};
-	});
-var _marshallflax$lexical_elm$Types$DraggableWidget = F2(
-	function (a, b) {
-		return {position: a, drag: b};
-	});
-var _marshallflax$lexical_elm$Types$DragState = F2(
-	function (a, b) {
-		return {start: a, current: b};
-	});
-var _marshallflax$lexical_elm$Types$SavedModel = F2(
-	function (a, b) {
-		return {text: a, wordsPerLine: b};
-	});
-var _marshallflax$lexical_elm$Types$savedModelDecoder = A3(
-	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-	'wordsPerLine',
-	_elm_lang$core$Json_Decode$int,
-	A3(
-		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-		'text',
-		_elm_lang$core$Json_Decode$string,
-		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_marshallflax$lexical_elm$Types$SavedModel)));
-var _marshallflax$lexical_elm$Types$DragAt = function (a) {
-	return {ctor: 'DragAt', _0: a};
-};
-var _marshallflax$lexical_elm$Types$DragEnd = function (a) {
-	return {ctor: 'DragEnd', _0: a};
-};
-var _marshallflax$lexical_elm$Types$DragStart = function (a) {
-	return {ctor: 'DragStart', _0: a};
-};
-var _marshallflax$lexical_elm$Types$WebsocketMessage = function (a) {
-	return {ctor: 'WebsocketMessage', _0: a};
-};
-var _marshallflax$lexical_elm$Types$ToggleColorEnabled = function (a) {
-	return {ctor: 'ToggleColorEnabled', _0: a};
-};
-var _marshallflax$lexical_elm$Types$ToggleColor = F2(
-	function (a, b) {
-		return {ctor: 'ToggleColor', _0: a, _1: b};
-	});
-var _marshallflax$lexical_elm$Types$SetWordsPerLine = function (a) {
-	return {ctor: 'SetWordsPerLine', _0: a};
-};
-var _marshallflax$lexical_elm$Types$SetText = function (a) {
-	return {ctor: 'SetText', _0: a};
-};
-var _marshallflax$lexical_elm$Types$SetCurrentWord = function (a) {
-	return {ctor: 'SetCurrentWord', _0: a};
-};
-var _marshallflax$lexical_elm$Types$SetCurrentNormalized = function (a) {
-	return {ctor: 'SetCurrentNormalized', _0: a};
-};
-var _marshallflax$lexical_elm$Types$SetCurrentColor = function (a) {
-	return {ctor: 'SetCurrentColor', _0: a};
-};
-var _marshallflax$lexical_elm$Types$ResetSomeColors = function (a) {
-	return {ctor: 'ResetSomeColors', _0: a};
-};
-var _marshallflax$lexical_elm$Types$HideSomeColors = function (a) {
-	return {ctor: 'HideSomeColors', _0: a};
-};
-var _marshallflax$lexical_elm$Types$EnableAllColors = {ctor: 'EnableAllColors'};
-var _marshallflax$lexical_elm$Types$DragMessage = F2(
-	function (a, b) {
-		return {ctor: 'DragMessage', _0: a, _1: b};
-	});
-var _marshallflax$lexical_elm$Types$SaveModel = {ctor: 'SaveModel'};
-var _marshallflax$lexical_elm$Types$SetTableState = function (a) {
-	return {ctor: 'SetTableState', _0: a};
-};
-var _marshallflax$lexical_elm$Types$KeyMsg = function (a) {
-	return {ctor: 'KeyMsg', _0: a};
-};
-var _marshallflax$lexical_elm$Types$LexicalMessage = function (a) {
-	return {ctor: 'LexicalMessage', _0: a};
-};
-var _marshallflax$lexical_elm$BowlingScoreView$showTestResultsOld = function (testList) {
-	var doTest = function (_p0) {
-		var _p1 = _p0;
-		var _p3 = _p1._0;
-		var _p2 = _p1._1;
-		if (_p2.ctor === 'Ok') {
-			return A2(
-				_elm_lang$html$Html$tr,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$style(
-						{
-							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 'backgroundColor', _1: 'lightgreen'},
-							_1: {ctor: '[]'}
-						}),
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$td,
-						{ctor: '[]'},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text(
-								_elm_lang$core$Basics$toString(_p3)),
-							_1: {ctor: '[]'}
-						}),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$td,
-							{ctor: '[]'},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text(_p2._0),
-								_1: {ctor: '[]'}
-							}),
-						_1: {ctor: '[]'}
-					}
-				});
-		} else {
-			return A2(
-				_elm_lang$html$Html$tr,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$style(
-						{
-							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 'backgroundColor', _1: 'red'},
-							_1: {ctor: '[]'}
-						}),
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$td,
-						{ctor: '[]'},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text(
-								_elm_lang$core$Basics$toString(_p3)),
-							_1: {ctor: '[]'}
-						}),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$td,
-							{ctor: '[]'},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text(_p2._0),
-								_1: {ctor: '[]'}
-							}),
-						_1: {ctor: '[]'}
-					}
-				});
-		}
-	};
-	return A2(
-		_elm_lang$html$Html$table,
-		{ctor: '[]'},
-		A2(_elm_lang$core$List$map, doTest, testList));
-};
-var _marshallflax$lexical_elm$BowlingScoreView$toRowAttrs = function (_p4) {
-	var _p5 = _p4;
-	var _p6 = _p5._1;
-	if (_p6.ctor === 'Ok') {
-		return {
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$style(
-				{
-					ctor: '::',
-					_0: {ctor: '_Tuple2', _0: 'background', _1: 'lightgreen'},
-					_1: {ctor: '[]'}
-				}),
-			_1: {ctor: '[]'}
-		};
-	} else {
-		return {
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$style(
-				{
-					ctor: '::',
-					_0: {ctor: '_Tuple2', _0: 'background', _1: 'red'},
-					_1: {ctor: '[]'}
-				}),
-			_1: {ctor: '[]'}
-		};
-	}
-};
-var _marshallflax$lexical_elm$BowlingScoreView$showTestResults = _evancz$elm_sortable_table$Table$view(
-	_evancz$elm_sortable_table$Table$customConfig(
-		{
-			toId: function (_p7) {
-				return _elm_lang$core$Basics$toString(
-					_elm_lang$core$Tuple$first(_p7));
-			},
-			toMsg: _marshallflax$lexical_elm$Types$SetTableState,
-			columns: {
-				ctor: '::',
-				_0: A2(_evancz$elm_sortable_table$Table$intColumn, 'Which', _elm_lang$core$Tuple$first),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_evancz$elm_sortable_table$Table$stringColumn,
-						'Text',
-						function (_p8) {
-							return _elm_lang$core$Basics$toString(
-								_elm_lang$core$Tuple$second(_p8));
-						}),
-					_1: {ctor: '[]'}
-				}
-			},
-			customizations: _elm_lang$core$Native_Utils.update(
-				_evancz$elm_sortable_table$Table$defaultCustomizations,
-				{rowAttrs: _marshallflax$lexical_elm$BowlingScoreView$toRowAttrs})
-		}));
-var _marshallflax$lexical_elm$BowlingScoreView$initialTableState = _evancz$elm_sortable_table$Table$initialSort('Text');
-var _marshallflax$lexical_elm$MiscView$decodeShiftKey = A2(
-	_elm_lang$core$Json_Decode$at,
-	{
-		ctor: '::',
-		_0: 'shiftKey',
-		_1: {ctor: '[]'}
-	},
-	_elm_lang$core$Json_Decode$bool);
-var _marshallflax$lexical_elm$MiscView$forBooleanModifier = F4(
-	function (decoder, eventName, modifierCriteria, message) {
-		var matches = function (modifierValue) {
-			return modifierCriteria(modifierValue) ? _elm_lang$core$Json_Decode$succeed(message) : _elm_lang$core$Json_Decode$fail('Not relevant');
-		};
-		return A2(
-			_elm_lang$html$Html_Events$on,
-			eventName,
-			A2(_elm_lang$core$Json_Decode$andThen, matches, decoder));
-	});
-var _marshallflax$lexical_elm$MiscView$onShiftedMouseEnter = A3(_marshallflax$lexical_elm$MiscView$forBooleanModifier, _marshallflax$lexical_elm$MiscView$decodeShiftKey, 'mouseenter', _elm_lang$core$Basics$identity);
-var _marshallflax$lexical_elm$MiscView$onUnShiftedMouseEnter = A3(_marshallflax$lexical_elm$MiscView$forBooleanModifier, _marshallflax$lexical_elm$MiscView$decodeShiftKey, 'mouseenter', _elm_lang$core$Basics$not);
-var _marshallflax$lexical_elm$ColoredWordView$matchingStyle = function (matches) {
-	return matches ? {
-		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'borderStyle', _1: 'solid'},
-		_1: {
-			ctor: '::',
-			_0: {ctor: '_Tuple2', _0: 'borderColor', _1: 'black'},
-			_1: {ctor: '[]'}
-		}
-	} : {
-		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'borderStyle', _1: 'solid'},
-		_1: {
-			ctor: '::',
-			_0: {ctor: '_Tuple2', _0: 'borderColor', _1: 'transparent'},
-			_1: {ctor: '[]'}
-		}
-	};
-};
-var _marshallflax$lexical_elm$ColoredWordView$colorStyles = F3(
-	function (excludeSet, coloredWord, currentWordsNormalized) {
-		var isMatch = A2(_elm_lang$core$Set$member, coloredWord.normalized, currentWordsNormalized);
-		var colorSet = A2(_elm_lang$core$Set$diff, coloredWord.colors, excludeSet);
-		var size = _elm_lang$core$Set$size(colorSet);
-		return _elm_lang$core$Native_Utils.eq(size, 0) ? _elm_lang$html$Html_Attributes$style(
-			_marshallflax$lexical_elm$ColoredWordView$matchingStyle(isMatch)) : ((_elm_lang$core$Native_Utils.cmp(size, 1) < 1) ? _elm_lang$html$Html_Attributes$style(
-			{
-				ctor: '::',
-				_0: {
-					ctor: '_Tuple2',
-					_0: 'backgroundColor',
-					_1: A2(
-						_elm_lang$core$String$join,
-						',',
-						_elm_lang$core$Set$toList(colorSet))
-				},
-				_1: _marshallflax$lexical_elm$ColoredWordView$matchingStyle(isMatch)
-			}) : _elm_lang$html$Html_Attributes$style(
-			{
-				ctor: '::',
-				_0: {
-					ctor: '_Tuple2',
-					_0: 'background',
-					_1: A2(
-						_elm_lang$core$Basics_ops['++'],
-						'linear-gradient(90deg,',
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							A2(
-								_elm_lang$core$String$join,
-								',',
-								_elm_lang$core$Set$toList(colorSet)),
-							')'))
-				},
-				_1: _marshallflax$lexical_elm$ColoredWordView$matchingStyle(isMatch)
-			}));
-	});
-var _marshallflax$lexical_elm$ColoredWordView$renderWord = F4(
-	function (hideColors, currentColor, currentWordsNormalized, _p0) {
-		var _p1 = _p0;
-		var _p3 = _p1._1;
-		var _p2 = _p1._0;
-		return A2(
-			_elm_lang$html$Html$span,
-			{
-				ctor: '::',
-				_0: A3(_marshallflax$lexical_elm$ColoredWordView$colorStyles, hideColors, _p3, currentWordsNormalized),
-				_1: {
-					ctor: '::',
-					_0: _elm_lang$html$Html_Events$onClick(
-						_marshallflax$lexical_elm$Types$LexicalMessage(
-							A2(_marshallflax$lexical_elm$Types$ToggleColor, _p2, currentColor))),
-					_1: {
-						ctor: '::',
-						_0: _marshallflax$lexical_elm$MiscView$onShiftedMouseEnter(
-							_marshallflax$lexical_elm$Types$LexicalMessage(
-								_marshallflax$lexical_elm$Types$SetCurrentWord(_p2))),
-						_1: {ctor: '[]'}
-					}
-				}
-			},
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html$text(
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						' ',
-						A2(_elm_lang$core$Basics_ops['++'], _p3.text, ' '))),
-				_1: {ctor: '[]'}
-			});
-	});
-var _marshallflax$lexical_elm$ColoredWordView$colorStyle = function (colorName) {
-	return _elm_lang$html$Html_Attributes$style(
-		{
-			ctor: '::',
-			_0: {ctor: '_Tuple2', _0: 'backgroundColor', _1: colorName},
-			_1: {ctor: '[]'}
-		});
-};
-var _marshallflax$lexical_elm$DragController$doCmd = F2(
-	function (dragCmd, maybeWidget) {
-		var _p0 = maybeWidget;
-		if (_p0.ctor === 'Nothing') {
-			return _elm_lang$core$Maybe$Just(
-				A2(
-					_marshallflax$lexical_elm$Types$DraggableWidget,
-					A2(_elm_lang$mouse$Mouse$Position, 0, 0),
-					_elm_lang$core$Maybe$Nothing));
-		} else {
-			var _p8 = _p0._0;
-			var _p1 = dragCmd;
-			switch (_p1.ctor) {
-				case 'DragStart':
-					var _p2 = _p1._0;
-					return _elm_lang$core$Maybe$Just(
-						_elm_lang$core$Native_Utils.update(
-							_p8,
-							{
-								drag: _elm_lang$core$Maybe$Just(
-									A2(_marshallflax$lexical_elm$Types$DragState, _p2, _p2))
-							}));
-				case 'DragAt':
-					return _elm_lang$core$Maybe$Just(
-						_elm_lang$core$Native_Utils.update(
-							_p8,
-							{
-								drag: A2(
-									_elm_lang$core$Maybe$map,
-									function (_p3) {
-										var _p4 = _p3;
-										return A2(_marshallflax$lexical_elm$Types$DragState, _p4.start, _p1._0);
-									},
-									_p8.drag)
-							}));
-				default:
-					return _elm_lang$core$Maybe$Just(
-						_elm_lang$core$Native_Utils.update(
-							_p8,
-							{
-								position: function () {
-									var _p5 = _p8.drag;
-									if (_p5.ctor === 'Nothing') {
-										return _p8.position;
-									} else {
-										var _p7 = _p5._0.start;
-										var _p6 = _p5._0.current;
-										return A2(_elm_lang$mouse$Mouse$Position, (_p8.position.x + _p6.x) - _p7.x, (_p8.position.y + _p6.y) - _p7.y);
-									}
-								}(),
-								drag: _elm_lang$core$Maybe$Nothing
-							}));
-			}
-		}
-	});
-var _marshallflax$lexical_elm$DragView$dragSubscriptions = function (draggables) {
-	var computeSub = function (_p0) {
-		var _p1 = _p0;
-		var _p5 = _p1._0;
-		var _p2 = _p1._1.drag;
-		if (_p2.ctor === 'Nothing') {
-			return _elm_lang$core$Platform_Sub$none;
-		} else {
-			return _elm_lang$core$Platform_Sub$batch(
-				{
-					ctor: '::',
-					_0: _elm_lang$mouse$Mouse$moves(
-						function (_p3) {
-							return A2(
-								_marshallflax$lexical_elm$Types$DragMessage,
-								_p5,
-								_marshallflax$lexical_elm$Types$DragAt(_p3));
-						}),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$mouse$Mouse$ups(
-							function (_p4) {
-								return A2(
-									_marshallflax$lexical_elm$Types$DragMessage,
-									_p5,
-									_marshallflax$lexical_elm$Types$DragEnd(_p4));
-							}),
-						_1: {ctor: '[]'}
-					}
-				});
-		}
-	};
-	return _elm_lang$core$Platform_Sub$batch(
-		A2(_elm_lang$core$List$map, computeSub, draggables));
-};
-var _marshallflax$lexical_elm$DragView$onMouseDown = function (key) {
-	return A2(
-		_elm_lang$html$Html_Events$on,
-		'mousedown',
-		A2(
-			_elm_lang$core$Json_Decode$map,
-			function (_p6) {
-				return A2(
-					_marshallflax$lexical_elm$Types$DragMessage,
-					key,
-					_marshallflax$lexical_elm$Types$DragStart(_p6));
-			},
-			_elm_lang$mouse$Mouse$position));
-};
-var _marshallflax$lexical_elm$DragView$px = function (number) {
-	return A2(
-		_elm_lang$core$Basics_ops['++'],
-		_elm_lang$core$Basics$toString(number),
-		'px');
-};
-var _marshallflax$lexical_elm$DragView$viewDraggable = F3(
-	function (dict, key, html) {
-		var _p7 = A2(_elm_lang$core$Dict$get, key, dict);
-		if (_p7.ctor === 'Nothing') {
-			return A2(
-				_elm_lang$html$Html$span,
-				{
-					ctor: '::',
-					_0: _marshallflax$lexical_elm$DragView$onMouseDown(key),
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: html,
-					_1: {ctor: '[]'}
-				});
-		} else {
-			var _p11 = _p7._0;
-			var position = function () {
-				var _p8 = _p11.drag;
-				if (_p8.ctor === 'Nothing') {
-					return _p11.position;
-				} else {
-					var _p10 = _p8._0.start;
-					var _p9 = _p8._0.current;
-					return A2(_elm_lang$mouse$Mouse$Position, (_p11.position.x + _p9.x) - _p10.x, (_p11.position.y + _p9.y) - _p10.y);
-				}
-			}();
-			return A2(
-				_elm_lang$html$Html$span,
-				{
-					ctor: '::',
-					_0: _marshallflax$lexical_elm$DragView$onMouseDown(key),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$style(
-							{
-								ctor: '::',
-								_0: {ctor: '_Tuple2', _0: 'position', _1: 'relative'},
-								_1: {
-									ctor: '::',
-									_0: {
-										ctor: '_Tuple2',
-										_0: 'left',
-										_1: _marshallflax$lexical_elm$DragView$px(
-											function (_) {
-												return _.x;
-											}(position))
-									},
-									_1: {
-										ctor: '::',
-										_0: {
-											ctor: '_Tuple2',
-											_0: 'top',
-											_1: _marshallflax$lexical_elm$DragView$px(
-												function (_) {
-													return _.y;
-												}(position))
-										},
-										_1: {ctor: '[]'}
-									}
-								}
-							}),
-						_1: {ctor: '[]'}
-					}
-				},
-				{
-					ctor: '::',
-					_0: html,
-					_1: {ctor: '[]'}
-				});
-		}
-	});
-var _marshallflax$lexical_elm$FreqInfoView$renderWords = F2(
-	function (currentWordsNormalized, words) {
-		var doWord = function (word) {
-			return A2(
-				_elm_lang$html$Html$span,
-				{
-					ctor: '::',
-					_0: _marshallflax$lexical_elm$MiscView$onShiftedMouseEnter(
-						_marshallflax$lexical_elm$Types$LexicalMessage(
-							_marshallflax$lexical_elm$Types$SetCurrentNormalized(word))),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$style(
-							_marshallflax$lexical_elm$ColoredWordView$matchingStyle(
-								A2(_elm_lang$core$Set$member, word, currentWordsNormalized))),
-						_1: {ctor: '[]'}
-					}
-				},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text(
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							' <',
-							A2(_elm_lang$core$Basics_ops['++'], word, '> '))),
-					_1: {ctor: '[]'}
-				});
-		};
-		return A2(
-			_elm_lang$html$Html$td,
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$style(
-					{
-						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: 'border', _1: 'solid'},
-						_1: {
-							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 'border-width', _1: '1px'},
-							_1: {ctor: '[]'}
-						}
-					}),
-				_1: {ctor: '[]'}
-			},
-			A2(_elm_lang$core$List$map, doWord, words));
-	});
-var _marshallflax$lexical_elm$FreqInfoView$renderFrequency = F2(
-	function (currentWordsNormalized, _p0) {
-		var _p1 = _p0;
-		return A2(
-			_elm_lang$html$Html$tr,
-			{ctor: '[]'},
-			{
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$td,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$style(
-							{
-								ctor: '::',
-								_0: {ctor: '_Tuple2', _0: 'border', _1: 'solid'},
-								_1: {
-									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 'border-width', _1: '1px'},
-									_1: {ctor: '[]'}
-								}
-							}),
-						_1: {ctor: '[]'}
-					},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text(
-							_elm_lang$core$Basics$toString(_p1._0)),
-						_1: {ctor: '[]'}
-					}),
-				_1: {
-					ctor: '::',
-					_0: A2(_marshallflax$lexical_elm$FreqInfoView$renderWords, currentWordsNormalized, _p1._1),
-					_1: {ctor: '[]'}
-				}
-			});
-	});
-var _marshallflax$lexical_elm$FreqInfoView$renderFrequencies = F2(
-	function (currentWordsNormalized, freqToWords) {
-		return A2(
-			_elm_lang$html$Html$table,
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$style(
-					{
-						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: 'border', _1: 'solid'},
-						_1: {
-							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 'border-width', _1: '1px'},
-							_1: {ctor: '[]'}
-						}
-					}),
-				_1: {ctor: '[]'}
-			},
-			A2(
-				_elm_lang$core$List$map,
-				_marshallflax$lexical_elm$FreqInfoView$renderFrequency(currentWordsNormalized),
-				_elm_lang$core$List$reverse(
-					_elm_lang$core$Dict$toList(
-						A2(_elm_lang$core$Maybe$withDefault, _elm_lang$core$Dict$empty, freqToWords)))));
-	});
-var _marshallflax$lexical_elm$LexicalController$updateModelWithNewText = F2(
-	function (newText, model) {
-		var words = _marshallflax$lexical_elm$ColoredWord$splitIntoColorwords(newText);
-		var wordList = _elm_lang$core$Array$toList(
-			A2(
-				_elm_lang$core$Array$map,
-				function (_) {
-					return _.normalized;
-				},
-				words));
-		var graphs = _elm_lang$core$String$toLower(
-			A4(
-				_elm_lang$core$Regex$replace,
-				_elm_lang$core$Regex$All,
-				_elm_lang$core$Regex$regex('[^0-9a-zA-Z]+'),
-				function (_p0) {
-					return ' ';
-				},
-				A4(
-					_elm_lang$core$Regex$replace,
-					_elm_lang$core$Regex$All,
-					_elm_lang$core$Regex$regex('[\']'),
-					function (_p1) {
-						return '';
-					},
-					newText)));
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{
-				text: newText,
-				words: words,
-				frequencies: A3(
-					_marshallflax$lexical_elm$FreqInfo$countFreq,
-					true,
-					{
-						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: 1, _1: 0},
-						_1: {
-							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 2, _1: 1},
-							_1: {ctor: '[]'}
-						}
-					},
-					wordList),
-				graphs: graphs,
-				ngraphs: A3(
-					_marshallflax$lexical_elm$FreqInfo$countFreq,
-					false,
-					{
-						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: 3, _1: 1},
-						_1: {ctor: '[]'}
-					},
-					A2(
-						_elm_lang$core$List$map,
-						_elm_lang$core$String$fromChar,
-						_elm_lang$core$String$toList(graphs)))
-			});
-	});
-var _marshallflax$lexical_elm$LexicalController$dumpState = function (model) {
-	return A2(
-		_elm_lang$core$String$join,
-		' ',
-		A2(
-			_elm_lang$core$List$map,
-			_marshallflax$lexical_elm$ColoredWord$dumpColoredWord,
-			_elm_lang$core$Array$toList(model.words)));
-};
-var _marshallflax$lexical_elm$LexicalController$setWordsPerLine = F2(
-	function (wordString, model) {
-		var _p2 = _elm_lang$core$String$toInt(wordString);
-		if (_p2.ctor === 'Err') {
-			return model;
-		} else {
-			return _elm_lang$core$Native_Utils.update(
-				model,
-				{wordsPerLine: _p2._0});
-		}
-	});
-var _marshallflax$lexical_elm$LexicalController$rainbowList = {
-	ctor: '::',
-	_0: {
-		ctor: '::',
-		_0: 'Aqua',
-		_1: {
-			ctor: '::',
-			_0: 'Blue',
-			_1: {
-				ctor: '::',
-				_0: 'Green',
-				_1: {
-					ctor: '::',
-					_0: 'DarkTurquoise',
-					_1: {
-						ctor: '::',
-						_0: 'Fuchsia',
-						_1: {
-							ctor: '::',
-							_0: 'Lime',
-							_1: {
-								ctor: '::',
-								_0: 'Plum',
-								_1: {
-									ctor: '::',
-									_0: 'Yellow',
-									_1: {ctor: '[]'}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	},
-	_1: {
-		ctor: '::',
-		_0: {
-			ctor: '::',
-			_0: 'Beige',
-			_1: {
-				ctor: '::',
-				_0: 'Indigo',
-				_1: {
-					ctor: '::',
-					_0: 'Purple',
-					_1: {
-						ctor: '::',
-						_0: 'Crimson',
-						_1: {
-							ctor: '::',
-							_0: 'Violet',
-							_1: {
-								ctor: '::',
-								_0: 'Coral',
-								_1: {
-									ctor: '::',
-									_0: 'Pink',
-									_1: {
-										ctor: '::',
-										_0: 'Gold',
-										_1: {
-											ctor: '::',
-											_0: 'Cyan',
-											_1: {ctor: '[]'}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		_1: {ctor: '[]'}
-	}
-};
-var _marshallflax$lexical_elm$LexicalController$countWordsMatching = function (model) {
-	var matches = function (coloredWord) {
-		return A2(_elm_lang$core$Set$member, coloredWord.normalized, model.workingNormalized);
-	};
-	return _elm_lang$core$Array$length(
-		A2(_elm_lang$core$Array$filter, matches, model.words));
-};
-var _marshallflax$lexical_elm$LexicalController$partitionedList = function (model) {
-	return A2(
-		_elm_community$list_split$List_Split$chunksOfLeft,
-		model.wordsPerLine,
-		_elm_lang$core$Array$toIndexedList(model.words));
-};
-var _marshallflax$lexical_elm$LexicalController$countWords = function (model) {
-	return _elm_lang$core$Array$length(model.words);
-};
-var _marshallflax$lexical_elm$LexicalController$currentWordFromIndex = F2(
-	function (index, words) {
-		return A2(
-			_elm_lang$core$Maybe$withDefault,
-			_marshallflax$lexical_elm$ColoredWord$empty,
-			A2(_elm_lang$core$Array$get, index, words));
-	});
-var _marshallflax$lexical_elm$LexicalController$lexicalUpdate = F2(
-	function (msg, model) {
-		var _p3 = msg;
-		switch (_p3.ctor) {
-			case 'EnableAllColors':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{hideColors: _elm_lang$core$Set$empty}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'HideSomeColors':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							hideColors: A2(
-								_elm_lang$core$Set$union,
-								model.hideColors,
-								_elm_lang$core$Set$fromList(_p3._0))
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'ResetSomeColors':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							hideColors: A2(
-								_elm_lang$core$Set$diff,
-								model.hideColors,
-								_elm_lang$core$Set$fromList(_p3._0))
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'SetCurrentColor':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{workingColor: _p3._0}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'SetCurrentNormalized':
-				var _p4 = _p3._0;
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							workingWord: -1,
-							workingNormalized: A2(
-								_elm_lang$core$Set$insert,
-								_p4,
-								_elm_lang$core$Set$fromList(
-									A3(
-										_elm_lang$core$Regex$split,
-										_elm_lang$core$Regex$All,
-										_elm_lang$core$Regex$regex('_'),
-										_p4)))
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'SetCurrentWord':
-				var _p5 = _p3._0;
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							workingWord: _p5,
-							workingNormalized: A2(
-								_elm_lang$core$Set$insert,
-								A2(_marshallflax$lexical_elm$LexicalController$currentWordFromIndex, _p5, model.words).normalized,
-								_elm_lang$core$Set$empty)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'SetText':
-				return {
-					ctor: '_Tuple2',
-					_0: A2(_marshallflax$lexical_elm$LexicalController$updateModelWithNewText, _p3._0, model),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'SetWordsPerLine':
-				return {
-					ctor: '_Tuple2',
-					_0: A2(_marshallflax$lexical_elm$LexicalController$setWordsPerLine, _p3._0, model),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'ToggleColor':
-				var _p7 = _p3._0;
-				var _p6 = _p3._1;
-				return {
-					ctor: '_Tuple2',
-					_0: function () {
-						if (_elm_lang$core$Native_Utils.eq(
-							_elm_lang$core$String$length(_p6),
-							0)) {
-							return model;
-						} else {
-							var currentColoredWord = A2(
-								_elm_lang$core$Maybe$withDefault,
-								_marshallflax$lexical_elm$ColoredWord$empty,
-								A2(_elm_lang$core$Array$get, _p7, model.words));
-							var modifiedColoredWord = _elm_lang$core$Native_Utils.update(
-								currentColoredWord,
-								{
-									colors: A2(_marshallflax$lexical_elm$Misc$toggleSet, _p6, currentColoredWord.colors)
-								});
-							return _elm_lang$core$Native_Utils.update(
-								model,
-								{
-									words: A3(_elm_lang$core$Array$set, _p7, modifiedColoredWord, model.words)
-								});
-						}
-					}(),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'ToggleColorEnabled':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							hideColors: A2(_marshallflax$lexical_elm$Misc$toggleSet, _p3._0, model.hideColors)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			default:
-				var _p8 = A2(_elm_lang$core$Json_Decode$decodeString, _marshallflax$lexical_elm$Types$savedModelDecoder, _p3._0);
-				if (_p8.ctor === 'Ok') {
-					var _p9 = _p8._0;
-					return {
-						ctor: '_Tuple2',
-						_0: A2(
-							_marshallflax$lexical_elm$LexicalController$updateModelWithNewText,
-							A2(_elm_lang$core$Basics_ops['++'], 'Got: ', _p9.text),
-							_elm_lang$core$Native_Utils.update(
-								model,
-								{wordsPerLine: _p9.wordsPerLine})),
-						_1: _elm_lang$core$Platform_Cmd$none
-					};
-				} else {
-					return {
-						ctor: '_Tuple2',
-						_0: A2(_marshallflax$lexical_elm$LexicalController$updateModelWithNewText, _p8._0, model),
-						_1: _elm_lang$core$Platform_Cmd$none
-					};
-				}
-		}
-	});
-var _marshallflax$lexical_elm$LexicalController$init = {
-	text: 'Hello',
-	workingColor: '',
-	words: _elm_lang$core$Array$fromList(
-		{ctor: '[]'}),
-	workingWord: -1,
-	workingNormalized: _elm_lang$core$Set$empty,
-	hideColors: _elm_lang$core$Set$empty,
-	wordsPerLine: 10,
-	frequencies: _marshallflax$lexical_elm$FreqInfo$empty,
-	graphs: '',
-	ngraphs: _marshallflax$lexical_elm$FreqInfo$empty
-};
 var _massung$elm_css$Css$style = F2(
 	function (attributes, sheet) {
 		return A3(
@@ -13071,7 +11781,1752 @@ var _massung$elm_css$Css$Visited = {ctor: 'Visited'};
 var _massung$elm_css$Css$Link = {ctor: 'Link'};
 var _massung$elm_css$Css$Default = {ctor: 'Default'};
 var _massung$elm_css$Css$Any = {ctor: 'Any'};
-var _marshallflax$lexical_elm$LexicalView$imports = {ctor: '[]'};
+var _marshallflax$lexical_elm$Styles$OutlineBorder = {ctor: 'OutlineBorder'};
+var _marshallflax$lexical_elm$Styles$SolidTransparentBorder = {ctor: 'SolidTransparentBorder'};
+var _marshallflax$lexical_elm$Styles$SolidBlackBorder = {ctor: 'SolidBlackBorder'};
+var _marshallflax$lexical_elm$Styles$Colophon = {ctor: 'Colophon'};
+var _marshallflax$lexical_elm$Styles$DisplayNone = {ctor: 'DisplayNone'};
+var _marshallflax$lexical_elm$Styles$TestBad = {ctor: 'TestBad'};
+var _marshallflax$lexical_elm$Styles$TestGood = {ctor: 'TestGood'};
+var _marshallflax$lexical_elm$Styles$Cell400px = {ctor: 'Cell400px'};
+var _marshallflax$lexical_elm$Styles$Cell800px = {ctor: 'Cell800px'};
+var _marshallflax$lexical_elm$Styles$GradientClass = {ctor: 'GradientClass'};
+var _marshallflax$lexical_elm$Styles$NumberLineClass = {ctor: 'NumberLineClass'};
+var _marshallflax$lexical_elm$Styles$stylesheet = A2(
+	_massung$elm_css$Css$stylesheet,
+	{ctor: '[]'},
+	{
+		ctor: '::',
+		_0: {
+			selectors: {
+				ctor: '::',
+				_0: _massung$elm_css$Css$Class(_marshallflax$lexical_elm$Styles$NumberLineClass),
+				_1: {ctor: '[]'}
+			},
+			descriptor: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'counter-increment', _1: 'line'},
+				_1: {ctor: '[]'}
+			}
+		},
+		_1: {
+			ctor: '::',
+			_0: {
+				selectors: {
+					ctor: '::',
+					_0: A2(
+						_massung$elm_css$Css$Pseudo,
+						{
+							ctor: '::',
+							_0: _massung$elm_css$Css$Before,
+							_1: {ctor: '[]'}
+						},
+						_massung$elm_css$Css$Class(_marshallflax$lexical_elm$Styles$NumberLineClass)),
+					_1: {ctor: '[]'}
+				},
+				descriptor: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'content', _1: 'counter(line)'},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'color', _1: 'red'},
+						_1: {ctor: '[]'}
+					}
+				}
+			},
+			_1: {
+				ctor: '::',
+				_0: {
+					selectors: {
+						ctor: '::',
+						_0: _massung$elm_css$Css$Class(_marshallflax$lexical_elm$Styles$GradientClass),
+						_1: {ctor: '[]'}
+					},
+					descriptor: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'background-clip', _1: 'content-box !important'},
+						_1: {ctor: '[]'}
+					}
+				},
+				_1: {
+					ctor: '::',
+					_0: {
+						selectors: {
+							ctor: '::',
+							_0: _massung$elm_css$Css$Class(_marshallflax$lexical_elm$Styles$Cell400px),
+							_1: {ctor: '[]'}
+						},
+						descriptor: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'width', _1: '400px'},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'vertical-align', _1: 'top'},
+								_1: {ctor: '[]'}
+							}
+						}
+					},
+					_1: {
+						ctor: '::',
+						_0: {
+							selectors: {
+								ctor: '::',
+								_0: _massung$elm_css$Css$Class(_marshallflax$lexical_elm$Styles$Cell800px),
+								_1: {ctor: '[]'}
+							},
+							descriptor: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'width', _1: '800px'},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'vertical-align', _1: 'top'},
+									_1: {ctor: '[]'}
+								}
+							}
+						},
+						_1: {
+							ctor: '::',
+							_0: {
+								selectors: {
+									ctor: '::',
+									_0: _massung$elm_css$Css$Class(_marshallflax$lexical_elm$Styles$TestGood),
+									_1: {ctor: '[]'}
+								},
+								descriptor: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'background', _1: 'lightgreen'},
+									_1: {ctor: '[]'}
+								}
+							},
+							_1: {
+								ctor: '::',
+								_0: {
+									selectors: {
+										ctor: '::',
+										_0: _massung$elm_css$Css$Class(_marshallflax$lexical_elm$Styles$TestBad),
+										_1: {ctor: '[]'}
+									},
+									descriptor: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'background', _1: 'red'},
+										_1: {ctor: '[]'}
+									}
+								},
+								_1: {
+									ctor: '::',
+									_0: {
+										selectors: {
+											ctor: '::',
+											_0: _massung$elm_css$Css$Class(_marshallflax$lexical_elm$Styles$DisplayNone),
+											_1: {ctor: '[]'}
+										},
+										descriptor: {
+											ctor: '::',
+											_0: {ctor: '_Tuple2', _0: 'display', _1: 'none'},
+											_1: {ctor: '[]'}
+										}
+									},
+									_1: {
+										ctor: '::',
+										_0: {
+											selectors: {
+												ctor: '::',
+												_0: _massung$elm_css$Css$Class(_marshallflax$lexical_elm$Styles$Colophon),
+												_1: {ctor: '[]'}
+											},
+											descriptor: {
+												ctor: '::',
+												_0: {ctor: '_Tuple2', _0: 'font-size', _1: '25%'},
+												_1: {ctor: '[]'}
+											}
+										},
+										_1: {
+											ctor: '::',
+											_0: {
+												selectors: {
+													ctor: '::',
+													_0: _massung$elm_css$Css$Class(_marshallflax$lexical_elm$Styles$SolidBlackBorder),
+													_1: {ctor: '[]'}
+												},
+												descriptor: {
+													ctor: '::',
+													_0: {ctor: '_Tuple2', _0: 'border-style', _1: 'solid'},
+													_1: {
+														ctor: '::',
+														_0: {ctor: '_Tuple2', _0: 'border-color', _1: 'black'},
+														_1: {ctor: '[]'}
+													}
+												}
+											},
+											_1: {
+												ctor: '::',
+												_0: {
+													selectors: {
+														ctor: '::',
+														_0: _massung$elm_css$Css$Class(_marshallflax$lexical_elm$Styles$SolidTransparentBorder),
+														_1: {ctor: '[]'}
+													},
+													descriptor: {
+														ctor: '::',
+														_0: {ctor: '_Tuple2', _0: 'border-style', _1: 'solid'},
+														_1: {
+															ctor: '::',
+															_0: {ctor: '_Tuple2', _0: 'border-color', _1: 'transparent'},
+															_1: {ctor: '[]'}
+														}
+													}
+												},
+												_1: {
+													ctor: '::',
+													_0: {
+														selectors: {
+															ctor: '::',
+															_0: _massung$elm_css$Css$Class(_marshallflax$lexical_elm$Styles$OutlineBorder),
+															_1: {ctor: '[]'}
+														},
+														descriptor: {
+															ctor: '::',
+															_0: {ctor: '_Tuple2', _0: 'border', _1: 'solid'},
+															_1: {
+																ctor: '::',
+																_0: {ctor: '_Tuple2', _0: 'border-width', _1: '1px'},
+																_1: {ctor: '[]'}
+															}
+														}
+													},
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	});
+var _marshallflax$lexical_elm$Styles$useClass = function (classname) {
+	return _marshallflax$lexical_elm$Styles$stylesheet.$class(classname);
+};
+var _marshallflax$lexical_elm$Styles$defs = A2(
+	_massung$elm_css$Css$style,
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html_Attributes$scoped(true),
+		_1: {ctor: '[]'}
+	},
+	_marshallflax$lexical_elm$Styles$stylesheet);
+var _marshallflax$lexical_elm$Styles$MyId = {ctor: 'MyId'};
+var _marshallflax$lexical_elm$ColoredWord$matchingWordsForColor = function (specifiedColor) {
+	return function (_p0) {
+		return A2(
+			_elm_lang$core$Array$map,
+			function (_) {
+				return _.text;
+			},
+			A2(
+				_elm_lang$core$Array$filter,
+				function (_p1) {
+					return A2(
+						_elm_lang$core$Set$member,
+						specifiedColor,
+						function (_) {
+							return _.colors;
+						}(_p1));
+				},
+				_p0));
+	};
+};
+var _marshallflax$lexical_elm$ColoredWord$dumpColoredWord = function (_p2) {
+	var _p3 = _p2;
+	var _p5 = _p3.text;
+	var _p4 = _p3.colors;
+	return _elm_lang$core$Set$isEmpty(_p4) ? _p5 : A2(
+		_elm_lang$core$Basics_ops['++'],
+		_p5,
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			'<',
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				A2(
+					_elm_lang$core$String$join,
+					',',
+					_elm_lang$core$Set$toList(_p4)),
+				'>')));
+};
+var _marshallflax$lexical_elm$ColoredWord$normalize = function (text) {
+	return A4(
+		_elm_lang$core$Regex$replace,
+		_elm_lang$core$Regex$All,
+		_elm_lang$core$Regex$regex('[^_a-z0-9\'’]'),
+		_elm_lang$core$Basics$always(''),
+		_elm_lang$core$String$toLower(text));
+};
+var _marshallflax$lexical_elm$ColoredWord$chunkToColoredword = function (str) {
+	var textAndColors = A2(
+		_elm_lang$core$Maybe$map,
+		function (_) {
+			return _.submatches;
+		},
+		_elm_lang$core$List$head(
+			A3(
+				_elm_lang$core$Regex$find,
+				_elm_lang$core$Regex$All,
+				_elm_lang$core$Regex$regex('^([^<>]+)<([^>]+)>\\s*$'),
+				str)));
+	var text = A2(
+		_elm_lang$core$Maybe$withDefault,
+		str,
+		A2(
+			_elm_lang$core$Maybe$withDefault,
+			_elm_lang$core$Maybe$Nothing,
+			A2(_elm_lang$core$Maybe$andThen, _elm_lang$core$List$head, textAndColors)));
+	var colors = A2(
+		_elm_lang$core$Maybe$withDefault,
+		_elm_lang$core$Set$empty,
+		A2(
+			_elm_lang$core$Maybe$map,
+			_elm_lang$core$Set$fromList,
+			A2(
+				_elm_lang$core$Maybe$map,
+				A2(
+					_elm_lang$core$Regex$split,
+					_elm_lang$core$Regex$All,
+					_elm_lang$core$Regex$regex(',')),
+				A2(
+					_elm_lang$core$Maybe$withDefault,
+					_elm_lang$core$Maybe$Nothing,
+					A2(
+						_elm_lang$core$Maybe$andThen,
+						_elm_lang$core$List$head,
+						A2(
+							_elm_lang$core$Maybe$map,
+							_elm_lang$core$List$drop(1),
+							textAndColors))))));
+	return {
+		text: text,
+		colors: colors,
+		normalized: _marshallflax$lexical_elm$ColoredWord$normalize(text)
+	};
+};
+var _marshallflax$lexical_elm$ColoredWord$tokenize = function (input) {
+	var whiteSpaceChar = ' \\f\\n\\r\\t\\v\\u00a0\\u1680\\u180e\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff';
+	var pattern = A2(
+		_elm_lang$core$Basics_ops['++'],
+		'',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			'[',
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				whiteSpaceChar,
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					']*',
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'[',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'^',
+							A2(_elm_lang$core$Basics_ops['++'], whiteSpaceChar, ']*')))))));
+	return A2(
+		_elm_lang$core$List$map,
+		function (_) {
+			return _.match;
+		},
+		A3(
+			_elm_lang$core$Regex$find,
+			_elm_lang$core$Regex$All,
+			_elm_lang$core$Regex$regex(pattern),
+			input));
+};
+var _marshallflax$lexical_elm$ColoredWord$splitIntoColorwords = function (input) {
+	return A2(
+		_elm_lang$core$Array$map,
+		_marshallflax$lexical_elm$ColoredWord$chunkToColoredword,
+		_elm_lang$core$Array$fromList(
+			_marshallflax$lexical_elm$ColoredWord$tokenize(input)));
+};
+var _marshallflax$lexical_elm$ColoredWord$empty = {text: '', colors: _elm_lang$core$Set$empty, normalized: ''};
+var _marshallflax$lexical_elm$Misc$zipLists = function (lists) {
+	var zipListHelper = function (_p0) {
+		zipListHelper:
+		while (true) {
+			var _p1 = _p0;
+			var _p4 = _p1._0;
+			var _p3 = _p1._1;
+			var _p2 = A3(
+				_elm_lang$core$List$foldr,
+				_elm_lang$core$Maybe$map2(
+					F2(
+						function (x, y) {
+							return {ctor: '::', _0: x, _1: y};
+						})),
+				_elm_lang$core$Maybe$Just(
+					{ctor: '[]'}),
+				A2(_elm_lang$core$List$map, _elm_lang$core$List$head, _p4));
+			if (_p2.ctor === 'Nothing') {
+				return {ctor: '_Tuple2', _0: _p4, _1: _p3};
+			} else {
+				var _v2 = {
+					ctor: '_Tuple2',
+					_0: A2(
+						_elm_lang$core$List$map,
+						_elm_lang$core$List$drop(1),
+						_p4),
+					_1: {ctor: '::', _0: _p2._0, _1: _p3}
+				};
+				_p0 = _v2;
+				continue zipListHelper;
+			}
+		}
+	};
+	return _elm_lang$core$List$reverse(
+		_elm_lang$core$Tuple$second(
+			zipListHelper(
+				{
+					ctor: '_Tuple2',
+					_0: lists,
+					_1: {ctor: '[]'}
+				})));
+};
+var _marshallflax$lexical_elm$Misc$zipShifts = F3(
+	function ($default, shifts, list) {
+		var doShift = function (shift) {
+			return A2(
+				_elm_lang$core$Basics_ops['++'],
+				A2(_elm_lang$core$List$drop, shift, list),
+				A2(_elm_lang$core$List$repeat, shift, $default));
+		};
+		return _marshallflax$lexical_elm$Misc$zipLists(
+			A2(_elm_lang$core$List$map, doShift, shifts));
+	});
+var _marshallflax$lexical_elm$Misc$accumulateMaybe = F3(
+	function ($default, verb, maybe) {
+		return _elm_lang$core$Maybe$Just(
+			verb(
+				A2(_elm_lang$core$Maybe$withDefault, $default, maybe)));
+	});
+var _marshallflax$lexical_elm$Misc$combineSubscriptions = F2(
+	function (list, model) {
+		return _elm_lang$core$Platform_Sub$batch(
+			A2(
+				_elm_lang$core$List$map,
+				F2(
+					function (x, y) {
+						return y(x);
+					})(model),
+				list));
+	});
+var _marshallflax$lexical_elm$Misc$toggleSet = F2(
+	function (element, set) {
+		return A2(_elm_lang$core$Set$member, element, set) ? A2(_elm_lang$core$Set$remove, element, set) : A2(_elm_lang$core$Set$insert, element, set);
+	});
+var _marshallflax$lexical_elm$FreqInfo$countFreq = F3(
+	function (perhapsIntersperse, desiredLengthsAndMinimumFrequencies, tokenList) {
+		var addNGram = function (_p0) {
+			var _p1 = _p0;
+			var _p5 = _p1._0;
+			var tokenToCount = A3(
+				_elm_lang$core$List$foldl,
+				A2(
+					_elm_lang$core$Basics$flip,
+					_elm_lang$core$Dict$update,
+					A2(
+						_marshallflax$lexical_elm$Misc$accumulateMaybe,
+						0,
+						F2(
+							function (x, y) {
+								return x + y;
+							})(1))),
+				_elm_lang$core$Dict$empty,
+				A2(
+					_elm_lang$core$List$map,
+					function (_p2) {
+						return A3(
+							_elm_lang$core$List$foldr,
+							F2(
+								function (x, y) {
+									return A2(_elm_lang$core$Basics_ops['++'], x, y);
+								}),
+							'',
+							perhapsIntersperse(_p2));
+					},
+					_marshallflax$lexical_elm$Misc$zipLists(
+						A2(
+							_elm_lang$core$List$map,
+							A2(_elm_lang$core$Basics$flip, _elm_lang$core$List$drop, tokenList),
+							A2(_elm_lang$core$List$range, 0, _p5 - 1)))));
+			var freqToList = A2(
+				_elm_lang$core$Basics$flip(
+					_elm_lang$core$List$foldl(_elm_lang$core$Dict$remove)),
+				A2(_elm_lang$core$List$range, 1, _p1._1),
+				A3(
+					_elm_lang$core$List$foldr,
+					function (_p3) {
+						var _p4 = _p3;
+						return A2(
+							_elm_lang$core$Dict$update,
+							_p4._1,
+							A2(
+								_marshallflax$lexical_elm$Misc$accumulateMaybe,
+								{ctor: '[]'},
+								F2(
+									function (x, y) {
+										return {ctor: '::', _0: x, _1: y};
+									})(_p4._0)));
+					},
+					_elm_lang$core$Dict$empty,
+					_elm_lang$core$Dict$toList(tokenToCount)));
+			return A2(
+				_elm_lang$core$Dict$insert,
+				_p5,
+				{tokenToCount: tokenToCount, freqToList: freqToList});
+		};
+		return A3(_elm_lang$core$List$foldl, addNGram, _elm_lang$core$Dict$empty, desiredLengthsAndMinimumFrequencies);
+	});
+var _marshallflax$lexical_elm$FreqInfo$empty = _elm_lang$core$Dict$empty;
+var _marshallflax$lexical_elm$FreqInfo$emptyLenInfo = {tokenToCount: _elm_lang$core$Dict$empty, freqToList: _elm_lang$core$Dict$empty};
+var _marshallflax$lexical_elm$FreqInfo$LenInfo = F2(
+	function (a, b) {
+		return {tokenToCount: a, freqToList: b};
+	});
+var _marshallflax$lexical_elm$Types$encodeSavedModel = function (model) {
+	return A2(
+		_elm_lang$core$Json_Encode$encode,
+		0,
+		_elm_lang$core$Json_Encode$object(
+			{
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'text',
+					_1: _elm_lang$core$Json_Encode$string(model.lexical.text)
+				},
+				_1: {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple2',
+						_0: 'wordsPerLine',
+						_1: _elm_lang$core$Json_Encode$int(model.lexical.wordsPerLine)
+					},
+					_1: {ctor: '[]'}
+				}
+			}));
+};
+var _marshallflax$lexical_elm$Types$Model = F5(
+	function (a, b, c, d, e) {
+		return {lexical: a, draggables: b, lastKeyCode: c, bowlingResults: d, tableState: e};
+	});
+var _marshallflax$lexical_elm$Types$DraggableWidget = F2(
+	function (a, b) {
+		return {position: a, drag: b};
+	});
+var _marshallflax$lexical_elm$Types$DragState = F2(
+	function (a, b) {
+		return {start: a, current: b};
+	});
+var _marshallflax$lexical_elm$Types$SavedModel = F2(
+	function (a, b) {
+		return {text: a, wordsPerLine: b};
+	});
+var _marshallflax$lexical_elm$Types$savedModelDecoder = A3(
+	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+	'wordsPerLine',
+	_elm_lang$core$Json_Decode$int,
+	A3(
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+		'text',
+		_elm_lang$core$Json_Decode$string,
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_marshallflax$lexical_elm$Types$SavedModel)));
+var _marshallflax$lexical_elm$Types$DragAt = function (a) {
+	return {ctor: 'DragAt', _0: a};
+};
+var _marshallflax$lexical_elm$Types$DragEnd = function (a) {
+	return {ctor: 'DragEnd', _0: a};
+};
+var _marshallflax$lexical_elm$Types$DragStart = function (a) {
+	return {ctor: 'DragStart', _0: a};
+};
+var _marshallflax$lexical_elm$Types$WebsocketMessage = function (a) {
+	return {ctor: 'WebsocketMessage', _0: a};
+};
+var _marshallflax$lexical_elm$Types$ToggleColorEnabled = function (a) {
+	return {ctor: 'ToggleColorEnabled', _0: a};
+};
+var _marshallflax$lexical_elm$Types$ToggleColor = F2(
+	function (a, b) {
+		return {ctor: 'ToggleColor', _0: a, _1: b};
+	});
+var _marshallflax$lexical_elm$Types$SetWordsPerLine = function (a) {
+	return {ctor: 'SetWordsPerLine', _0: a};
+};
+var _marshallflax$lexical_elm$Types$SetText = function (a) {
+	return {ctor: 'SetText', _0: a};
+};
+var _marshallflax$lexical_elm$Types$SetCurrentWord = function (a) {
+	return {ctor: 'SetCurrentWord', _0: a};
+};
+var _marshallflax$lexical_elm$Types$SetCurrentTrigraph = function (a) {
+	return {ctor: 'SetCurrentTrigraph', _0: a};
+};
+var _marshallflax$lexical_elm$Types$SetCurrentNormalized = function (a) {
+	return {ctor: 'SetCurrentNormalized', _0: a};
+};
+var _marshallflax$lexical_elm$Types$SetCurrentColor = function (a) {
+	return {ctor: 'SetCurrentColor', _0: a};
+};
+var _marshallflax$lexical_elm$Types$ResetSomeColors = function (a) {
+	return {ctor: 'ResetSomeColors', _0: a};
+};
+var _marshallflax$lexical_elm$Types$HideSomeColors = function (a) {
+	return {ctor: 'HideSomeColors', _0: a};
+};
+var _marshallflax$lexical_elm$Types$EnableAllColors = {ctor: 'EnableAllColors'};
+var _marshallflax$lexical_elm$Types$DragMessage = F2(
+	function (a, b) {
+		return {ctor: 'DragMessage', _0: a, _1: b};
+	});
+var _marshallflax$lexical_elm$Types$SaveModel = {ctor: 'SaveModel'};
+var _marshallflax$lexical_elm$Types$SetTableState = function (a) {
+	return {ctor: 'SetTableState', _0: a};
+};
+var _marshallflax$lexical_elm$Types$KeyMsg = function (a) {
+	return {ctor: 'KeyMsg', _0: a};
+};
+var _marshallflax$lexical_elm$Types$LexicalMessage = function (a) {
+	return {ctor: 'LexicalMessage', _0: a};
+};
+var _marshallflax$lexical_elm$BowlingScoreView$showTestResultsOld = function (testList) {
+	var doTest = function (_p0) {
+		var _p1 = _p0;
+		var _p3 = _p1._0;
+		var _p2 = _p1._1;
+		if (_p2.ctor === 'Ok') {
+			return A2(
+				_elm_lang$html$Html$tr,
+				{
+					ctor: '::',
+					_0: _marshallflax$lexical_elm$Styles$useClass(_marshallflax$lexical_elm$Styles$TestGood),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$td,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(
+								_elm_lang$core$Basics$toString(_p3)),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$td,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(_p2._0),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
+				});
+		} else {
+			return A2(
+				_elm_lang$html$Html$tr,
+				{
+					ctor: '::',
+					_0: _marshallflax$lexical_elm$Styles$useClass(_marshallflax$lexical_elm$Styles$TestBad),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$td,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(
+								_elm_lang$core$Basics$toString(_p3)),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$td,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(_p2._0),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
+				});
+		}
+	};
+	return A2(
+		_elm_lang$html$Html$table,
+		{ctor: '[]'},
+		A2(_elm_lang$core$List$map, doTest, testList));
+};
+var _marshallflax$lexical_elm$BowlingScoreView$toRowAttrs = function (_p4) {
+	var _p5 = _p4;
+	var _p6 = _p5._1;
+	if (_p6.ctor === 'Ok') {
+		return {
+			ctor: '::',
+			_0: _marshallflax$lexical_elm$Styles$useClass(_marshallflax$lexical_elm$Styles$TestGood),
+			_1: {ctor: '[]'}
+		};
+	} else {
+		return {
+			ctor: '::',
+			_0: _marshallflax$lexical_elm$Styles$useClass(_marshallflax$lexical_elm$Styles$TestBad),
+			_1: {ctor: '[]'}
+		};
+	}
+};
+var _marshallflax$lexical_elm$BowlingScoreView$showTestResults = _evancz$elm_sortable_table$Table$view(
+	_evancz$elm_sortable_table$Table$customConfig(
+		{
+			toId: function (_p7) {
+				return _elm_lang$core$Basics$toString(
+					_elm_lang$core$Tuple$first(_p7));
+			},
+			toMsg: _marshallflax$lexical_elm$Types$SetTableState,
+			columns: {
+				ctor: '::',
+				_0: A2(_evancz$elm_sortable_table$Table$intColumn, 'Which', _elm_lang$core$Tuple$first),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_evancz$elm_sortable_table$Table$stringColumn,
+						'Text',
+						function (_p8) {
+							return _elm_lang$core$Basics$toString(
+								_elm_lang$core$Tuple$second(_p8));
+						}),
+					_1: {ctor: '[]'}
+				}
+			},
+			customizations: _elm_lang$core$Native_Utils.update(
+				_evancz$elm_sortable_table$Table$defaultCustomizations,
+				{rowAttrs: _marshallflax$lexical_elm$BowlingScoreView$toRowAttrs})
+		}));
+var _marshallflax$lexical_elm$BowlingScoreView$initialTableState = _evancz$elm_sortable_table$Table$initialSort('Text');
+var _marshallflax$lexical_elm$MiscView$decodeShiftKey = A2(
+	_elm_lang$core$Json_Decode$at,
+	{
+		ctor: '::',
+		_0: 'shiftKey',
+		_1: {ctor: '[]'}
+	},
+	_elm_lang$core$Json_Decode$bool);
+var _marshallflax$lexical_elm$MiscView$forBooleanModifier = F4(
+	function (decoder, eventName, modifierCriteria, message) {
+		var matches = function (modifierValue) {
+			return modifierCriteria(modifierValue) ? _elm_lang$core$Json_Decode$succeed(message) : _elm_lang$core$Json_Decode$fail('Not relevant');
+		};
+		return A2(
+			_elm_lang$html$Html_Events$on,
+			eventName,
+			A2(_elm_lang$core$Json_Decode$andThen, matches, decoder));
+	});
+var _marshallflax$lexical_elm$MiscView$onShiftedMouseEnter = A3(_marshallflax$lexical_elm$MiscView$forBooleanModifier, _marshallflax$lexical_elm$MiscView$decodeShiftKey, 'mouseenter', _elm_lang$core$Basics$identity);
+var _marshallflax$lexical_elm$MiscView$onUnShiftedMouseEnter = A3(_marshallflax$lexical_elm$MiscView$forBooleanModifier, _marshallflax$lexical_elm$MiscView$decodeShiftKey, 'mouseenter', _elm_lang$core$Basics$not);
+var _marshallflax$lexical_elm$ColoredWordView$matchingStyle = function (matches) {
+	return matches ? _marshallflax$lexical_elm$Styles$useClass(_marshallflax$lexical_elm$Styles$SolidBlackBorder) : _marshallflax$lexical_elm$Styles$useClass(_marshallflax$lexical_elm$Styles$SolidTransparentBorder);
+};
+var _marshallflax$lexical_elm$ColoredWordView$colorStyles = F3(
+	function (excludeSet, coloredWord, currentWordsNormalized) {
+		var matchStyle = _marshallflax$lexical_elm$ColoredWordView$matchingStyle(
+			A2(_elm_lang$core$Set$member, coloredWord.normalized, currentWordsNormalized));
+		var colorSet = A2(_elm_lang$core$Set$diff, coloredWord.colors, excludeSet);
+		var size = _elm_lang$core$Set$size(colorSet);
+		return _elm_lang$core$Native_Utils.eq(size, 0) ? {
+			ctor: '::',
+			_0: matchStyle,
+			_1: {ctor: '[]'}
+		} : ((_elm_lang$core$Native_Utils.cmp(size, 1) < 1) ? {
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$style(
+				{
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple2',
+						_0: 'backgroundColor',
+						_1: A2(
+							_elm_lang$core$String$join,
+							',',
+							_elm_lang$core$Set$toList(colorSet))
+					},
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: matchStyle,
+				_1: {ctor: '[]'}
+			}
+		} : {
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$style(
+				{
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple2',
+						_0: 'background',
+						_1: A2(
+							_elm_lang$core$Basics_ops['++'],
+							'linear-gradient(90deg,',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								A2(
+									_elm_lang$core$String$join,
+									',',
+									_elm_lang$core$Set$toList(colorSet)),
+								')'))
+					},
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: matchStyle,
+				_1: {ctor: '[]'}
+			}
+		});
+	});
+var _marshallflax$lexical_elm$ColoredWordView$renderWord = F4(
+	function (hideColors, currentColor, currentWordsNormalized, _p0) {
+		var _p1 = _p0;
+		var _p3 = _p1._1;
+		var _p2 = _p1._0;
+		return A2(
+			_elm_lang$html$Html$span,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Events$onClick(
+					_marshallflax$lexical_elm$Types$LexicalMessage(
+						A2(_marshallflax$lexical_elm$Types$ToggleColor, _p2, currentColor))),
+				_1: {
+					ctor: '::',
+					_0: _marshallflax$lexical_elm$MiscView$onShiftedMouseEnter(
+						_marshallflax$lexical_elm$Types$LexicalMessage(
+							_marshallflax$lexical_elm$Types$SetCurrentWord(_p2))),
+					_1: A3(_marshallflax$lexical_elm$ColoredWordView$colorStyles, hideColors, _p3, currentWordsNormalized)
+				}
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						' ',
+						A2(_elm_lang$core$Basics_ops['++'], _p3.text, ' '))),
+				_1: {ctor: '[]'}
+			});
+	});
+var _marshallflax$lexical_elm$ColoredWordView$colorStyle = function (colorName) {
+	return _elm_lang$html$Html_Attributes$style(
+		{
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 'backgroundColor', _1: colorName},
+			_1: {ctor: '[]'}
+		});
+};
+var _marshallflax$lexical_elm$DragController$doCmd = F2(
+	function (dragCmd, maybeWidget) {
+		var _p0 = maybeWidget;
+		if (_p0.ctor === 'Nothing') {
+			return _elm_lang$core$Maybe$Just(
+				A2(
+					_marshallflax$lexical_elm$Types$DraggableWidget,
+					A2(_elm_lang$mouse$Mouse$Position, 0, 0),
+					_elm_lang$core$Maybe$Nothing));
+		} else {
+			var _p8 = _p0._0;
+			var _p1 = dragCmd;
+			switch (_p1.ctor) {
+				case 'DragStart':
+					var _p2 = _p1._0;
+					return _elm_lang$core$Maybe$Just(
+						_elm_lang$core$Native_Utils.update(
+							_p8,
+							{
+								drag: _elm_lang$core$Maybe$Just(
+									A2(_marshallflax$lexical_elm$Types$DragState, _p2, _p2))
+							}));
+				case 'DragAt':
+					return _elm_lang$core$Maybe$Just(
+						_elm_lang$core$Native_Utils.update(
+							_p8,
+							{
+								drag: A2(
+									_elm_lang$core$Maybe$map,
+									function (_p3) {
+										var _p4 = _p3;
+										return A2(_marshallflax$lexical_elm$Types$DragState, _p4.start, _p1._0);
+									},
+									_p8.drag)
+							}));
+				default:
+					return _elm_lang$core$Maybe$Just(
+						_elm_lang$core$Native_Utils.update(
+							_p8,
+							{
+								position: function () {
+									var _p5 = _p8.drag;
+									if (_p5.ctor === 'Nothing') {
+										return _p8.position;
+									} else {
+										var _p7 = _p5._0.start;
+										var _p6 = _p5._0.current;
+										return A2(_elm_lang$mouse$Mouse$Position, (_p8.position.x + _p6.x) - _p7.x, (_p8.position.y + _p6.y) - _p7.y);
+									}
+								}(),
+								drag: _elm_lang$core$Maybe$Nothing
+							}));
+			}
+		}
+	});
+var _marshallflax$lexical_elm$DragView$dragSubscriptions = function (draggables) {
+	var computeSub = function (_p0) {
+		var _p1 = _p0;
+		var _p5 = _p1._0;
+		var _p2 = _p1._1.drag;
+		if (_p2.ctor === 'Nothing') {
+			return _elm_lang$core$Platform_Sub$none;
+		} else {
+			return _elm_lang$core$Platform_Sub$batch(
+				{
+					ctor: '::',
+					_0: _elm_lang$mouse$Mouse$moves(
+						function (_p3) {
+							return A2(
+								_marshallflax$lexical_elm$Types$DragMessage,
+								_p5,
+								_marshallflax$lexical_elm$Types$DragAt(_p3));
+						}),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$mouse$Mouse$ups(
+							function (_p4) {
+								return A2(
+									_marshallflax$lexical_elm$Types$DragMessage,
+									_p5,
+									_marshallflax$lexical_elm$Types$DragEnd(_p4));
+							}),
+						_1: {ctor: '[]'}
+					}
+				});
+		}
+	};
+	return _elm_lang$core$Platform_Sub$batch(
+		A2(_elm_lang$core$List$map, computeSub, draggables));
+};
+var _marshallflax$lexical_elm$DragView$onMouseDown = function (key) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mousedown',
+		A2(
+			_elm_lang$core$Json_Decode$map,
+			function (_p6) {
+				return A2(
+					_marshallflax$lexical_elm$Types$DragMessage,
+					key,
+					_marshallflax$lexical_elm$Types$DragStart(_p6));
+			},
+			_elm_lang$mouse$Mouse$position));
+};
+var _marshallflax$lexical_elm$DragView$px = function (number) {
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		_elm_lang$core$Basics$toString(number),
+		'px');
+};
+var _marshallflax$lexical_elm$DragView$viewDraggable = F3(
+	function (dict, key, html) {
+		var _p7 = A2(_elm_lang$core$Dict$get, key, dict);
+		if (_p7.ctor === 'Nothing') {
+			return A2(
+				_elm_lang$html$Html$span,
+				{
+					ctor: '::',
+					_0: _marshallflax$lexical_elm$DragView$onMouseDown(key),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: html,
+					_1: {ctor: '[]'}
+				});
+		} else {
+			var _p11 = _p7._0;
+			var position = function () {
+				var _p8 = _p11.drag;
+				if (_p8.ctor === 'Nothing') {
+					return _p11.position;
+				} else {
+					var _p10 = _p8._0.start;
+					var _p9 = _p8._0.current;
+					return A2(_elm_lang$mouse$Mouse$Position, (_p11.position.x + _p9.x) - _p10.x, (_p11.position.y + _p9.y) - _p10.y);
+				}
+			}();
+			return A2(
+				_elm_lang$html$Html$span,
+				{
+					ctor: '::',
+					_0: _marshallflax$lexical_elm$DragView$onMouseDown(key),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$style(
+							{
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'position', _1: 'relative'},
+								_1: {
+									ctor: '::',
+									_0: {
+										ctor: '_Tuple2',
+										_0: 'left',
+										_1: _marshallflax$lexical_elm$DragView$px(
+											function (_) {
+												return _.x;
+											}(position))
+									},
+									_1: {
+										ctor: '::',
+										_0: {
+											ctor: '_Tuple2',
+											_0: 'top',
+											_1: _marshallflax$lexical_elm$DragView$px(
+												function (_) {
+													return _.y;
+												}(position))
+										},
+										_1: {ctor: '[]'}
+									}
+								}
+							}),
+						_1: {ctor: '[]'}
+					}
+				},
+				{
+					ctor: '::',
+					_0: html,
+					_1: {ctor: '[]'}
+				});
+		}
+	});
+var _marshallflax$lexical_elm$FreqInfoView$renderGeneric = F2(
+	function (renderWord, freqToWords) {
+		var renderFrequency = function (_p0) {
+			var _p1 = _p0;
+			return A2(
+				_elm_lang$html$Html$tr,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$td,
+						{
+							ctor: '::',
+							_0: _marshallflax$lexical_elm$Styles$useClass(_marshallflax$lexical_elm$Styles$OutlineBorder),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(
+								_elm_lang$core$Basics$toString(_p1._0)),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$td,
+							{
+								ctor: '::',
+								_0: _marshallflax$lexical_elm$Styles$useClass(_marshallflax$lexical_elm$Styles$OutlineBorder),
+								_1: {ctor: '[]'}
+							},
+							A2(_elm_lang$core$List$map, renderWord, _p1._1)),
+						_1: {ctor: '[]'}
+					}
+				});
+		};
+		return A2(
+			_elm_lang$html$Html$table,
+			{
+				ctor: '::',
+				_0: _marshallflax$lexical_elm$Styles$useClass(_marshallflax$lexical_elm$Styles$OutlineBorder),
+				_1: {ctor: '[]'}
+			},
+			A2(
+				_elm_lang$core$List$map,
+				renderFrequency,
+				_elm_lang$core$List$reverse(
+					_elm_lang$core$Dict$toList(
+						function (_) {
+							return _.freqToList;
+						}(
+							A2(_elm_lang$core$Maybe$withDefault, _marshallflax$lexical_elm$FreqInfo$emptyLenInfo, freqToWords))))));
+	});
+var _marshallflax$lexical_elm$FreqInfoView$renderFrequencies = F2(
+	function (currentWordsNormalized, freqToWords) {
+		var renderWord = function (word) {
+			return A2(
+				_elm_lang$html$Html$span,
+				{
+					ctor: '::',
+					_0: _marshallflax$lexical_elm$MiscView$onShiftedMouseEnter(
+						_marshallflax$lexical_elm$Types$LexicalMessage(
+							_marshallflax$lexical_elm$Types$SetCurrentNormalized(word))),
+					_1: {
+						ctor: '::',
+						_0: _marshallflax$lexical_elm$ColoredWordView$matchingStyle(
+							A2(_elm_lang$core$Set$member, word, currentWordsNormalized)),
+						_1: {ctor: '[]'}
+					}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							' <',
+							A2(_elm_lang$core$Basics_ops['++'], word, '> '))),
+					_1: {ctor: '[]'}
+				});
+		};
+		return A2(_marshallflax$lexical_elm$FreqInfoView$renderGeneric, renderWord, freqToWords);
+	});
+var _marshallflax$lexical_elm$FreqInfoView$renderNgraphs = F2(
+	function (currentTrigraph, freqToWords) {
+		var renderWord = function (word) {
+			return A2(
+				_elm_lang$html$Html$span,
+				{
+					ctor: '::',
+					_0: _marshallflax$lexical_elm$MiscView$onShiftedMouseEnter(
+						_marshallflax$lexical_elm$Types$LexicalMessage(
+							_marshallflax$lexical_elm$Types$SetCurrentTrigraph(word))),
+					_1: {
+						ctor: '::',
+						_0: _marshallflax$lexical_elm$ColoredWordView$matchingStyle(
+							_elm_lang$core$Native_Utils.eq(word, currentTrigraph)),
+						_1: {ctor: '[]'}
+					}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							' <',
+							A2(_elm_lang$core$Basics_ops['++'], word, '> '))),
+					_1: {ctor: '[]'}
+				});
+		};
+		return A2(_marshallflax$lexical_elm$FreqInfoView$renderGeneric, renderWord, freqToWords);
+	});
+var _marshallflax$lexical_elm$LexicalController$perhapsInterperse = function (interposeUnderscores) {
+	return interposeUnderscores ? _elm_lang$core$List$intersperse('_') : _elm_lang$core$Basics$identity;
+};
+var _marshallflax$lexical_elm$LexicalController$updateModelWithNewText = F2(
+	function (newText, model) {
+		var words = _marshallflax$lexical_elm$ColoredWord$splitIntoColorwords(newText);
+		var wordList = _elm_lang$core$Array$toList(
+			A2(
+				_elm_lang$core$Array$map,
+				function (_) {
+					return _.normalized;
+				},
+				words));
+		var graphs = _elm_lang$core$String$toLower(
+			A4(
+				_elm_lang$core$Regex$replace,
+				_elm_lang$core$Regex$All,
+				_elm_lang$core$Regex$regex('[^0-9a-zA-Z]+'),
+				function (_p0) {
+					return ' ';
+				},
+				A4(
+					_elm_lang$core$Regex$replace,
+					_elm_lang$core$Regex$All,
+					_elm_lang$core$Regex$regex('[\']'),
+					function (_p1) {
+						return '';
+					},
+					A2(_elm_lang$core$String$join, ' ', wordList))));
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				text: newText,
+				words: words,
+				frequencies: A3(
+					_marshallflax$lexical_elm$FreqInfo$countFreq,
+					_marshallflax$lexical_elm$LexicalController$perhapsInterperse(true),
+					{
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 1, _1: 0},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 2, _1: 1},
+							_1: {ctor: '[]'}
+						}
+					},
+					wordList),
+				graphs: graphs,
+				ngraphs: A3(
+					_marshallflax$lexical_elm$FreqInfo$countFreq,
+					_marshallflax$lexical_elm$LexicalController$perhapsInterperse(false),
+					{
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 3, _1: 1},
+						_1: {ctor: '[]'}
+					},
+					A2(
+						_elm_lang$core$List$map,
+						_elm_lang$core$String$fromChar,
+						_elm_lang$core$String$toList(graphs)))
+			});
+	});
+var _marshallflax$lexical_elm$LexicalController$dumpState = function (model) {
+	return A2(
+		_elm_lang$core$String$join,
+		'',
+		A2(
+			_elm_lang$core$List$map,
+			_marshallflax$lexical_elm$ColoredWord$dumpColoredWord,
+			_elm_lang$core$Array$toList(model.words)));
+};
+var _marshallflax$lexical_elm$LexicalController$setWordsPerLine = F2(
+	function (wordString, model) {
+		var _p2 = _elm_lang$core$String$toInt(wordString);
+		if (_p2.ctor === 'Err') {
+			return model;
+		} else {
+			return _elm_lang$core$Native_Utils.update(
+				model,
+				{wordsPerLine: _p2._0});
+		}
+	});
+var _marshallflax$lexical_elm$LexicalController$rainbowList = {
+	ctor: '::',
+	_0: {
+		ctor: '::',
+		_0: 'Aqua',
+		_1: {
+			ctor: '::',
+			_0: 'Blue',
+			_1: {
+				ctor: '::',
+				_0: 'Green',
+				_1: {
+					ctor: '::',
+					_0: 'DarkTurquoise',
+					_1: {
+						ctor: '::',
+						_0: 'Fuchsia',
+						_1: {
+							ctor: '::',
+							_0: 'Lime',
+							_1: {
+								ctor: '::',
+								_0: 'Plum',
+								_1: {
+									ctor: '::',
+									_0: 'Yellow',
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	_1: {
+		ctor: '::',
+		_0: {
+			ctor: '::',
+			_0: 'Beige',
+			_1: {
+				ctor: '::',
+				_0: 'Indigo',
+				_1: {
+					ctor: '::',
+					_0: 'Purple',
+					_1: {
+						ctor: '::',
+						_0: 'Crimson',
+						_1: {
+							ctor: '::',
+							_0: 'Violet',
+							_1: {
+								ctor: '::',
+								_0: 'Coral',
+								_1: {
+									ctor: '::',
+									_0: 'Pink',
+									_1: {
+										ctor: '::',
+										_0: 'Gold',
+										_1: {
+											ctor: '::',
+											_0: 'Cyan',
+											_1: {ctor: '[]'}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		_1: {ctor: '[]'}
+	}
+};
+var _marshallflax$lexical_elm$LexicalController$countWordsMatching = function (model) {
+	var matches = function (coloredWord) {
+		return A2(_elm_lang$core$Set$member, coloredWord.normalized, model.workingNormalized);
+	};
+	return _elm_lang$core$Array$length(
+		A2(_elm_lang$core$Array$filter, matches, model.words));
+};
+var _marshallflax$lexical_elm$LexicalController$partitionedList = function (model) {
+	return A2(
+		_elm_community$list_split$List_Split$chunksOfLeft,
+		model.wordsPerLine,
+		_elm_lang$core$Array$toIndexedList(model.words));
+};
+var _marshallflax$lexical_elm$LexicalController$countWords = function (model) {
+	return _elm_lang$core$Array$length(model.words);
+};
+var _marshallflax$lexical_elm$LexicalController$currentWordFromIndex = F2(
+	function (index, words) {
+		return A2(
+			_elm_lang$core$Maybe$withDefault,
+			_marshallflax$lexical_elm$ColoredWord$empty,
+			A2(_elm_lang$core$Array$get, index, words));
+	});
+var _marshallflax$lexical_elm$LexicalController$lexicalUpdate = F2(
+	function (msg, model) {
+		var _p3 = msg;
+		switch (_p3.ctor) {
+			case 'EnableAllColors':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{hideColors: _elm_lang$core$Set$empty}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'HideSomeColors':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							hideColors: A2(
+								_elm_lang$core$Set$union,
+								model.hideColors,
+								_elm_lang$core$Set$fromList(_p3._0))
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'ResetSomeColors':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							hideColors: A2(
+								_elm_lang$core$Set$diff,
+								model.hideColors,
+								_elm_lang$core$Set$fromList(_p3._0))
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'SetCurrentColor':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{workingColor: _p3._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'SetCurrentNormalized':
+				var _p4 = _p3._0;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							workingWord: -1,
+							workingNormalized: A2(
+								_elm_lang$core$Set$insert,
+								_p4,
+								_elm_lang$core$Set$fromList(
+									A3(
+										_elm_lang$core$Regex$split,
+										_elm_lang$core$Regex$All,
+										_elm_lang$core$Regex$regex('_'),
+										_p4)))
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'SetCurrentWord':
+				var _p5 = _p3._0;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							workingWord: _p5,
+							workingNormalized: A2(
+								_elm_lang$core$Set$insert,
+								A2(_marshallflax$lexical_elm$LexicalController$currentWordFromIndex, _p5, model.words).normalized,
+								_elm_lang$core$Set$empty)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'SetCurrentTrigraph':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{currentTrigraph: _p3._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'SetText':
+				return {
+					ctor: '_Tuple2',
+					_0: A2(_marshallflax$lexical_elm$LexicalController$updateModelWithNewText, _p3._0, model),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'SetWordsPerLine':
+				return {
+					ctor: '_Tuple2',
+					_0: A2(_marshallflax$lexical_elm$LexicalController$setWordsPerLine, _p3._0, model),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'ToggleColor':
+				var _p7 = _p3._0;
+				var _p6 = _p3._1;
+				return {
+					ctor: '_Tuple2',
+					_0: function () {
+						if (_elm_lang$core$Native_Utils.eq(
+							_elm_lang$core$String$length(_p6),
+							0)) {
+							return model;
+						} else {
+							var currentColoredWord = A2(
+								_elm_lang$core$Maybe$withDefault,
+								_marshallflax$lexical_elm$ColoredWord$empty,
+								A2(_elm_lang$core$Array$get, _p7, model.words));
+							var modifiedColoredWord = _elm_lang$core$Native_Utils.update(
+								currentColoredWord,
+								{
+									colors: A2(_marshallflax$lexical_elm$Misc$toggleSet, _p6, currentColoredWord.colors)
+								});
+							return _elm_lang$core$Native_Utils.update(
+								model,
+								{
+									words: A3(_elm_lang$core$Array$set, _p7, modifiedColoredWord, model.words)
+								});
+						}
+					}(),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'ToggleColorEnabled':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							hideColors: A2(_marshallflax$lexical_elm$Misc$toggleSet, _p3._0, model.hideColors)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				var _p8 = A2(_elm_lang$core$Json_Decode$decodeString, _marshallflax$lexical_elm$Types$savedModelDecoder, _p3._0);
+				if (_p8.ctor === 'Ok') {
+					var _p9 = _p8._0;
+					return {
+						ctor: '_Tuple2',
+						_0: A2(
+							_marshallflax$lexical_elm$LexicalController$updateModelWithNewText,
+							A2(_elm_lang$core$Basics_ops['++'], 'Got: ', _p9.text),
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{wordsPerLine: _p9.wordsPerLine})),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: A2(_marshallflax$lexical_elm$LexicalController$updateModelWithNewText, _p8._0, model),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+		}
+	});
+var _marshallflax$lexical_elm$LexicalController$init = {
+	text: 'Hello',
+	workingColor: '',
+	words: _elm_lang$core$Array$fromList(
+		{ctor: '[]'}),
+	workingWord: -1,
+	workingNormalized: _elm_lang$core$Set$empty,
+	hideColors: _elm_lang$core$Set$empty,
+	wordsPerLine: 10,
+	frequencies: _marshallflax$lexical_elm$FreqInfo$empty,
+	graphs: '',
+	ngraphs: _marshallflax$lexical_elm$FreqInfo$empty,
+	currentTrigraph: ''
+};
+var _marshallflax$lexical_elm$LexicalView$numberToColor = function (number) {
+	return (_elm_lang$core$Native_Utils.cmp(number, 1) < 1) ? '#FCC' : ((_elm_lang$core$Native_Utils.cmp(number, 3) < 1) ? '#FFC' : ((_elm_lang$core$Native_Utils.cmp(number, 5) < 1) ? '#CFC' : ((_elm_lang$core$Native_Utils.cmp(number, 7) < 1) ? '#CFF' : '#CCF')));
+};
+var _marshallflax$lexical_elm$LexicalView$renderGraphs = function (lexicalModel) {
+	var countToStyle = function (_p0) {
+		var _p1 = _p0;
+		var _p2 = _p1._1;
+		return {
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$style(
+				{
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple2',
+						_0: 'background',
+						_1: A2(
+							_elm_lang$core$Basics_ops['++'],
+							'linear-gradient(135deg,',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								A2(
+									_elm_lang$core$String$join,
+									',',
+									A2(_elm_lang$core$List$map, _marshallflax$lexical_elm$LexicalView$numberToColor, _p1._0)),
+								')'))
+					},
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _marshallflax$lexical_elm$ColoredWordView$matchingStyle(
+					_elm_lang$core$Native_Utils.eq(_p2, lexicalModel.currentTrigraph)),
+				_1: {
+					ctor: '::',
+					_0: _marshallflax$lexical_elm$Styles$useClass(_marshallflax$lexical_elm$Styles$GradientClass),
+					_1: {
+						ctor: '::',
+						_0: _marshallflax$lexical_elm$MiscView$onShiftedMouseEnter(
+							_marshallflax$lexical_elm$Types$LexicalMessage(
+								_marshallflax$lexical_elm$Types$SetCurrentTrigraph(_p2))),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		};
+	};
+	var lenInfo = function (_) {
+		return _.tokenToCount;
+	}(
+		A2(
+			_elm_lang$core$Maybe$withDefault,
+			_marshallflax$lexical_elm$FreqInfo$emptyLenInfo,
+			A2(_elm_lang$core$Dict$get, 3, lexicalModel.ngraphs)));
+	var renderChar = function (_p3) {
+		var _p4 = _p3;
+		var _p5 = _p4._1;
+		var counts = A2(
+			_elm_lang$core$List$map,
+			function (x) {
+				return A2(
+					_elm_lang$core$Maybe$withDefault,
+					0,
+					A2(_elm_lang$core$Dict$get, x, lenInfo));
+			},
+			_p5);
+		var thisTrigraph = A2(
+			_elm_lang$core$Maybe$withDefault,
+			'',
+			_elm_lang$core$List$head(_p5));
+		return A2(
+			_elm_lang$html$Html$span,
+			countToStyle(
+				{ctor: '_Tuple2', _0: counts, _1: thisTrigraph}),
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(_p4._0),
+				_1: {ctor: '[]'}
+			});
+	};
+	var chars = A2(
+		_elm_lang$core$List$map,
+		_elm_lang$core$String$fromChar,
+		_elm_lang$core$String$toList(lexicalModel.graphs));
+	var triplets = A2(
+		_elm_lang$core$List$map,
+		_elm_lang$core$String$concat,
+		A3(
+			_marshallflax$lexical_elm$Misc$zipShifts,
+			' ',
+			A2(_elm_lang$core$List$range, 0, 2),
+			chars));
+	var tripletsTriples = A3(
+		_marshallflax$lexical_elm$Misc$zipShifts,
+		' ',
+		A2(_elm_lang$core$List$range, 0, 2),
+		triplets);
+	var charAndTriplets = A3(
+		_elm_lang$core$List$map2,
+		F2(
+			function (v0, v1) {
+				return {ctor: '_Tuple2', _0: v0, _1: v1};
+			}),
+		chars,
+		tripletsTriples);
+	return A2(_elm_lang$core$List$map, renderChar, charAndTriplets);
+};
+var _marshallflax$lexical_elm$LexicalView$renderWords = function (lexicalModel) {
+	var doWord = A3(_marshallflax$lexical_elm$ColoredWordView$renderWord, lexicalModel.hideColors, lexicalModel.workingColor, lexicalModel.workingNormalized);
+	var renderLine = function (listPart) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _marshallflax$lexical_elm$Styles$useClass(_marshallflax$lexical_elm$Styles$NumberLineClass),
+				_1: {ctor: '[]'}
+			},
+			A2(_elm_lang$core$List$map, doWord, listPart));
+	};
+	return A2(
+		_elm_lang$core$List$map,
+		renderLine,
+		_marshallflax$lexical_elm$LexicalController$partitionedList(lexicalModel));
+};
+var _marshallflax$lexical_elm$LexicalView$frequencyStats = function (lexicalModel) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$table,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$tr,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$td,
+								{
+									ctor: '::',
+									_0: _marshallflax$lexical_elm$Styles$useClass(_marshallflax$lexical_elm$Styles$Cell800px),
+									_1: {ctor: '[]'}
+								},
+								_marshallflax$lexical_elm$LexicalView$renderWords(lexicalModel)),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$td,
+									{
+										ctor: '::',
+										_0: _marshallflax$lexical_elm$Styles$useClass(_marshallflax$lexical_elm$Styles$Cell800px),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: A2(
+											_marshallflax$lexical_elm$FreqInfoView$renderFrequencies,
+											lexicalModel.workingNormalized,
+											A2(_elm_lang$core$Dict$get, 1, lexicalModel.frequencies)),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$td,
+										{
+											ctor: '::',
+											_0: _marshallflax$lexical_elm$Styles$useClass(_marshallflax$lexical_elm$Styles$Cell800px),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: A2(
+												_marshallflax$lexical_elm$FreqInfoView$renderFrequencies,
+												lexicalModel.workingNormalized,
+												A2(_elm_lang$core$Dict$get, 2, lexicalModel.frequencies)),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}
+						}),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$table,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$tr,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$td,
+									{
+										ctor: '::',
+										_0: _marshallflax$lexical_elm$Styles$useClass(_marshallflax$lexical_elm$Styles$Cell800px),
+										_1: {ctor: '[]'}
+									},
+									_marshallflax$lexical_elm$LexicalView$renderGraphs(lexicalModel)),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$td,
+										{
+											ctor: '::',
+											_0: _marshallflax$lexical_elm$Styles$useClass(_marshallflax$lexical_elm$Styles$Cell800px),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: A2(
+												_marshallflax$lexical_elm$FreqInfoView$renderNgraphs,
+												lexicalModel.currentTrigraph,
+												A2(_elm_lang$core$Dict$get, 3, lexicalModel.ngraphs)),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
+		});
+};
 var _marshallflax$lexical_elm$LexicalView$wordsForColor = function (lexicalModel) {
 	return A2(
 		_elm_lang$html$Html$input,
@@ -13085,12 +13540,7 @@ var _marshallflax$lexical_elm$LexicalView$wordsForColor = function (lexicalModel
 						A2(_marshallflax$lexical_elm$ColoredWord$matchingWordsForColor, lexicalModel.workingColor, lexicalModel.words)))),
 			_1: {
 				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$style(
-					{
-						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: 'width', _1: '800px'},
-						_1: {ctor: '[]'}
-					}),
+				_0: _marshallflax$lexical_elm$Styles$useClass(_marshallflax$lexical_elm$Styles$Cell800px),
 				_1: {
 					ctor: '::',
 					_0: _elm_lang$html$Html_Attributes$readonly(true),
@@ -13133,9 +13583,9 @@ var _marshallflax$lexical_elm$LexicalView$wordsPerLine = function (lexicalModel)
 			_1: {
 				ctor: '::',
 				_0: _elm_lang$html$Html_Events$onInput(
-					function (_p0) {
+					function (_p6) {
 						return _marshallflax$lexical_elm$Types$LexicalMessage(
-							_marshallflax$lexical_elm$Types$SetWordsPerLine(_p0));
+							_marshallflax$lexical_elm$Types$SetWordsPerLine(_p6));
 					}),
 				_1: {ctor: '[]'}
 			}
@@ -13159,127 +13609,128 @@ var _marshallflax$lexical_elm$LexicalView$resetButtons = A2(
 		_0: _elm_lang$html$Html$text('ResetHiding'),
 		_1: {ctor: '[]'}
 	});
+var _marshallflax$lexical_elm$LexicalView$disableButton = function (cs) {
+	return A2(
+		_elm_lang$html$Html$button,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Events$onClick(
+				_marshallflax$lexical_elm$Types$LexicalMessage(
+					_marshallflax$lexical_elm$Types$ResetSomeColors(cs))),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text('reset'),
+			_1: {ctor: '[]'}
+		});
+};
+var _marshallflax$lexical_elm$LexicalView$enableButton = function (cs) {
+	return A2(
+		_elm_lang$html$Html$button,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Events$onClick(
+				_marshallflax$lexical_elm$Types$LexicalMessage(
+					_marshallflax$lexical_elm$Types$HideSomeColors(cs))),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text('hide'),
+			_1: {ctor: '[]'}
+		});
+};
 var _marshallflax$lexical_elm$LexicalView$colorButtons = F2(
 	function (draggablesModel, hideColors) {
-		return A2(
-			_elm_lang$html$Html$div,
-			{ctor: '[]'},
-			function () {
-				var doCell = function (l) {
-					return A3(
-						_marshallflax$lexical_elm$DragView$viewDraggable,
-						draggablesModel,
-						l,
-						A2(
-							_elm_lang$html$Html$td,
-							{ctor: '[]'},
+		var doCell = function (nameOfColor) {
+			return A2(
+				_elm_lang$html$Html$td,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$input,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$checked(
+									A2(_elm_lang$core$Set$member, nameOfColor, hideColors)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onClick(
+										_marshallflax$lexical_elm$Types$LexicalMessage(
+											_marshallflax$lexical_elm$Types$ToggleColorEnabled(nameOfColor))),
+									_1: {ctor: '[]'}
+								}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$button,
 							{
 								ctor: '::',
 								_0: A2(
-									_elm_lang$html$Html$input,
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
-										_1: {
-											ctor: '::',
-											_0: _elm_lang$html$Html_Events$onClick(
-												_marshallflax$lexical_elm$Types$LexicalMessage(
-													_marshallflax$lexical_elm$Types$ToggleColorEnabled(l))),
-											_1: {
-												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$checked(
-													A2(_elm_lang$core$Set$member, l, hideColors)),
-												_1: {ctor: '[]'}
-											}
-										}
-									},
-									{ctor: '[]'}),
+									_elm_lang$html$Html_Attributes$attribute,
+									'id',
+									A2(_elm_lang$core$Basics_ops['++'], 'colorButton', nameOfColor)),
 								_1: {
 									ctor: '::',
-									_0: A2(
-										_elm_lang$html$Html$button,
-										{
-											ctor: '::',
-											_0: A2(
-												_elm_lang$html$Html_Attributes$attribute,
-												'id',
-												A2(_elm_lang$core$Basics_ops['++'], 'colorButton', l)),
-											_1: {
-												ctor: '::',
-												_0: _marshallflax$lexical_elm$ColoredWordView$colorStyle(l),
-												_1: {
-													ctor: '::',
-													_0: _elm_lang$html$Html_Events$onClick(
-														_marshallflax$lexical_elm$Types$LexicalMessage(
-															_marshallflax$lexical_elm$Types$SetCurrentColor(l))),
-													_1: {ctor: '[]'}
-												}
-											}
-										},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text(l),
-											_1: {ctor: '[]'}
-										}),
-									_1: {ctor: '[]'}
+									_0: _marshallflax$lexical_elm$ColoredWordView$colorStyle(nameOfColor),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Events$onClick(
+											_marshallflax$lexical_elm$Types$LexicalMessage(
+												_marshallflax$lexical_elm$Types$SetCurrentColor(nameOfColor))),
+										_1: {ctor: '[]'}
+									}
 								}
-							}));
-				};
-				var disableButton = function (cs) {
-					return A2(
-						_elm_lang$html$Html$button,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Events$onClick(
-								_marshallflax$lexical_elm$Types$LexicalMessage(
-									_marshallflax$lexical_elm$Types$ResetSomeColors(cs))),
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text('reset'),
-							_1: {ctor: '[]'}
-						});
-				};
-				var enableButton = function (cs) {
-					return A2(
-						_elm_lang$html$Html$button,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Events$onClick(
-								_marshallflax$lexical_elm$Types$LexicalMessage(
-									_marshallflax$lexical_elm$Types$HideSomeColors(cs))),
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text('hide'),
-							_1: {ctor: '[]'}
-						});
-				};
-				var doRow = function (ls) {
-					return A2(
-						_elm_lang$html$Html$table,
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(nameOfColor),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
+				});
+		};
+		var doDraggableCell = function (nameOfColor) {
+			return A3(
+				_marshallflax$lexical_elm$DragView$viewDraggable,
+				draggablesModel,
+				nameOfColor,
+				doCell(nameOfColor));
+		};
+		var doRow = function (ls) {
+			return A2(
+				_elm_lang$html$Html$table,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$tr,
 						{ctor: '[]'},
 						{
 							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$tr,
-								{ctor: '[]'},
-								{
-									ctor: '::',
-									_0: enableButton(ls),
-									_1: {
-										ctor: '::',
-										_0: disableButton(ls),
-										_1: A2(_elm_lang$core$List$map, doCell, ls)
-									}
-								}),
-							_1: {ctor: '[]'}
-						});
-				};
-				return A2(_elm_lang$core$List$map, doRow, _marshallflax$lexical_elm$LexicalController$rainbowList);
-			}());
+							_0: _marshallflax$lexical_elm$LexicalView$enableButton(ls),
+							_1: {
+								ctor: '::',
+								_0: _marshallflax$lexical_elm$LexicalView$disableButton(ls),
+								_1: A2(_elm_lang$core$List$map, doDraggableCell, ls)
+							}
+						}),
+					_1: {ctor: '[]'}
+				});
+		};
+		return A2(
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			A2(_elm_lang$core$List$map, doRow, _marshallflax$lexical_elm$LexicalController$rainbowList));
 	});
 var _marshallflax$lexical_elm$LexicalView$showTextInput = function (lexicalModel) {
 	return A2(
@@ -13291,18 +13742,13 @@ var _marshallflax$lexical_elm$LexicalView$showTextInput = function (lexicalModel
 			_1: {
 				ctor: '::',
 				_0: _elm_lang$html$Html_Events$onInput(
-					function (_p1) {
+					function (_p7) {
 						return _marshallflax$lexical_elm$Types$LexicalMessage(
-							_marshallflax$lexical_elm$Types$SetText(_p1));
+							_marshallflax$lexical_elm$Types$SetText(_p7));
 					}),
 				_1: {
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$style(
-						{
-							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 'width', _1: '800px'},
-							_1: {ctor: '[]'}
-						}),
+					_0: _marshallflax$lexical_elm$Styles$useClass(_marshallflax$lexical_elm$Styles$Cell800px),
 					_1: {ctor: '[]'}
 				}
 			}
@@ -13322,7 +13768,6 @@ var _marshallflax$lexical_elm$LexicalView$showSaveButton = A2(
 		_1: {ctor: '[]'}
 	});
 var _marshallflax$lexical_elm$LexicalView$showColorsOfCurrentWord = function (lexicalModel) {
-	var currentWord = A2(_marshallflax$lexical_elm$LexicalController$currentWordFromIndex, lexicalModel.workingWord, lexicalModel.words);
 	return A2(
 		_elm_lang$html$Html$span,
 		{ctor: '[]'},
@@ -13330,211 +13775,24 @@ var _marshallflax$lexical_elm$LexicalView$showColorsOfCurrentWord = function (le
 			ctor: '::',
 			_0: _elm_lang$html$Html$text(
 				_elm_lang$core$Basics$toString(
-					_elm_lang$core$Set$toList(currentWord.colors))),
+					_elm_lang$core$Set$toList(
+						function (_) {
+							return _.colors;
+						}(
+							A2(_marshallflax$lexical_elm$LexicalController$currentWordFromIndex, lexicalModel.workingWord, lexicalModel.words))))),
 			_1: {ctor: '[]'}
 		});
 };
-var _marshallflax$lexical_elm$LexicalView$MyId = {ctor: 'MyId'};
-var _marshallflax$lexical_elm$LexicalView$MyClass = {ctor: 'MyClass'};
-var _marshallflax$lexical_elm$LexicalView$rules = {
-	ctor: '::',
-	_0: {
-		selectors: {
-			ctor: '::',
-			_0: _massung$elm_css$Css$Class(_marshallflax$lexical_elm$LexicalView$MyClass),
-			_1: {ctor: '[]'}
-		},
-		descriptor: {
-			ctor: '::',
-			_0: {ctor: '_Tuple2', _0: 'counter-increment', _1: 'line'},
-			_1: {ctor: '[]'}
-		}
-	},
-	_1: {
-		ctor: '::',
-		_0: {
-			selectors: {
-				ctor: '::',
-				_0: A2(
-					_massung$elm_css$Css$Pseudo,
-					{
-						ctor: '::',
-						_0: _massung$elm_css$Css$Before,
-						_1: {ctor: '[]'}
-					},
-					_massung$elm_css$Css$Class(_marshallflax$lexical_elm$LexicalView$MyClass)),
-				_1: {ctor: '[]'}
-			},
-			descriptor: {
-				ctor: '::',
-				_0: {ctor: '_Tuple2', _0: 'content', _1: 'counter(line)'},
-				_1: {
-					ctor: '::',
-					_0: {ctor: '_Tuple2', _0: 'color', _1: 'red'},
-					_1: {ctor: '[]'}
-				}
-			}
-		},
-		_1: {ctor: '[]'}
-	}
-};
-var _marshallflax$lexical_elm$LexicalView$stylesheet = A2(_massung$elm_css$Css$stylesheet, _marshallflax$lexical_elm$LexicalView$imports, _marshallflax$lexical_elm$LexicalView$rules);
-var _marshallflax$lexical_elm$LexicalView$frequencyStats = function (lexicalModel) {
-	return A2(
-		_elm_lang$html$Html$table,
-		{ctor: '[]'},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$tr,
-				{ctor: '[]'},
-				{
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$td,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$style(
-								{
-									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 'width', _1: '800px'},
-									_1: {
-										ctor: '::',
-										_0: {ctor: '_Tuple2', _0: 'vertical-align', _1: 'top'},
-										_1: {ctor: '[]'}
-									}
-								}),
-							_1: {ctor: '[]'}
-						},
-						function () {
-							var doWord = A3(_marshallflax$lexical_elm$ColoredWordView$renderWord, lexicalModel.hideColors, lexicalModel.workingColor, lexicalModel.workingNormalized);
-							var renderLine = function (listPart) {
-								return A2(
-									_elm_lang$html$Html$div,
-									{
-										ctor: '::',
-										_0: _marshallflax$lexical_elm$LexicalView$stylesheet.$class(_marshallflax$lexical_elm$LexicalView$MyClass),
-										_1: {ctor: '[]'}
-									},
-									A2(_elm_lang$core$List$map, doWord, listPart));
-							};
-							return A2(
-								_elm_lang$core$List$map,
-								renderLine,
-								_marshallflax$lexical_elm$LexicalController$partitionedList(lexicalModel));
-						}()),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$td,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$style(
-									{
-										ctor: '::',
-										_0: {ctor: '_Tuple2', _0: 'width', _1: '800px'},
-										_1: {
-											ctor: '::',
-											_0: {ctor: '_Tuple2', _0: 'vertical-align', _1: 'top'},
-											_1: {ctor: '[]'}
-										}
-									}),
-								_1: {ctor: '[]'}
-							},
-							{
-								ctor: '::',
-								_0: A2(
-									_marshallflax$lexical_elm$FreqInfoView$renderFrequencies,
-									lexicalModel.workingNormalized,
-									A2(_elm_lang$core$Dict$get, 1, lexicalModel.frequencies)),
-								_1: {ctor: '[]'}
-							}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$td,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$style(
-										{
-											ctor: '::',
-											_0: {ctor: '_Tuple2', _0: 'width', _1: '400px'},
-											_1: {
-												ctor: '::',
-												_0: {ctor: '_Tuple2', _0: 'vertical-align', _1: 'top'},
-												_1: {ctor: '[]'}
-											}
-										}),
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: A2(
-										_marshallflax$lexical_elm$FreqInfoView$renderFrequencies,
-										lexicalModel.workingNormalized,
-										A2(_elm_lang$core$Dict$get, 2, lexicalModel.frequencies)),
-									_1: {ctor: '[]'}
-								}),
-							_1: {ctor: '[]'}
-						}
-					}
-				}),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$tr,
-					{ctor: '[]'},
-					{
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$td,
-							{ctor: '[]'},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text(lexicalModel.graphs),
-								_1: {ctor: '[]'}
-							}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$td,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$style(
-										{
-											ctor: '::',
-											_0: {ctor: '_Tuple2', _0: 'width', _1: '400px'},
-											_1: {
-												ctor: '::',
-												_0: {ctor: '_Tuple2', _0: 'vertical-align', _1: 'top'},
-												_1: {ctor: '[]'}
-											}
-										}),
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: A2(
-										_marshallflax$lexical_elm$FreqInfoView$renderFrequencies,
-										lexicalModel.workingNormalized,
-										A2(_elm_lang$core$Dict$get, 3, lexicalModel.ngraphs)),
-									_1: {ctor: '[]'}
-								}),
-							_1: {ctor: '[]'}
-						}
-					}),
-				_1: {ctor: '[]'}
-			}
-		});
-};
-var _marshallflax$lexical_elm$LexicalView$viewLexicalModel = function (model) {
-	var lexicalModel = model.lexical;
+var _marshallflax$lexical_elm$LexicalView$viewLexicalModel = function (_p8) {
+	var _p9 = _p8;
+	var _p11 = _p9._1;
+	var _p10 = _p9._0;
 	return A2(
 		_elm_lang$html$Html$div,
 		{ctor: '[]'},
 		{
 			ctor: '::',
-			_0: _marshallflax$lexical_elm$LexicalView$showColorsOfCurrentWord(lexicalModel),
+			_0: _marshallflax$lexical_elm$LexicalView$showColorsOfCurrentWord(_p11),
 			_1: {
 				ctor: '::',
 				_0: A2(
@@ -13552,10 +13810,10 @@ var _marshallflax$lexical_elm$LexicalView$viewLexicalModel = function (model) {
 					_0: _marshallflax$lexical_elm$LexicalView$showSaveButton,
 					_1: {
 						ctor: '::',
-						_0: _marshallflax$lexical_elm$LexicalView$showTextInput(lexicalModel),
+						_0: _marshallflax$lexical_elm$LexicalView$showTextInput(_p11),
 						_1: {
 							ctor: '::',
-							_0: A2(_marshallflax$lexical_elm$LexicalView$colorButtons, model.draggables, lexicalModel.hideColors),
+							_0: A2(_marshallflax$lexical_elm$LexicalView$colorButtons, _p10, _p11.hideColors),
 							_1: {
 								ctor: '::',
 								_0: A2(
@@ -13564,19 +13822,19 @@ var _marshallflax$lexical_elm$LexicalView$viewLexicalModel = function (model) {
 									{ctor: '[]'}),
 								_1: {
 									ctor: '::',
-									_0: A3(_marshallflax$lexical_elm$DragView$viewDraggable, model.draggables, 'text1', _marshallflax$lexical_elm$LexicalView$resetButtons),
+									_0: A3(_marshallflax$lexical_elm$DragView$viewDraggable, _p10, 'text1', _marshallflax$lexical_elm$LexicalView$resetButtons),
 									_1: {
 										ctor: '::',
-										_0: _marshallflax$lexical_elm$LexicalView$wordsPerLine(lexicalModel),
+										_0: _marshallflax$lexical_elm$LexicalView$wordsPerLine(_p11),
 										_1: {
 											ctor: '::',
-											_0: _marshallflax$lexical_elm$LexicalView$wordStats(lexicalModel),
+											_0: _marshallflax$lexical_elm$LexicalView$wordStats(_p11),
 											_1: {
 												ctor: '::',
-												_0: _marshallflax$lexical_elm$LexicalView$wordsForColor(lexicalModel),
+												_0: _marshallflax$lexical_elm$LexicalView$wordsForColor(_p11),
 												_1: {
 													ctor: '::',
-													_0: _marshallflax$lexical_elm$LexicalView$frequencyStats(lexicalModel),
+													_0: _marshallflax$lexical_elm$LexicalView$frequencyStats(_p11),
 													_1: {ctor: '[]'}
 												}
 											}
@@ -13594,12 +13852,7 @@ var _marshallflax$lexical_elm$MainView$colophon = A2(
 	_elm_lang$html$Html$p,
 	{
 		ctor: '::',
-		_0: _elm_lang$html$Html_Attributes$style(
-			{
-				ctor: '::',
-				_0: {ctor: '_Tuple2', _0: 'fontSize', _1: '25%'},
-				_1: {ctor: '[]'}
-			}),
+		_0: _marshallflax$lexical_elm$Styles$useClass(_marshallflax$lexical_elm$Styles$Colophon),
 		_1: {ctor: '[]'}
 	},
 	{
@@ -13661,7 +13914,7 @@ var _marshallflax$lexical_elm$MainView$colophon = A2(
 		}
 	});
 var _marshallflax$lexical_elm$MainView$viewSubscriptions = function (_p0) {
-	return _elm_lang$keyboard$Keyboard$downs(_marshallflax$lexical_elm$Types$KeyMsg);
+	return _elm_lang$core$Platform_Sub$none;
 };
 var _marshallflax$lexical_elm$MainView$root = function (model) {
 	return A2(
@@ -13669,17 +13922,13 @@ var _marshallflax$lexical_elm$MainView$root = function (model) {
 		{ctor: '[]'},
 		{
 			ctor: '::',
-			_0: A2(
-				_massung$elm_css$Css$style,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$scoped(true),
-					_1: {ctor: '[]'}
-				},
-				_marshallflax$lexical_elm$LexicalView$stylesheet),
+			_0: _marshallflax$lexical_elm$Styles$defs,
 			_1: {
 				ctor: '::',
-				_0: A2(_elm_lang$html$Html_Lazy$lazy, _marshallflax$lexical_elm$LexicalView$viewLexicalModel, model),
+				_0: A2(
+					_elm_lang$html$Html_Lazy$lazy,
+					_marshallflax$lexical_elm$LexicalView$viewLexicalModel,
+					{ctor: '_Tuple2', _0: model.draggables, _1: model.lexical}),
 				_1: {
 					ctor: '::',
 					_0: _marshallflax$lexical_elm$MainView$colophon,
@@ -13687,16 +13936,7 @@ var _marshallflax$lexical_elm$MainView$root = function (model) {
 						ctor: '::',
 						_0: A2(
 							_elm_lang$html$Html$table,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$style(
-									{
-										ctor: '::',
-										_0: {ctor: '_Tuple2', _0: 'display', _1: 'none'},
-										_1: {ctor: '[]'}
-									}),
-								_1: {ctor: '[]'}
-							},
+							{ctor: '[]'},
 							{
 								ctor: '::',
 								_0: A2(
@@ -13733,12 +13973,7 @@ var _marshallflax$lexical_elm$MainView$root = function (model) {
 								_elm_lang$html$Html$p,
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$style(
-										{
-											ctor: '::',
-											_0: {ctor: '_Tuple2', _0: 'display', _1: 'none'},
-											_1: {ctor: '[]'}
-										}),
+									_0: _marshallflax$lexical_elm$Styles$useClass(_marshallflax$lexical_elm$Styles$DisplayNone),
 									_1: {ctor: '[]'}
 								},
 								{
