@@ -1,11 +1,11 @@
-module Styles exposing (Class(..), useClass, defs)
+module Styles exposing (StyleClass(..), useClass, defs)
 
 import Css
 import Html
 import Html.Attributes
 
 
-type Class
+type StyleClass
     = NumberLineClass
     | GradientClass
     | Cell800px
@@ -19,7 +19,7 @@ type Class
     | OutlineBorder
 
 
-stylesheet : Css.Stylesheet Id Class msg
+stylesheet : Css.Stylesheet Id StyleClass msg
 stylesheet =
     Css.stylesheet []
         [ { selectors = [ Css.Class NumberLineClass ]
@@ -91,7 +91,7 @@ stylesheet =
         ]
 
 
-useClass : Class -> Html.Attribute msg
+useClass : StyleClass -> Html.Attribute msg
 useClass classname =
     stylesheet.class classname
 
